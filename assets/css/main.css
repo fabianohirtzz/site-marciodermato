@@ -1087,7 +1087,8 @@ body.fonts-pending .stats { visibility: hidden; }
 }
 .stat { text-align: center; }
 .stat__num {
-  display: block;
+  display: inline-block;
+  white-space: nowrap;
   font-family: var(--font-display);
   font-weight: 600;
   font-size: clamp(44px, 6vw, 72px);

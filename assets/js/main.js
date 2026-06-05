@@ -185,6 +185,11 @@
       el.textContent = prefix + target + suffix;
       return;
     }
+    /* Lock the box to its resting width so the changing digit count — and
+       Cormorant's proportional figures, where some intermediate values (e.g.
+       1888) are wider than the final one (1993) — can't reflow the stats row
+       mid-count. Released when the count finishes so it stays responsive. */
+    el.style.width = el.getBoundingClientRect().width + "px";
     const dur = 1400;
     const t0 = performance.now();
     const step = (now) => {
@@ -192,6 +197,7 @@
       const eased = 1 - Math.pow(1 - p, 3);
       el.textContent = prefix + Math.round(target * eased) + suffix;
       if (p < 1) requestAnimationFrame(step);
+      else el.style.width = "";
     };
     requestAnimationFrame(step);
   }
