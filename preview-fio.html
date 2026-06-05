@@ -208,16 +208,16 @@
 
     <label>Opacidade <b id="vOp">0.50</b></label>
     <input type="range" id="cOp" min=".1" max="1" step=".02" value=".5">
-    <label>Espessura <b id="vSt">1.6</b></label>
-    <input type="range" id="cSt" min=".8" max="4" step=".1" value="1.6">
-    <label>Ondulação (vida) <b id="vWi">10</b></label>
-    <input type="range" id="cWi" min="0" max="26" step="1" value="10">
-    <label>Brilho que corre <b id="vGl">0.85</b></label>
-    <input type="range" id="cGl" min="0" max="1" step=".05" value=".85">
-    <label>Parallax (deriva) <b id="vPa">0.04</b></label>
-    <input type="range" id="cPa" min="0" max=".16" step=".01" value=".04">
+    <label>Espessura <b id="vSt">1.3</b></label>
+    <input type="range" id="cSt" min=".8" max="4" step=".1" value="1.3">
+    <label>Ondulação (vida) <b id="vWi">8</b></label>
+    <input type="range" id="cWi" min="0" max="26" step="1" value="8">
+    <label>Brilho que corre <b id="vGl">0.90</b></label>
+    <input type="range" id="cGl" min="0" max="1" step=".05" value=".9">
+    <label>Parallax (deriva) <b id="vPa">0.10</b></label>
+    <input type="range" id="cPa" min="0" max=".16" step=".01" value=".1">
 
-    <label class="chk"><input type="checkbox" id="cFly" checked> Fios soltos (tufo de cabelo)</label>
+    <label class="chk"><input type="checkbox" id="cFly"> Fios soltos (tufo de cabelo)</label>
 
     <div class="row">
       <button class="b-reset" id="bReset">Padrão</button>
@@ -237,7 +237,7 @@
   const cbg=document.querySelector('.fio-bg'), bgLayer=document.getElementById('bgLayer'), root=document.documentElement;
   const BG={hero:'linear-gradient(180deg,#eef6f5 0%,#ffffff 70%)', white:'#ffffff', mint:'#e4f1ef', deep:'linear-gradient(160deg,#057f7f 0%,#03403f 100%)'};
 
-  const cfg={op:.5, st:1.6, wig:10, glow:.85, par:.04, fly:true, modo:'serp'};
+  const cfg={op:.5, st:1.3, wig:8, glow:.9, par:.1, fly:false, modo:'serp'};
   let W=0,H=0, secs=[], strandObjs=[], faceTF=null, faceY0=0,faceY1=0;
 
   const smooth=t=>t*t*(3-2*t);
@@ -270,8 +270,8 @@
     bandX = clamp(bandX, 22, W-22);
     // amplitude cabe na lateral e nunca invade o texto
     const amp = Math.max(8, Math.min(gutter*0.42, 18 + cfg.wig*2.2));
-    const h=sec.bot-sec.top, padT=h*0.16, padB=h*0.16;       // folga nas pontas (sem divisa)
-    const y0=sec.top+padT, y1=sec.bot-padB;
+    // sem padding: o fio afunila até a ponta exatamente na divisa (encosta e some)
+    const y0=sec.top, y1=sec.bot;
     const dx=opt.dx||0, ph=opt.ph||0, ascale=opt.ascale!=null?opt.ascale:1;
     const step=Math.max(5,(y1-y0)/64);
     let d='';
@@ -391,9 +391,9 @@
   bind('cPa','vPa','par',v=>(+v).toFixed(2),false);
   document.getElementById('cFly').addEventListener('change',e=>{ cfg.fly=e.target.checked; rebuild(); writeOut(); });
   document.querySelectorAll('.modo button').forEach(b=>b.addEventListener('click',()=>{ setMode(b.dataset.modo); writeOut(); }));
-  document.getElementById('bReset').addEventListener('click',()=>{ Object.assign(cfg,{op:.5,st:1.6,wig:10,glow:.85,par:.04,fly:true,modo:'serp'});
-    cOp.value=.5;cSt.value=1.6;cWi.value=10;cGl.value=.85;cPa.value=.04;document.getElementById('cFly').checked=true;
-    vOp.textContent='0.50';vSt.textContent='1.6';vWi.textContent='10';vGl.textContent='0.85';vPa.textContent='0.04';
+  document.getElementById('bReset').addEventListener('click',()=>{ Object.assign(cfg,{op:.5,st:1.3,wig:8,glow:.9,par:.1,fly:false,modo:'serp'});
+    cOp.value=.5;cSt.value=1.3;cWi.value=8;cGl.value=.9;cPa.value=.1;document.getElementById('cFly').checked=false;
+    vOp.textContent='0.50';vSt.textContent='1.3';vWi.textContent='8';vGl.textContent='0.90';vPa.textContent='0.10';
     rebuild(); writeOut(); });
   document.getElementById('bCopy').addEventListener('click',()=>{ writeOut(); out.select(); try{navigator.clipboard.writeText(out.value);}catch(e){} });
   const panel=document.getElementById('panel'), tgl=document.getElementById('panelToggle');
