@@ -110,13 +110,8 @@
           <feGaussianBlur stdDeviation="2.2"/>
         </filter>
       </defs>
-      <!-- modo serpentina: tufo de fios -->
-      <g id="strands">
-        <path class="strand strand--fly" id="flyA" pathLength="1" style="stroke-width:1px"></path>
-        <path class="strand strand--fly" id="flyB" pathLength="1" style="stroke-width:0.8px"></path>
-        <path class="strand strand--main" id="main" pathLength="1"></path>
-        <path class="sheen" id="sheen" pathLength="1" style="stroke-width:2.6px"></path>
-      </g>
+      <!-- modo lateral: um fio por seção, alternando os lados (gerado via JS) -->
+      <g id="strands"></g>
       <!-- modo rosto: perfil em linha contínua (paths preenchidos via JS) -->
       <g id="faceGroup">
         <path class="face" id="faceProfile" pathLength="1"></path>
@@ -147,7 +142,7 @@
       <div class="center">
         <p class="eyebrow"><i></i> Método 4D</p>
         <h2>Avaliação correta, <span class="hl"><i>tratamento correto</i></span></h2>
-        <p class="lede">Esta seção e a próxima têm o mesmo fundo branco, então aqui o fio entra pela direita, no alto, e começa a cruzar.</p>
+        <p class="lede">Aqui o fio vive na lateral direita, longe do texto. Ao terminar a seção ele some e reaparece do outro lado, sem cruzar a divisa.</p>
       </div>
     </section>
 
@@ -156,7 +151,7 @@
       <div class="center">
         <p class="eyebrow"><i></i> Vocação</p>
         <h2>Cuidar da pele é <span class="hl"><i>minha vocação</i></span></h2>
-        <p class="lede">…e termina embaixo, à esquerda. As duas seções juntas formam uma diagonal do canto superior direito ao inferior esquerdo, exatamente como você descreveu.</p>
+        <p class="lede">Agora ele reaparece na lateral esquerda. Esquerda, depois direita, depois esquerda: cada seção tem o seu fio, sempre no vazio das bordas.</p>
       </div>
     </section>
 
@@ -207,7 +202,7 @@
     <p class="sub">Ajuste e me mande os valores que ficaram bons.</p>
 
     <div class="modo">
-      <button data-modo="serp" class="on">Fio serpenteando</button>
+      <button data-modo="serp" class="on">Fio lateral</button>
       <button data-modo="rosto">Rosto desenhado</button>
     </div>
 
@@ -234,9 +229,8 @@
 <script>
 (function(){
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const SVGNS='http://www.w3.org/2000/svg';
   const svg=document.getElementById('fioSvg'), grad=document.getElementById('fioGrad');
-  const main=document.getElementById('main'), flyA=document.getElementById('flyA'),
-        flyB=document.getElementById('flyB'), sheen=document.getElementById('sheen');
   const strandsG=document.getElementById('strands'), faceG=document.getElementById('faceGroup');
   const faceProfile=document.getElementById('faceProfile'), faceHair=document.getElementById('faceHair'),
         faceSheen=document.getElementById('faceSheen');
@@ -244,7 +238,7 @@
   const BG={hero:'linear-gradient(180deg,#eef6f5 0%,#ffffff 70%)', white:'#ffffff', mint:'#e4f1ef', deep:'linear-gradient(160deg,#057f7f 0%,#03403f 100%)'};
 
   const cfg={op:.5, st:1.6, wig:10, glow:.85, par:.04, fly:true, modo:'serp'};
-  let W=0,H=0, secs=[], faceTF=null, faceY0=0,faceY1=0;
+  let W=0,H=0, secs=[], strandObjs=[], faceTF=null, faceY0=0,faceY1=0;
 
   const smooth=t=>t*t*(3-2*t);
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -265,53 +259,58 @@
     bgLayer.innerHTML=secs.map(s=>`<div style="top:${s.top}px;height:${(s.bot-s.top)}px;background:${BG[s.bg]||'#fff'}"></div>`).join('');
   }
 
-  // fração horizontal alvo em y (0..1 da largura)
-  function fracAt(y){
-    if(!secs.length) return .5;
-    if(y<=secs[0].top) return secs[0].from;
-    const last=secs[secs.length-1];
-    if(y>=last.bot) return last.to;
-    for(const s of secs){
-      if(y>=s.top && y<=s.bot){
-        const t=smooth((y-s.top)/Math.max(1,s.bot-s.top));
-        return s.from+(s.to-s.from)*t;
-      }
-    }
-    return .5;
-  }
-
-  // centro em px, com margem para não colar nas bordas + ondulação de cabelo
-  function centerX(y){
-    const margin=W*0.10;
-    const x = margin + fracAt(y)*(W-2*margin);
-    const yn=y/H;
-    const wig = cfg.wig*Math.sin(yn*Math.PI*2*6 + .7) + (cfg.wig*.45)*Math.sin(yn*Math.PI*2*13 + 2.1);
-    return x + wig;
-  }
-
-  function strandPath(offset, phase){
-    const step=Math.max(7,H/260);
+  // ---- fio lateral por seção (alterna esquerda/direita, longe do texto) ----
+  // gera o caminho de um fio dentro da lateral livre de uma seção.
+  // as pontas afunilam para um ponto vertical (env=sen) -> não tocam a divisa.
+  function sectionPath(sec, side, opt){
+    opt=opt||{};
+    const contentHalf=Math.min(370, W*0.46);          // metade da coluna de texto
+    const gutter=Math.max(0, W*0.5 - contentHalf);    // espaço lateral livre
+    let bandX = side==='left' ? gutter*0.5 : W - gutter*0.5;
+    bandX = clamp(bandX, 22, W-22);
+    // amplitude cabe na lateral e nunca invade o texto
+    const amp = Math.max(8, Math.min(gutter*0.42, 18 + cfg.wig*2.2));
+    const h=sec.bot-sec.top, padT=h*0.16, padB=h*0.16;       // folga nas pontas (sem divisa)
+    const y0=sec.top+padT, y1=sec.bot-padB;
+    const dx=opt.dx||0, ph=opt.ph||0, ascale=opt.ascale!=null?opt.ascale:1;
+    const step=Math.max(5,(y1-y0)/64);
     let d='';
-    for(let y=0;y<=H;y+=step){
-      const x=centerX(y) + offset + (offset?Math.sin(y/H*Math.PI*2*9+phase)*offset*0.5:0);
-      d+=(y===0?'M':'L')+x.toFixed(1)+' '+y.toFixed(1)+' ';
+    for(let y=y0;y<=y1;y+=step){
+      const t=(y-y0)/Math.max(1,(y1-y0));
+      const env=Math.sin(Math.PI*t);                  // 0 nas pontas, 1 no meio
+      const wave=Math.sin(t*Math.PI*1.25 + ph + (side==='left'?0:Math.PI));
+      const micro=Math.sin(t*Math.PI*6.5 + ph)*0.16;  // micro vida de cabelo
+      const x = bandX + (wave+micro)*amp*env*ascale + dx;
+      d+=(y===y0?'M':'L')+x.toFixed(1)+' '+y.toFixed(1)+' ';
     }
-    return d;
+    return {d,y0,y1};
   }
 
-  // gradiente: insere tom claro sobre a faixa "deep" (inversão automática)
-  function buildGradient(){
-    const deep=secs.find(s=>s.bg==='deep');
-    let stops=[[0,'#19b3a6'],[.5,'#057f7f'],[1,'#044d4d']];
-    if(deep){
-      const a=clamp(deep.top/H,0,1), b=clamp(deep.bot/H,0,1);
-      stops=[[0,'#19b3a6'],[.5,'#057f7f'],
-        [Math.max(0,a-0.02),'#0a6b68'],
-        [a,'#d9f3ef'],[(a+b)/2,'#eafaf7'],[b,'#d9f3ef'],
-        [Math.min(1,b+0.02),'#0a6b68'],[1,'#044d4d']]
-        .filter(Boolean).sort((p,q)=>p[0]-q[0]);
-    }
-    grad.innerHTML = stops.map(s=>`<stop offset="${(+s[0]).toFixed(3)}" stop-color="${s[1]}"/>`).join('');
+  function mkPath(cls, d, stroke, sw){
+    const p=document.createElementNS(SVGNS,'path');
+    p.setAttribute('class',cls); p.setAttribute('d',d); p.setAttribute('pathLength','1');
+    p.setAttribute('fill','none'); if(stroke) p.style.stroke=stroke; if(sw) p.style.strokeWidth=sw;
+    return p;
+  }
+
+  // monta um fio por seção, alternando os lados (hero=esquerda)
+  function buildStrands(){
+    strandsG.innerHTML=''; strandObjs=[];
+    secs.forEach((sec,i)=>{
+      const side = (i%2===0)?'left':'right';
+      const deep = sec.bg==='deep';
+      const tealMain='url(#fioGrad)', mainStroke=deep?'#e4f7f3':tealMain;
+      const flyStroke=deep?'#cdeee9':tealMain;
+      const sheenStroke=deep?'#f1fffb':'#1ec7b6';
+      const g=sectionPath(sec,side);
+      let fly=null;
+      if(cfg.fly){ const gf=sectionPath(sec,side,{dx:side==='left'?5:-5, ph:.7, ascale:1.12});
+        fly=mkPath('strand strand--fly', gf.d, flyStroke, '0.9px'); strandsG.appendChild(fly); }
+      const main=mkPath('strand strand--main', g.d, mainStroke);
+      const sheen=mkPath('sheen', g.d, sheenStroke, '2.4px');
+      strandsG.appendChild(main); strandsG.appendChild(sheen);
+      strandObjs.push({sec,side,main,fly,sheen,deep});
+    });
   }
 
   // ---- modo rosto: perfil em linha contínua (coords locais 0..300 x 0..380) ----
@@ -334,27 +333,30 @@
   function applyVars(){ root.style.setProperty('--fio-opacity',cfg.op); root.style.setProperty('--fio-stroke',cfg.st+'px'); }
 
   function rebuild(){
-    measure();
-    const d=strandPath(0,0);
-    main.setAttribute('d',d); sheen.setAttribute('d',d);
-    flyA.setAttribute('d',strandPath(6,1.2)); flyB.setAttribute('d',strandPath(-7,3.4));
-    flyA.style.display=flyB.style.display=cfg.fly?'':'none';
-    buildGradient(); placeFace(); applyVars(); setMode(cfg.modo); onScroll();
+    measure(); buildStrands(); placeFace(); applyVars(); setMode(cfg.modo); onScroll();
   }
 
-  const seg=.06;
+  const seg=.08;
   function onScroll(){
-    const docH=document.documentElement.scrollHeight||1;
     const sY=window.scrollY;
-    // o fio cresce até um pouco abaixo da base da viewport: ele lidera o olhar
-    const progress=clamp((sY + innerHeight*0.92)/docH,0,1);
-    const viewPos=clamp((sY+innerHeight*.5)/docH,0,1);
 
     if(cfg.modo==='serp'){
-      [main,flyA,flyB].forEach(p=>{ p.style.strokeDasharray=1; p.style.strokeDashoffset=reduce?0:(1-progress).toFixed(4); });
-      if(reduce){ sheen.style.opacity=0; }
-      else{ sheen.style.strokeDasharray=seg+' '+(1-seg); sheen.style.strokeDashoffset=(seg/2-viewPos).toFixed(4); sheen.style.opacity=cfg.glow*.9; }
-      svg.style.transform=`translateX(${(Math.sin(progress*Math.PI*2)*cfg.par*120).toFixed(1)}px)`;
+      // cada fio desenha conforme SUA seção cruza a viewport; some na divisa e reaparece do outro lado
+      strandObjs.forEach(o=>{
+        const h=Math.max(1,o.sec.bot-o.sec.top);
+        const sp=clamp((sY + innerHeight*0.82 - o.sec.top)/h, 0, 1);
+        const off=reduce?0:(1-sp).toFixed(4);
+        o.main.style.strokeDasharray=1; o.main.style.strokeDashoffset=off;
+        if(o.fly){ o.fly.style.strokeDasharray=1; o.fly.style.strokeDashoffset=off; }
+        if(reduce){ o.sheen.style.opacity=0; }
+        else{
+          o.sheen.style.strokeDasharray=seg+' '+(1-seg);
+          o.sheen.style.strokeDashoffset=(seg/2 - sp).toFixed(4);
+          const edge=Math.min(sp,1-sp);                 // brilho some nas pontas
+          o.sheen.style.opacity=(cfg.glow*clamp(edge/0.12,0,1)).toFixed(3);
+        }
+      });
+      strandsG.style.transform=`translateY(${(Math.sin(sY/620)*cfg.par*60).toFixed(1)}px)`;
     } else {
       // rosto: desenha conforme a seção do método 4d cruza a viewport
       const fp=clamp((sY+innerHeight*0.72 - faceY0)/Math.max(1,(faceY1-faceY0)),0,1);
