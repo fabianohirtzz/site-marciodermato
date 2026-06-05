@@ -20,6 +20,25 @@
     boot();
   }
 
+  /* --- font guard: reveal font-sensitive layout (the stats row) only once
+     the webfonts have settled, so it never paints the wider fallback font in a
+     wrapped state and then reflows. Safety timeout keeps content from ever
+     staying hidden if font loading stalls. ------------------------------- */
+  (function dropFontGuard() {
+    let done = false;
+    const drop = () => {
+      if (done) return;
+      done = true;
+      document.body.classList.remove("fonts-pending");
+    };
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(drop);
+    } else {
+      drop();
+    }
+    setTimeout(drop, 1500);
+  })();
+
   /* ------------------------------------------------------------------ */
   /* Gentle reveal (one-shot IntersectionObserver)                      */
   /* ------------------------------------------------------------------ */

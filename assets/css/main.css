@@ -126,6 +126,11 @@ ul { list-style: none; padding: 0; }
 /* loading guard — body.is-loading hides reveal flashes until JS boots */
 body.is-loading * { transition: none !important; }
 
+/* font guard — hold the stats row hidden until webfonts settle, so the wider
+   fallback font never paints its wrapped (scrambled) two-row state before the
+   display font swaps in and reflows it back to a single row */
+body.fonts-pending .stats { visibility: hidden; }
+
 .skip-link {
   position: absolute;
   left: 16px;
