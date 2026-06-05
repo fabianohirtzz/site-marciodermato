@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Dr. Márcio Teixeira · Dermatologista em Porto Alegre</title>
+  <meta name="description" content="Dermatologia de excelência desde 1993 em Porto Alegre. Cuidado personalizado, resultados naturais e o exclusivo Método 4D. Agende sua consulta com o Dr. Márcio Teixeira." />
+  <meta name="theme-color" content="#057f7f" />
+
+  <link rel="icon" type="image/png" href="logo/logo-header-colorido.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+<body class="is-loading">
+  <a class="skip-link" href="#hero">Pular para o conteúdo</a>
+
+  <!-- ============================ NAV ============================ -->
+  <header class="nav" data-nav>
+    <div class="nav__inner">
+      <a class="nav__brand" href="index.html" aria-label="Dr. Márcio Teixeira, página inicial">
+        <img class="nav__logo nav__logo--light" src="logo/logo-header-branco.png" alt="Dr. Márcio Teixeira" />
+        <img class="nav__logo nav__logo--solid" src="logo/logo-header-colorido.png" alt="Dr. Márcio Teixeira" />
+      </a>
+
+      <nav class="nav__links" aria-label="Navegação principal">
+        <a class="nav__link" href="index.html" aria-current="page">Início</a>
+        <a class="nav__link" href="tratamentos.html">Tratamentos</a>
+        <a class="nav__link" href="metodo-4d.html">Método 4D</a>
+        <a class="nav__link" href="tricologia.html">Tricologia</a>
+        <a class="nav__link" href="sobre.html">Sobre</a>
+        <a class="nav__link" href="contato.html">Contato</a>
+      </nav>
+
+      <a class="btn btn--primary nav__cta" href="https://wa.me/5551999704848?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20consulta." target="_blank" rel="noopener">Agende sua consulta</a>
+
+      <button class="nav__burger" data-drawer-open type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="drawer">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="nav-scrim" data-drawer-scrim></div>
+  <aside class="drawer" id="drawer" data-drawer aria-hidden="true">
+    <button class="drawer__close" data-drawer-close type="button" aria-label="Fechar menu">&times;</button>
+    <a class="drawer__link" href="index.html" aria-current="page">Início</a>
+    <a class="drawer__link" href="tratamentos.html">Tratamentos</a>
+    <a class="drawer__link" href="metodo-4d.html">Método 4D</a>
+    <a class="drawer__link" href="tricologia.html">Tricologia</a>
+    <a class="drawer__link" href="sobre.html">Sobre</a>
+    <a class="drawer__link" href="contato.html">Contato</a>
+    <a class="btn btn--primary drawer__cta" href="https://wa.me/5551999704848?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20consulta." target="_blank" rel="noopener">Agende sua consulta</a>
+  </aside>
+
+  <main>
+    <!-- =========================== HERO =========================== -->
+    <section class="hero" id="hero" aria-label="Apresentação Dr. Márcio Teixeira">
+      <div class="hero__media parallax" aria-hidden="true">
+        <video class="hero__video" id="hero-video" muted loop playsinline preload="metadata">
+          <source src="video-hero/video-hero.mp4" type="video/mp4" />
+        </video>
+        <div class="hero__scrim"></div>
+      </div>
+
+      <div class="hero__inner">
+        <div class="hero__copy">
+          <p class="hero__eyebrow">Dermatologia, estética e tricologia · Porto Alegre</p>
+          <h1 class="hero__title">
+            Dermatologia de excelência para a saúde e <span class="hl-light">beleza da sua pele</span>
+          </h1>
+          <p class="hero__lede">
+            Dr. Márcio Teixeira: cuidado personalizado e resultados naturais com quem entende profundamente de pele, com excelência desde 1993.
+          </p>
+          <div class="hero__actions">
+            <a class="btn btn--primary" href="https://wa.me/5551999704848?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20consulta." target="_blank" rel="noopener">Agende sua consulta</a>
+            <a class="btn btn--ghost-on-deep" href="metodo-4d.html">Conheça o Método 4D</a>
+          </div>
+        </div>
+      </div>
+
+      <a class="hero__cue" href="#diferenciais" aria-label="Rolar para saber mais">
+        <span>Saiba mais</span>
+        <span class="hero__cue-line" aria-hidden="true"></span>
+      </a>
+
+      <button class="hero__pause" data-hero-pause type="button" aria-label="Pausar vídeo">
+        <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" /><rect x="14" y="5" width="4" height="14" rx="1" /></svg>
+        <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+      </button>
+    </section>
+
+    <!-- ===================== RESULTADOS (antes/depois) ===================== -->
+    <section class="section section--branco" id="resultados" aria-labelledby="resultados-title">
+      <div class="container">
+        <div class="compare">
+          <div class="compare__copy reveal">
+            <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Resultados reais</p>
+            <h2 id="resultados-title" class="section__title">Veja a diferença que o cuidado <span class="hl hl--italic">certo</span> faz</h2>
+            <p class="section__lede">
+              Arraste para comparar o antes e o depois. Resultados naturais, conquistados com avaliação precisa e a tecnologia adequada para cada pele.
+            </p>
+            <p class="compare__note">Resultado real de paciente da clínica. Imagens exibidas com consentimento.</p>
+          </div>
+
+          <div class="ba reveal" data-ba style="--pos:50%">
+            <img class="ba__img ba__img--after" src="assets/img/home-depois.jpg" alt="Pele após o tratamento, com mais uniformidade e viço" />
+            <img class="ba__img ba__img--before" src="assets/img/home-antes.jpg" alt="Pele antes do tratamento" />
+            <span class="ba__label ba__label--before">Antes</span>
+            <span class="ba__label ba__label--after">Depois</span>
+            <div class="ba__divider" aria-hidden="true">
+              <span class="ba__handle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 7 4 12l5 5M15 7l5 5-5 5" /></svg>
+              </span>
+            </div>
+            <input class="ba__range" type="range" min="0" max="100" value="50" step="0.1" aria-label="Comparar antes e depois" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= DIFERENCIAIS ======================= -->
+    <section class="section section--neve" id="diferenciais" aria-labelledby="diferenciais-title">
+      <div class="container">
+        <header class="section__head">
+          <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Por que Dr. Márcio</p>
+          <h2 id="diferenciais-title" class="section__title">Ciência e empatia a serviço da <span class="hl hl--italic">sua pele</span></h2>
+        </header>
+
+        <div class="grid grid--diff section__body">
+          <article class="diff-card reveal" style="--i:0">
+            <span class="diff-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 8v4.5l3 1.8" /></svg>
+            </span>
+            <h3 class="diff-card__title">Experiência</h3>
+            <p class="diff-card__text">Quase 30 anos de atuação e participação ativa nos principais congressos e inovações da dermatologia.</p>
+          </article>
+
+          <article class="diff-card reveal" style="--i:1">
+            <span class="diff-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-9.2A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7-2.2c0 4.8-7 9.2-7 9.2z" /></svg>
+            </span>
+            <h3 class="diff-card__title">Atendimento Humanizado</h3>
+            <p class="diff-card__text">Você é ouvido, acolhido e orientado com empatia em todas as etapas do tratamento.</p>
+          </article>
+
+          <article class="diff-card reveal" style="--i:2">
+            <span class="diff-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5" /><rect x="13" y="4" width="7" height="7" rx="1.5" /><rect x="4" y="13" width="7" height="7" rx="1.5" /><rect x="13" y="13" width="7" height="7" rx="1.5" /></svg>
+            </span>
+            <h3 class="diff-card__title">Método 4D Exclusivo</h3>
+            <p class="diff-card__text">Abordagem única que avalia sua pele em quatro dimensões, para tratamentos mais eficazes e personalizados.</p>
+          </article>
+
+          <article class="diff-card reveal" style="--i:3">
+            <span class="diff-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5z" /><path d="M18.5 14.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2z" /></svg>
+            </span>
+            <h3 class="diff-card__title">Tecnologia de Ponta</h3>
+            <p class="diff-card__text">Equipamentos modernos e seguros, que entregam resultados com precisão e conforto.</p>
+          </article>
+
+          <article class="diff-card reveal" style="--i:4">
+            <span class="diff-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 5c-7 0-12 4-12 10v3" /><path d="M20 5c0 8-5 12-11 12" /><path d="M5 12c2 0 3 .6 4 2" /></svg>
+            </span>
+            <h3 class="diff-card__title">Resultados Naturais</h3>
+            <p class="diff-card__text">A beleza está no equilíbrio: respeitamos sua individualidade para realçar o que você tem de melhor.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= MÉTODO 4D ========================= -->
+    <section class="section section--branco" id="metodo" aria-labelledby="metodo-title">
+      <div class="curve-watermark" aria-hidden="true">
+        <svg viewBox="0 0 1280 320" fill="none" preserveAspectRatio="xMidYMid meet">
+          <path d="M0,180 C220,60 420,60 640,170 C860,280 1060,280 1280,150" stroke="currentColor" stroke-width="6" stroke-linecap="round" />
+        </svg>
+      </div>
+
+      <div class="container">
+        <header class="section__head">
+          <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Método 4D</p>
+          <h2 id="metodo-title" class="section__title">Avaliação correta, <span class="hl hl--italic">tratamento correto</span></h2>
+          <p class="section__lede">
+            Esta abordagem exclusiva, criada pelo Dr. Márcio, avalia sua pele em quatro dimensões, para tratamentos mais eficazes e personalizados.
+          </p>
+        </header>
+
+        <div class="grid grid--axes section__body">
+          <article class="axis-card reveal" style="--i:0">
+            <span class="axis-card__num">01</span>
+            <h3 class="axis-card__title">A Superfície da Pele</h3>
+            <p class="axis-card__desc">Avalia a superfície da pele, focando nas alterações da coloração, textura, luminosidade e uniformidade.</p>
+          </article>
+          <article class="axis-card reveal" style="--i:1">
+            <span class="axis-card__num">02</span>
+            <h3 class="axis-card__title">Linhas de Expressão</h3>
+            <p class="axis-card__desc">Tratamento das rugas dinâmicas e estáticas, suavizando os sulcos formados pela expressão.</p>
+          </article>
+          <article class="axis-card reveal" style="--i:2">
+            <span class="axis-card__num">03</span>
+            <h3 class="axis-card__title">Alterações do Volume da Face</h3>
+            <p class="axis-card__desc">Reposição ou redução de volume para contornos harmoniosos e definição natural dos traços.</p>
+          </article>
+          <article class="axis-card reveal" style="--i:3">
+            <span class="axis-card__num">04</span>
+            <h3 class="axis-card__title">Flacidez</h3>
+            <p class="axis-card__desc">Abordagem da perda de firmeza e sustentação, cuidando da flacidez cutânea e muscular.</p>
+          </article>
+        </div>
+
+        <div class="metodo__cta reveal">
+          <a class="btn btn--ghost" href="metodo-4d.html">Conheça o Método 4D</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================== DR. MÁRCIO (teaser) ====================== -->
+    <section class="section section--branco" id="dr-marcio" aria-labelledby="dr-marcio-title">
+      <div class="container">
+        <div class="grid-12">
+          <figure class="sobre__portrait col-5 reveal">
+            <img src="imagens/sobre.jpg" alt="Dr. Márcio Teixeira, dermatologista e tricologista em Porto Alegre" loading="lazy" />
+          </figure>
+
+          <div class="sobre__copy col-7 reveal">
+            <header class="head section__head section__head--left">
+              <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Dr. Márcio Teixeira</p>
+              <h2 id="dr-marcio-title" class="section__title">Cuidar da pele é minha <span class="hl hl--italic">vocação</span></h2>
+            </header>
+            <p class="sobre__bio">
+              Com quase 30 anos de trajetória, o Dr. Márcio é reconhecido por sua dedicação à dermatologia clínica, estética e cirúrgica. Formado pela UFRGS e com residência no Hospital de Clínicas de Porto Alegre, é membro titular da Sociedade Brasileira de Dermatologia e criador do exclusivo Método 4D.
+            </p>
+            <ul class="sobre__chips">
+              <li class="chip">CREMERS 20214</li>
+              <li class="chip">RQE 10858</li>
+              <li class="chip">RQE 12078</li>
+              <li class="chip">SBD · Membro titular</li>
+            </ul>
+            <blockquote class="sobre__quote">
+              <p>Valorizar sua beleza natural é minha missão.</p>
+              <cite class="sobre__quote-by">Dr. Márcio Teixeira</cite>
+            </blockquote>
+            <a class="btn btn--primary" href="sobre.html">Conheça o Dr. Márcio</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TRATAMENTOS EM DESTAQUE ==================== -->
+    <section class="section section--neve" id="tratamentos" aria-labelledby="tratamentos-title">
+      <div class="container">
+        <header class="section__head">
+          <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Tratamentos</p>
+          <h2 id="tratamentos-title" class="section__title">Cuidados <span class="hl hl--italic">sob medida</span> para a sua pele</h2>
+          <p class="section__lede">Uma seleção de tratamentos faciais, organizados pelos quatro eixos do Método 4D.</p>
+        </header>
+
+        <div class="grid grid--treat section__body">
+          <article class="treat-card reveal" data-eixo="1" style="--i:0">
+            <figure class="treat-card__media"><img src="imagens/skinnbooster.png" alt="Skinbooster" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Skinbooster</h3>
+              <p class="treat-card__eixo">Eixo 1 · Superfície da Pele</p>
+            </div>
+          </article>
+          <article class="treat-card reveal" data-eixo="2" style="--i:1">
+            <figure class="treat-card__media"><img src="imagens/toxina-butolinica.png" alt="Toxina Botulínica" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Toxina Botulínica</h3>
+              <p class="treat-card__eixo">Eixo 2 · Linhas de Expressão</p>
+            </div>
+          </article>
+          <article class="treat-card reveal" data-eixo="2" style="--i:2">
+            <figure class="treat-card__media"><img src="imagens/preenchimento-acido-hialuronico.png" alt="Preenchimento com Ácido Hialurônico" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Preenchimento com Ácido Hialurônico</h3>
+              <p class="treat-card__eixo">Eixo 2 · Linhas de Expressão</p>
+            </div>
+          </article>
+          <article class="treat-card reveal" data-eixo="3" style="--i:3">
+            <figure class="treat-card__media"><img src="imagens/bioestimulador-colageno.png" alt="Bioestimuladores de Colágeno" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Bioestimuladores de Colágeno</h3>
+              <p class="treat-card__eixo">Eixo 3 · Volume da Face</p>
+            </div>
+          </article>
+          <article class="treat-card reveal" data-eixo="4" style="--i:4">
+            <figure class="treat-card__media"><img src="imagens/ultrassom-microfocado.png" alt="Ultrassom Microfocado · Liftera" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Ultrassom Microfocado · Liftera</h3>
+              <p class="treat-card__eixo">Eixo 4 · Flacidez</p>
+            </div>
+          </article>
+          <article class="treat-card reveal" data-eixo="4" style="--i:5">
+            <figure class="treat-card__media"><img src="imagens/radiofrequencia.png" alt="Radiofrequência" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Radiofrequência</h3>
+              <p class="treat-card__eixo">Eixo 4 · Flacidez</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="treat__cta reveal">
+          <a class="btn btn--ghost" href="tratamentos.html">Ver todos os tratamentos</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================== NÚMEROS ========================== -->
+    <section class="section section--nevoa" id="numeros" aria-label="Nossos números">
+      <div class="container">
+        <div class="stats reveal">
+          <div class="stat">
+            <span class="stat__num" data-count="30">30</span>
+            <span class="stat__key">anos de excelência</span>
+          </div>
+          <span class="stat__sep" aria-hidden="true"></span>
+          <div class="stat">
+            <span class="stat__num" data-count="4">4</span>
+            <span class="stat__key">eixos do Método 4D</span>
+          </div>
+          <span class="stat__sep" aria-hidden="true"></span>
+          <div class="stat">
+            <span class="stat__num" data-count="20" data-prefix="+">+20</span>
+            <span class="stat__key">tratamentos</span>
+          </div>
+          <span class="stat__sep" aria-hidden="true"></span>
+          <div class="stat">
+            <span class="stat__num" data-count="1993">1993</span>
+            <span class="stat__key">desde</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= CTA BAND ========================= -->
+    <section class="section section--deep cta-band" id="agende" aria-labelledby="cta-title">
+      <div class="container">
+        <img class="cta-band__logo reveal" src="logo/logo-header-branco.png" alt="Dr. Márcio Teixeira" loading="lazy" />
+        <h2 id="cta-title" class="section__title reveal">Pronto para cuidar da sua pele <span class="hl--italic">com quem entende</span>?</h2>
+        <p class="cta-band__lede reveal">Agende sua consulta da forma mais prática para você.</p>
+        <div class="cta-band__actions reveal">
+          <a class="btn btn--on-deep" href="https://wa.me/5551999704848?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20consulta." target="_blank" rel="noopener">Agende sua consulta</a>
+          <a class="btn btn--ghost-on-deep" href="https://wa.me/5551999704848" target="_blank" rel="noopener">Atendimento WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================== FOOTER =========================== -->
+  <footer class="footer" aria-label="Rodapé">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <img class="footer__logo" src="logo/logo-rodape.png" alt="Dr. Márcio Teixeira" loading="lazy" />
+          <p class="footer__tagline">Seu dermatologista de confiança em Porto Alegre, excelência desde 1993 em saúde e beleza da pele.</p>
+        </div>
+
+        <nav class="footer__nav" aria-label="Navegação do rodapé">
+          <p class="footer__col-title">Navegação</p>
+          <div class="footer__links">
+            <a href="index.html">Início</a>
+            <a href="tratamentos.html">Tratamentos</a>
+            <a href="metodo-4d.html">Método 4D</a>
+            <a href="tricologia.html">Tricologia</a>
+            <a href="sobre.html">Sobre</a>
+            <a href="contato.html">Contato</a>
+          </div>
+        </nav>
+
+        <div class="footer__info">
+          <p class="footer__col-title">Contato</p>
+          <div class="footer__contact">
+            <span>Av. Dr. Nilo Peçanha, 1221/602, Porto Alegre/RS</span>
+            <span>Seg a Sex: 09h às 19h · Sáb: fechado</span>
+            <a href="https://wa.me/5551999704848" target="_blank" rel="noopener">(51) 99970-4848</a>
+            <a href="tel:+555131104110">(51) 3110-4110</a>
+            <a href="mailto:secretaria@dermaclin.poa.br">secretaria@dermaclin.poa.br</a>
+          </div>
+        </div>
+
+        <div class="footer__connect">
+          <p class="footer__col-title">Redes</p>
+          <div class="footer__social">
+            <a href="https://instagram.com/dr.marciodermato" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.21 15.58 2.2 15.2 2.2 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.21 8.8 2.2 12 2.2zm0 1.8c-3.14 0-3.51.01-4.75.07-.9.04-1.39.2-1.71.32-.43.17-.74.37-1.06.69-.32.32-.52.63-.69 1.06-.13.32-.28.81-.32 1.71C3.21 8.49 3.2 8.86 3.2 12s.01 3.51.07 4.75c.04.9.2 1.39.32 1.71.17.43.37.74.69 1.06.32.32.63.52 1.06.69.32.13.81.28 1.71.32 1.24.06 1.61.07 4.75.07s3.51-.01 4.75-.07c.9-.04 1.39-.2 1.71-.32.43-.17.74-.37 1.06-.69.32-.32.52-.63.69-1.06.13-.32.28-.81.32-1.71.06-1.24.07-1.61.07-4.75s-.01-3.51-.07-4.75c-.04-.9-.2-1.39-.32-1.71a2.85 2.85 0 0 0-.69-1.06 2.85 2.85 0 0 0-1.06-.69c-.32-.13-.81-.28-1.71-.32C15.51 4.01 15.14 4 12 4zm0 3.06A4.94 4.94 0 1 1 12 17a4.94 4.94 0 0 1 0-9.88zm0 1.8a3.14 3.14 0 1 0 0 6.28 3.14 3.14 0 0 0 0-6.28zm5.14-.69a1.15 1.15 0 1 1 0 2.3 1.15 1.15 0 0 1 0-2.3z" /></svg>
+            </a>
+            <a href="https://facebook.com/dr.marciodermato" target="_blank" rel="noopener" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12z" /></svg>
+            </a>
+            <a href="https://wa.me/5551999704848" target="_blank" rel="noopener" aria-label="WhatsApp">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163A11.867 11.867 0 0 1 .14 11.86C.14 5.32 5.46.001 12 .001S23.86 5.32 23.86 11.86 18.54 23.72 12 23.72a11.82 11.82 0 0 1-5.66-1.44L.057 24zM6.6 20.13c1.65.98 3.22 1.57 5.4 1.57 5.44 0 9.86-4.42 9.86-9.84S17.44 2.02 12 2.02 2.14 6.44 2.14 11.86c0 2.29.67 4 1.79 5.78l-.99 3.62 3.66-1.13zM17.4 14.3c-.07-.12-.27-.19-.56-.34-.29-.14-1.71-.84-1.97-.94-.27-.1-.46-.14-.65.15-.19.29-.75.94-.92 1.13-.17.19-.34.22-.63.07-.29-.14-1.22-.45-2.32-1.43-.86-.77-1.44-1.71-1.61-2-.17-.29-.02-.45.13-.59.13-.13.29-.34.43-.51.14-.17.19-.29.29-.48.1-.19.05-.36-.02-.51-.07-.14-.65-1.56-.89-2.14-.23-.56-.47-.48-.65-.49l-.55-.01c-.19 0-.5.07-.76.36-.26.29-1 .98-1 2.38s1.02 2.76 1.17 2.95c.14.19 2.01 3.07 4.86 4.3.68.29 1.21.47 1.62.6.68.22 1.3.19 1.79.11.55-.08 1.71-.7 1.95-1.37.24-.67.24-1.25.17-1.37z" /></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <p class="footer__creds">CREMERS 20214 · RQE 10858 | 12078 · Membro titular da Sociedade Brasileira de Dermatologia</p>
+      <div class="footer__bottom">
+        <span>Dr. Márcio Teixeira © Todos os Direitos Reservados</span>
+        <span>Desenvolvido por: Freela In Home</span>
+      </div>
+    </div>
+  </footer>
+
+  <a class="wpp" href="https://wa.me/5551999704848?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20consulta." target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163A11.867 11.867 0 0 1 .14 11.86C.14 5.32 5.46.001 12 .001S23.86 5.32 23.86 11.86 18.54 23.72 12 23.72a11.82 11.82 0 0 1-5.66-1.44L.057 24zM6.6 20.13c1.65.98 3.22 1.57 5.4 1.57 5.44 0 9.86-4.42 9.86-9.84S17.44 2.02 12 2.02 2.14 6.44 2.14 11.86c0 2.29.67 4 1.79 5.78l-.99 3.62 3.66-1.13zM17.4 14.3c-.07-.12-.27-.19-.56-.34-.29-.14-1.71-.84-1.97-.94-.27-.1-.46-.14-.65.15-.19.29-.75.94-.92 1.13-.17.19-.34.22-.63.07-.29-.14-1.22-.45-2.32-1.43-.86-.77-1.44-1.71-1.61-2-.17-.29-.02-.45.13-.59.13-.13.29-.34.43-.51.14-.17.19-.29.29-.48.1-.19.05-.36-.02-.51-.07-.14-.65-1.56-.89-2.14-.23-.56-.47-.48-.65-.49l-.55-.01c-.19 0-.5.07-.76.36-.26.29-1 .98-1 2.38s1.02 2.76 1.17 2.95c.14.19 2.01 3.07 4.86 4.3.68.29 1.21.47 1.62.6.68.22 1.3.19 1.79.11.55-.08 1.71-.7 1.95-1.37.24-.67.24-1.25.17-1.37z" /></svg>
+  </a>
+
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>

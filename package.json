@@ -1,0 +1,8 @@
+{
+  "name": "site-marciodermato",
+  "private": true,
+  "description": "Site Dr. Marcio Teixeira - Dermatologia",
+  "dependencies": {
+    "sharp": "^0.34.5"
+  }
+}

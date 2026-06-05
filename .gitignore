@@ -1,0 +1,17 @@
+# dependencies / tooling
+node_modules/
+
+# local Claude Code config (machine-specific) — skill stays tracked
+.claude/settings.local.json
+
+# browser-preview artifacts
+.playwright-mcp/
+*-hero.jpeg
+*-full.jpeg
+*.log
+
+# large source files that are NOT website assets
+# 996 MB WordPress backup of the old site
+*.wpress
+# unconverted Apple/QuickTime source video (convert to .mp4 before publishing)
+*.mov
