@@ -604,6 +604,35 @@ body.is-loading * { transition: none !important; }
 .grid--axes { --min: 250px; }
 .grid--treat { --min: 260px; }
 
+/* Diferenciais (5 cards) — flex so the row stays centered when it wraps
+   (5 across on desktop, 3+2 / 2+2+1 centered below, 1 on small phones). */
+.diff-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(18px, 1.8vw, 26px);
+}
+.diff-grid .diff-card {
+  flex: 1 1 168px;
+  max-width: 320px;
+}
+@media (max-width: 520px) {
+  .diff-grid .diff-card { flex-basis: 100%; max-width: none; }
+}
+
+/* Método 4D (4 cards) — explicit grid: 4 across → 2×2 → 1, never an orphan. */
+.axes-grid {
+  display: grid;
+  gap: clamp(20px, 2.2vw, 26px);
+  grid-template-columns: repeat(4, 1fr);
+}
+@media (max-width: 1024px) {
+  .axes-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 520px) {
+  .axes-grid { grid-template-columns: 1fr; }
+}
+
 .grid-12 {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -905,6 +934,9 @@ body.is-loading * { transition: none !important; }
 /* ------------------------------------------------------------------ */
 .cta-band { text-align: center; }
 .cta-band .section__title { color: #fff; }
+/* On the deep-teal band the teal-ink highlight would vanish — keep it white italic. */
+.cta-band .section__title .hl,
+.cta-band .section__title .hl--italic { color: #fff; }
 .cta-band__lede {
   margin: 18px auto 0;
   max-width: 560px;
