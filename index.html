@@ -125,7 +125,18 @@
 
     <!-- ======================= DIFERENCIAIS ======================= -->
     <section class="section section--neve" id="diferenciais" aria-labelledby="diferenciais-title">
-      <div class="container">
+      <!-- Shared brand-teal gradient for the icon strokes (objectBoundingBox). -->
+      <svg class="diff-defs" aria-hidden="true" focusable="false" width="0" height="0">
+        <defs>
+          <linearGradient id="mt-icon-grad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#19b3a6" />
+            <stop offset="0.55" stop-color="#057f7f" />
+            <stop offset="1" stop-color="#044d4d" />
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <div class="container container--diff">
         <header class="section__head">
           <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Por que Dr. Márcio</p>
           <h2 id="diferenciais-title" class="section__title">Ciência e empatia a serviço da <span class="hl hl--italic">sua pele</span></h2>
@@ -134,7 +145,7 @@
         <div class="diff-grid section__body">
           <article class="diff-card reveal" style="--i:0">
             <span class="diff-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 8v4.5l3 1.8" /></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" pathLength="1" /><path d="M12 8v4.5l3 1.8" pathLength="1" /></svg>
             </span>
             <h3 class="diff-card__title">Experiência</h3>
             <p class="diff-card__text">Quase 30 anos de atuação e participação ativa nos principais congressos e inovações da dermatologia.</p>
@@ -142,7 +153,7 @@
 
           <article class="diff-card reveal" style="--i:1">
             <span class="diff-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-9.2A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7-2.2c0 4.8-7 9.2-7 9.2z" /></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" pathLength="1" /></svg>
             </span>
             <h3 class="diff-card__title">Atendimento Humanizado</h3>
             <p class="diff-card__text">Você é ouvido, acolhido e orientado com empatia em todas as etapas do tratamento.</p>
@@ -150,7 +161,7 @@
 
           <article class="diff-card reveal" style="--i:2">
             <span class="diff-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5" /><rect x="13" y="4" width="7" height="7" rx="1.5" /><rect x="4" y="13" width="7" height="7" rx="1.5" /><rect x="13" y="13" width="7" height="7" rx="1.5" /></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5" pathLength="1" /><rect x="13" y="4" width="7" height="7" rx="1.5" pathLength="1" /><rect x="4" y="13" width="7" height="7" rx="1.5" pathLength="1" /><rect x="13" y="13" width="7" height="7" rx="1.5" pathLength="1" /></svg>
             </span>
             <h3 class="diff-card__title">Método 4D Exclusivo</h3>
             <p class="diff-card__text">Abordagem única que avalia sua pele em quatro dimensões, para tratamentos mais eficazes e personalizados.</p>
@@ -158,7 +169,7 @@
 
           <article class="diff-card reveal" style="--i:3">
             <span class="diff-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5z" /><path d="M18.5 14.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2z" /></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5z" pathLength="1" /><path d="M18.5 14.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2z" pathLength="1" /></svg>
             </span>
             <h3 class="diff-card__title">Tecnologia de Ponta</h3>
             <p class="diff-card__text">Equipamentos modernos e seguros, que entregam resultados com precisão e conforto.</p>
@@ -166,7 +177,7 @@
 
           <article class="diff-card reveal" style="--i:4">
             <span class="diff-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 5c-7 0-12 4-12 10v3" /><path d="M20 5c0 8-5 12-11 12" /><path d="M5 12c2 0 3 .6 4 2" /></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 5c-7 0-12 4-12 10v3" pathLength="1" /><path d="M20 5c0 8-5 12-11 12" pathLength="1" /><path d="M5 12c2 0 3 .6 4 2" pathLength="1" /></svg>
             </span>
             <h3 class="diff-card__title">Resultados Naturais</h3>
             <p class="diff-card__text">A beleza está no equilíbrio: respeitamos sua individualidade para realçar o que você tem de melhor.</p>

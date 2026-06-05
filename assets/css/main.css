@@ -141,6 +141,8 @@ body.is-loading * { transition: none !important; }
 }
 .container--narrow { max-width: var(--container-narrow); }
 .container--wide { max-width: var(--container-wide); }
+/* Aligns a section's content to the nav edges (same max-width + padding). */
+.container--diff { max-width: var(--container-wide); padding-inline: clamp(20px, 5vw, 56px); }
 
 .sr-only {
   position: absolute;
@@ -613,8 +615,10 @@ body.is-loading * { transition: none !important; }
   gap: clamp(18px, 1.8vw, 26px);
 }
 .diff-grid .diff-card {
-  flex: 1 1 168px;
-  max-width: 320px;
+  flex: 1 1 196px;
+  min-width: 0; /* lets the flex algorithm size every card equally,
+                   ignoring each card's longest-word intrinsic floor */
+  max-width: 340px;
 }
 @media (max-width: 520px) {
   .diff-grid .diff-card { flex-basis: 100%; max-width: none; }
@@ -784,8 +788,40 @@ body.is-loading * { transition: none !important; }
 .diff-card__title { font: 600 21px/1.25 var(--font-body); color: var(--tinta); }
 .diff-card__text { font: 400 16px/1.7 var(--font-body); color: var(--tinta-muted); }
 
+/* Brand-gradient icon strokes (vanilla equivalent of the 21st.dev
+   lucide-icon-drawer: a calm stroke "draw-in" on reveal + redraw on hover).
+   Each shape carries pathLength="1" so one dash length fits any path. */
+.diff-card__icon svg { stroke: url(#mt-icon-grad); }
+.diff-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+.diff-card__icon svg :is(path, circle, rect, polyline, line, polygon) {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.95s var(--ease-calm);
+  transition-delay: calc(var(--i, 0) * 80ms + 220ms);
+}
+.diff-card.is-in .diff-card__icon svg :is(path, circle, rect, polyline, line, polygon) {
+  stroke-dashoffset: 0;
+}
+@keyframes mt-icon-redraw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+.diff-card:hover .diff-card__icon svg :is(path, circle, rect, polyline, line, polygon),
+.diff-card:focus-within .diff-card__icon svg :is(path, circle, rect, polyline, line, polygon) {
+  animation: mt-icon-redraw 0.85s var(--ease-calm) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .diff-card:hover, .axis-card:hover, .treat-card:hover { transform: none; }
+  .diff-card__icon svg :is(path, circle, rect, polyline, line, polygon) {
+    stroke-dashoffset: 0;
+    transition: none;
+  }
+  .diff-card:hover .diff-card__icon svg :is(path, circle, rect, polyline, line, polygon),
+  .diff-card:focus-within .diff-card__icon svg :is(path, circle, rect, polyline, line, polygon) {
+    animation: none;
+  }
 }
 
 /* ------------------------------------------------------------------ */
