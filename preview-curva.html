@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Amostra · Curva sinuosa de fundo (parallax) · Dr. Márcio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --branco:#ffffff; --neve:#f4f9f9; --nevoa:#eaf3f3;
+    --marca:#057f7f; --marca-deep:#044d4d; --marca-bright:#19b3a6; --marca-ink:#055f5f;
+    --marca-soft:#e8f4f4; --tinta:#16302f; --tinta-muted:#566b6a;
+    --areia:#e9ded2;
+    --font-display:"Cormorant Garamond",Georgia,serif;
+    --font-body:"Poppins",system-ui,sans-serif;
+    --ease-calm:cubic-bezier(.22,1,.36,1);
+    /* ----- knobs do efeito (ajustáveis pelo painel) ----- */
+    --curve-opacity:.085;     /* opacidade do traço base */
+    --curve-stroke:2.4px;     /* espessura */
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; font-family:var(--font-body); color:var(--tinta);
+    background:var(--branco); -webkit-font-smoothing:antialiased; line-height:1.7;
+    overflow-x:hidden; position:relative;
+  }
+
+  /* ====== CAMADA DA CURVA (fundo) ====== */
+  /* altura em px (= altura do documento) é definida via JS, para a camada
+     cobrir a página inteira e rolar junto com o conteúdo */
+  .curve-bg{
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    z-index:0; pointer-events:none; overflow:visible;
+  }
+  .curve-bg svg{display:block; width:100%; height:100%;}
+  .curve-base{ fill:none; stroke:var(--marca); stroke-width:var(--curve-stroke);
+    stroke-linecap:round; stroke-linejoin:round; opacity:var(--curve-opacity); }
+  .curve-glow{ fill:none; stroke:var(--marca-bright); stroke-width:calc(var(--curve-stroke) + 1.2px);
+    stroke-linecap:round; opacity:.0; }   /* segmento luminoso que acompanha o scroll */
+
+  /* conteúdo acima da curva */
+  .wrap{position:relative; z-index:1;}
+
+  /* ====== chrome mínimo só pra dar contexto ====== */
+  .topbar{position:fixed; inset:0 0 auto 0; z-index:5; display:flex; align-items:center;
+    justify-content:space-between; padding:18px clamp(20px,5vw,64px);
+    background:rgba(255,255,255,.72); backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(5,127,127,.08);}
+  .topbar strong{font-family:var(--font-display); font-weight:600; font-size:22px; color:var(--marca-deep); letter-spacing:.01em;}
+  .topbar span{font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--tinta-muted);}
+
+  section{padding:clamp(96px,14vh,150px) clamp(20px,6vw,80px); position:relative;}
+  .center{max-width:760px; margin:0 auto; text-align:center;}
+  .eyebrow{display:inline-flex; align-items:center; gap:12px; font-size:13px; font-weight:600;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--marca-ink); margin:0 0 18px;}
+  .eyebrow i{width:28px; height:1.5px; background:var(--marca); border-radius:2px; display:inline-block;}
+  h1{font-family:var(--font-display); font-weight:600; line-height:1.05; letter-spacing:.005em;
+    font-size:clamp(40px,6vw,78px); margin:0 0 22px; color:var(--tinta);}
+  h2{font-family:var(--font-display); font-weight:600; line-height:1.06; letter-spacing:.005em;
+    font-size:clamp(32px,5vw,60px); margin:0 0 20px; color:var(--tinta);}
+  .hl{color:var(--marca-ink);} .hl i{font-style:italic; font-weight:500; color:var(--marca-ink);}
+  p.lede{font-size:clamp(17px,1.4vw,20px); color:var(--tinta-muted); margin:0 auto; max-width:60ch;}
+  .hero{min-height:96vh; display:grid; place-content:center; text-align:center;
+    background:linear-gradient(180deg,#f4f9f9 0%,#ffffff 60%);}
+  .band{background:var(--neve);}
+  .deep{background:linear-gradient(160deg,#057f7f 0%,#03403f 100%); color:#fff;}
+  .deep h2{color:#fff;} .deep p.lede{color:rgba(255,255,255,.82);}
+  .card{background:#fff; border-radius:22px; padding:40px;
+    box-shadow:0 14px 38px rgba(5,127,127,.08),0 4px 12px rgba(22,48,47,.05);
+    max-width:560px; margin:0 auto; text-align:left;}
+  .scrollnote{font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--marca-ink); margin-top:40px;}
+
+  /* ====== PAINEL DE AJUSTE ====== */
+  .panel{position:fixed; right:16px; bottom:16px; z-index:20; width:300px;
+    background:rgba(255,255,255,.96); backdrop-filter:blur(12px);
+    border:1px solid rgba(5,127,127,.16); border-radius:18px;
+    box-shadow:0 20px 50px rgba(5,127,127,.16); padding:18px; font-size:13px;
+    transition:transform .4s var(--ease-calm), opacity .3s; }
+  .panel.is-hidden{transform:translateY(120%); opacity:0;}
+  .panel h4{margin:0 0 4px; font-family:var(--font-display); font-size:20px; color:var(--marca-deep);}
+  .panel .sub{margin:0 0 14px; color:var(--tinta-muted); font-size:11.5px;}
+  .panel label{display:block; margin:11px 0 4px; font-weight:500; color:var(--tinta);
+    display:flex; justify-content:space-between;}
+  .panel label b{color:var(--marca-ink); font-weight:600; font-variant-numeric:tabular-nums;}
+  .panel input[type=range]{width:100%; accent-color:var(--marca);}
+  .panel .row{display:flex; gap:8px; margin-top:8px;}
+  .panel button{flex:1; cursor:pointer; border:none; border-radius:10px; padding:9px;
+    font-family:var(--font-body); font-weight:600; font-size:12px; letter-spacing:.02em;}
+  .panel .b-copy{background:var(--marca); color:#fff;}
+  .panel .b-reset{background:var(--marca-soft); color:var(--marca-ink);}
+  .panel textarea{width:100%; margin-top:10px; height:54px; border-radius:8px;
+    border:1px solid rgba(5,127,127,.18); padding:7px; font-family:ui-monospace,monospace;
+    font-size:10.5px; color:var(--tinta-muted); resize:none;}
+  .panel-toggle{position:fixed; right:16px; bottom:16px; z-index:21; cursor:pointer;
+    width:48px; height:48px; border-radius:50%; border:none; display:none;
+    place-items:center; background:var(--marca); color:#fff; font-size:18px;
+    box-shadow:0 12px 30px rgba(5,127,127,.3);}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    .curve-glow{opacity:0 !important}
+  }
+  @media (max-width:560px){ .panel{left:16px; right:16px; width:auto;} }
+</style>
+</head>
+<body>
+
+  <!-- camada da curva (preenchida via JS) -->
+  <div class="curve-bg" aria-hidden="true">
+    <svg id="curveSvg" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path id="curveBase" class="curve-base" pathLength="1"></path>
+      <path id="curveGlow" class="curve-glow" pathLength="1"></path>
+    </svg>
+  </div>
+
+  <header class="topbar">
+    <strong>Dr. Márcio Teixeira</strong>
+    <span>Amostra · curva de fundo</span>
+  </header>
+
+  <div class="wrap">
+    <section class="hero">
+      <div class="center">
+        <p class="eyebrow"><i></i> Dermatologia · Porto Alegre</p>
+        <h1>A assinatura da marca, <span class="hl"><i>desenhada</i></span> no fundo</h1>
+        <p class="lede">Role a página devagar. A curva do ícone se desenha conforme você desce, drifta com leveza e se acende ao passar, depois se aquieta e reaparece adiante.</p>
+        <p class="scrollnote">↓ role para ver o traço nascer</p>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="center">
+        <p class="eyebrow"><i></i> Método 4D</p>
+        <h2>Avaliação correta, <span class="hl"><i>tratamento correto</i></span></h2>
+        <p class="lede">Aqui a curva já cruzou a tela uma vez e começa a recuar para a margem, virando textura. Nada compete com o texto: é só atmosfera.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="center">
+        <p class="eyebrow"><i></i> Cuidado humano</p>
+        <h2>Ciência, tecnologia e <span class="hl"><i>empatia</i></span></h2>
+        <p class="lede">O segmento mais claro acompanha o ponto que você está lendo, como um lápis que ilumina por onde passa. Some logo depois, mantendo a calma da marca.</p>
+        <div class="card" style="margin-top:48px;">
+          <p class="eyebrow"><i></i> Exemplo de conteúdo</p>
+          <p style="margin:0;color:var(--tinta-muted)">Um cartão comum sobre o fundo, para você ver que o traço nunca atrapalha a leitura, mesmo passando atrás de um bloco branco.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="deep">
+      <div class="center">
+        <p class="eyebrow" style="color:#bdeee9"><i style="background:#bdeee9"></i> Faixa teal</p>
+        <h2>Sobre o teal, o branco vira o traço</h2>
+        <p class="lede">Numa faixa escura, a mesma curva pode inverter para clara, como no rodapé antigo. Posso preparar essa variação se você gostar do conceito.</p>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="center">
+        <p class="eyebrow"><i></i> Final</p>
+        <h2>Sutil, premium, <span class="hl"><i>seu</i></span></h2>
+        <p class="lede">Chegando ao fim, a curva está quase toda desenhada. Subindo a página, ela se apaga de volta. Ajuste a intensidade no painel ao lado e me diga o ponto ideal.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- painel de ajuste -->
+  <button class="panel-toggle" id="panelToggle" aria-label="Abrir ajustes">⚙</button>
+  <aside class="panel" id="panel" aria-label="Ajustes da curva">
+    <h4>Refine o efeito</h4>
+    <p class="sub">Mexa nos controles e me mande os valores que ficaram bons.</p>
+
+    <label>Opacidade do traço <b id="vOpacity">0.085</b></label>
+    <input type="range" id="cOpacity" min="0" max="0.20" step="0.005" value="0.085" />
+
+    <label>Amplitude (largura da onda) <b id="vAmp">90</b></label>
+    <input type="range" id="cAmp" min="20" max="220" step="2" value="90" />
+
+    <label>Nº de ondas na página <b id="vWaves">3</b></label>
+    <input type="range" id="cWaves" min="1" max="7" step="0.5" value="3" />
+
+    <label>Espessura do traço <b id="vStroke">2.4</b></label>
+    <input type="range" id="cStroke" min="1" max="6" step="0.2" value="2.4" />
+
+    <label>Parallax (deriva) <b id="vPar">0.05</b></label>
+    <input type="range" id="cPar" min="0" max="0.18" step="0.01" value="0.05" />
+
+    <label>Brilho do segmento <b id="vGlow">0.22</b></label>
+    <input type="range" id="cGlow" min="0" max="0.5" step="0.02" value="0.22" />
+
+    <label>Posição horizontal <b id="vPos">50%</b></label>
+    <input type="range" id="cPos" min="10" max="90" step="1" value="50" />
+
+    <div class="row">
+      <button class="b-reset" id="bReset">Padrão</button>
+      <button class="b-copy" id="bCopy">Copiar valores</button>
+    </div>
+    <textarea id="out" readonly></textarea>
+  </aside>
+
+<script>
+(function(){
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const svg  = document.getElementById('curveSvg');
+  const base = document.getElementById('curveBase');
+  const glow = document.getElementById('curveGlow');
+  const cbg  = document.querySelector('.curve-bg');
+  const root = document.documentElement;
+
+  // estado ajustável
+  const cfg = { amp:90, waves:3, opacity:.085, stroke:2.4, parallax:.05, glow:.22, posX:50 };
+
+  let W = 0, H = 0;
+
+  function buildPath(){
+    W = window.innerWidth;
+    // a camada deve ter a altura real do documento. Zera primeiro para medir sem
+    // contar a própria camada, depois fixa a altura medida.
+    cbg.style.height = '0px';
+    H = Math.max(document.documentElement.scrollHeight, window.innerHeight);
+    cbg.style.height = H + 'px';
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const cx = W * (cfg.posX/100);
+    const step = Math.max(8, H/240);
+    let d = '';
+    for(let y=0; y<=H; y+=step){
+      const x = cx + cfg.amp * Math.sin((y/H) * cfg.waves * Math.PI*2);
+      d += (y===0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1) + ' ';
+    }
+    base.setAttribute('d', d);
+    glow.setAttribute('d', d);
+  }
+
+  function applyStatic(){
+    root.style.setProperty('--curve-opacity', cfg.opacity);
+    root.style.setProperty('--curve-stroke', cfg.stroke + 'px');
+  }
+
+  // desenho ligado ao scroll
+  const seg = 0.07; // tamanho do segmento luminoso
+  function onScroll(){
+    const max = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+    const sY  = window.scrollY;
+    const progress = Math.min(sY / max, 1);                 // 0..1 quanto já foi desenhado
+    const viewPos = Math.min((sY + innerHeight*0.5) / (document.documentElement.scrollHeight||1), 1);
+
+    if(reduce){
+      base.style.strokeDasharray = 'none';
+      base.style.strokeDashoffset = 0;
+      glow.style.opacity = 0;
+      return;
+    }
+    // base: desenha de cima pra baixo conforme o progresso
+    base.style.strokeDasharray = 1;
+    base.style.strokeDashoffset = (1 - progress).toFixed(4);
+
+    // glow: um segmento curto centrado na parte que está sendo lida
+    glow.style.strokeDasharray = seg + ' ' + (1 - seg);
+    glow.style.strokeDashoffset = (seg/2 - viewPos).toFixed(4);
+    glow.style.opacity = cfg.glow;
+
+    // parallax: deriva horizontal sutil
+    const drift = Math.sin(progress * Math.PI*2) * (cfg.parallax * 120);
+    svg.style.transform = `translateX(${drift.toFixed(1)}px)`;
+  }
+
+  let ticking=false;
+  function tick(){ if(ticking)return; ticking=true; requestAnimationFrame(()=>{onScroll();ticking=false;}); }
+
+  function rebuild(){ buildPath(); applyStatic(); onScroll(); }
+
+  window.addEventListener('scroll', tick, {passive:true});
+  window.addEventListener('resize', rebuild);
+  window.addEventListener('load', rebuild);
+  rebuild();
+
+  /* ---------- painel ---------- */
+  const map = [
+    ['cOpacity','vOpacity','opacity', v=>(+v).toFixed(3)],
+    ['cAmp','vAmp','amp', v=>Math.round(v)],
+    ['cWaves','vWaves','waves', v=>(+v)],
+    ['cStroke','vStroke','stroke', v=>(+v).toFixed(1)],
+    ['cPar','vPar','parallax', v=>(+v).toFixed(2)],
+    ['cGlow','vGlow','glow', v=>(+v).toFixed(2)],
+    ['cPos','vPos','posX', v=>Math.round(v)+'%'],
+  ];
+  const out = document.getElementById('out');
+  function writeOut(){
+    out.value = `--curve-opacity:${cfg.opacity}; amplitude:${cfg.amp}; ondas:${cfg.waves}; espessura:${cfg.stroke}; parallax:${cfg.parallax}; glow:${cfg.glow}; posX:${cfg.posX}%`;
+  }
+  map.forEach(([id,vid,key,fmt])=>{
+    const el = document.getElementById(id);
+    el.addEventListener('input', ()=>{
+      cfg[key] = +el.value;
+      document.getElementById(vid).textContent = fmt(el.value);
+      if(['amp','waves','posX'].includes(key)) buildPath();
+      applyStatic(); onScroll(); writeOut();
+    });
+  });
+  document.getElementById('bReset').addEventListener('click', ()=>{
+    Object.assign(cfg,{amp:90,waves:3,opacity:.085,stroke:2.4,parallax:.05,glow:.22,posX:50});
+    map.forEach(([id,vid,key,fmt])=>{ const el=document.getElementById(id); el.value=cfg[key];
+      document.getElementById(vid).textContent=fmt(cfg[key]); });
+    rebuild(); writeOut();
+  });
+  document.getElementById('bCopy').addEventListener('click', ()=>{
+    writeOut(); out.select(); try{navigator.clipboard.writeText(out.value);}catch(e){}
+  });
+  // toggle do painel
+  const panel=document.getElementById('panel'), tgl=document.getElementById('panelToggle');
+  // botão flutuante aparece quando painel fecha (mobile/quando quiser esconder)
+  panel.addEventListener('dblclick', ()=>{ panel.classList.add('is-hidden'); tgl.style.display='grid'; });
+  tgl.addEventListener('click', ()=>{ panel.classList.remove('is-hidden'); tgl.style.display='none'; });
+  writeOut();
+})();
+</script>
+</body>
+</html>
