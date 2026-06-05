@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Amostra v2 · Fio de cabelo percorrendo o site · Dr. Márcio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --branco:#ffffff; --neve:#f4f9f9; --nevoa:#eaf3f3; --mint:#e4f1ef;
+    --marca:#057f7f; --marca-deep:#044d4d; --marca-bright:#19b3a6; --marca-ink:#055f5f;
+    --marca-soft:#e8f4f4; --tinta:#16302f; --tinta-muted:#566b6a;
+    --font-display:"Cormorant Garamond",Georgia,serif;
+    --font-body:"Poppins",system-ui,sans-serif;
+    --ease-calm:cubic-bezier(.22,1,.36,1);
+    --fio-opacity:.5; --fio-stroke:1.6px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0; font-family:var(--font-body); color:var(--tinta); background:var(--branco);
+    -webkit-font-smoothing:antialiased; line-height:1.7; overflow-x:hidden; position:relative;}
+
+  /* camada de fundo colorido (atrás do fio) */
+  .bglayer{position:absolute; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none;}
+  .bglayer > div{position:absolute; left:0; width:100%;}
+  /* camada do fio (entre o fundo e o texto) */
+  .fio-bg{position:absolute; top:0; left:0; width:100%; height:100%; z-index:1; pointer-events:none; overflow:visible;}
+  .fio-bg svg{display:block; width:100%; height:100%;}
+  .strand{fill:none; stroke:url(#fioGrad); stroke-linecap:round; stroke-linejoin:round;}
+  .strand--main{stroke-width:var(--fio-stroke); opacity:var(--fio-opacity);}
+  .strand--fly{stroke:url(#fioGrad); opacity:calc(var(--fio-opacity) * .42);}
+  .sheen{fill:none; stroke:#7fe6dc; stroke-linecap:round; opacity:0; filter:url(#soft);}
+  /* modo rosto */
+  .face{fill:none; stroke:url(#fioGrad); stroke-width:1.7px; stroke-linecap:round; stroke-linejoin:round; opacity:var(--fio-opacity);}
+  #faceGroup{display:none;}
+
+  .wrap{position:relative; z-index:2;}
+  .topbar{position:fixed; inset:0 0 auto 0; z-index:5; display:flex; align-items:center; justify-content:space-between;
+    padding:16px clamp(20px,5vw,64px); background:rgba(255,255,255,.72); backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(5,127,127,.08);}
+  .topbar strong{font-family:var(--font-display); font-weight:600; font-size:22px; color:var(--marca-deep);}
+  .topbar span{font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--tinta-muted);}
+
+  .sec{padding:clamp(90px,13vh,140px) clamp(20px,6vw,80px); position:relative;}
+  .center{max-width:740px; margin:0 auto; text-align:center;}
+  .eyebrow{display:inline-flex; align-items:center; gap:12px; font-size:13px; font-weight:600;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--marca-ink); margin:0 0 16px;}
+  .eyebrow i{width:28px; height:1.5px; background:var(--marca); border-radius:2px; display:inline-block;}
+  h1{font-family:var(--font-display); font-weight:600; line-height:1.04; letter-spacing:.005em;
+    font-size:clamp(40px,6vw,76px); margin:0 0 20px;}
+  h2{font-family:var(--font-display); font-weight:600; line-height:1.06; letter-spacing:.005em;
+    font-size:clamp(30px,5vw,56px); margin:0 0 18px;}
+  .hl i{font-style:italic; font-weight:500; color:var(--marca-ink);} .hl{color:var(--marca-ink);}
+  p.lede{font-size:clamp(16px,1.4vw,19px); color:var(--tinta-muted); margin:0 auto; max-width:58ch;}
+  .tag{display:inline-block; margin-top:30px; font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--marca-ink); background:var(--marca-soft); padding:6px 12px; border-radius:999px;}
+
+  /* cores reais vão para .bglayer (atrás do fio); as seções ficam transparentes */
+  .bg-hero{min-height:96vh; display:grid; place-content:center; text-align:center;}
+  .bg-deep{color:#fff;}
+  .bg-deep h2{color:#fff;} .bg-deep p.lede{color:rgba(255,255,255,.82);} .bg-deep .eyebrow{color:#bdeee9;}
+  .bg-deep .eyebrow i{background:#bdeee9;}
+  .card{background:#fff; border-radius:22px; padding:38px; max-width:540px; margin:40px auto 0; text-align:left;
+    box-shadow:0 14px 38px rgba(5,127,127,.08),0 4px 12px rgba(22,48,47,.05);}
+
+  /* painel */
+  .panel{position:fixed; right:14px; bottom:14px; z-index:20; width:286px; background:rgba(255,255,255,.96);
+    backdrop-filter:blur(12px); border:1px solid rgba(5,127,127,.16); border-radius:18px;
+    box-shadow:0 20px 50px rgba(5,127,127,.16); padding:16px; font-size:13px;
+    transition:transform .4s var(--ease-calm),opacity .3s;}
+  .panel.is-hidden{transform:translateY(130%); opacity:0;}
+  .panel h4{margin:0 0 2px; font-family:var(--font-display); font-size:20px; color:var(--marca-deep);}
+  .panel .sub{margin:0 0 10px; color:var(--tinta-muted); font-size:11px;}
+  .panel label{display:flex; justify-content:space-between; margin:9px 0 3px; font-weight:500;}
+  .panel label b{color:var(--marca-ink); font-weight:600; font-variant-numeric:tabular-nums;}
+  .panel input[type=range]{width:100%; accent-color:var(--marca);}
+  .panel .modo{display:flex; gap:6px; margin:10px 0 2px;}
+  .panel .modo button{flex:1; cursor:pointer; border:1px solid rgba(5,127,127,.2); background:#fff;
+    color:var(--marca-ink); border-radius:9px; padding:8px 4px; font-family:var(--font-body); font-weight:600; font-size:11.5px;}
+  .panel .modo button.on{background:var(--marca); color:#fff; border-color:var(--marca);}
+  .panel .chk{display:flex; align-items:center; gap:8px; margin-top:10px; cursor:pointer;}
+  .panel .row{display:flex; gap:8px; margin-top:12px;}
+  .panel .row button{flex:1; cursor:pointer; border:none; border-radius:10px; padding:9px; font-family:var(--font-body);
+    font-weight:600; font-size:12px;}
+  .b-copy{background:var(--marca); color:#fff;} .b-reset{background:var(--marca-soft); color:var(--marca-ink);}
+  .panel textarea{width:100%; margin-top:9px; height:48px; border-radius:8px; border:1px solid rgba(5,127,127,.18);
+    padding:6px; font-family:ui-monospace,monospace; font-size:10px; color:var(--tinta-muted); resize:none;}
+  .panel-toggle{position:fixed; right:14px; bottom:14px; z-index:21; cursor:pointer; width:48px; height:48px;
+    border-radius:50%; border:none; display:none; place-items:center; background:var(--marca); color:#fff; font-size:18px;
+    box-shadow:0 12px 30px rgba(5,127,127,.3);}
+
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} .sheen{opacity:0!important} }
+  @media (max-width:560px){ .panel{left:14px; right:14px; width:auto;} }
+</style>
+</head>
+<body>
+
+  <div class="bglayer" id="bgLayer" aria-hidden="true"></div>
+  <div class="fio-bg" aria-hidden="true">
+    <svg id="fioSvg" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="fioGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0"   stop-color="#19b3a6"/>
+          <stop offset=".5"  stop-color="#057f7f"/>
+          <stop offset="1"   stop-color="#044d4d"/>
+        </linearGradient>
+        <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="2.2"/>
+        </filter>
+      </defs>
+      <!-- modo serpentina: tufo de fios -->
+      <g id="strands">
+        <path class="strand strand--fly" id="flyA" pathLength="1" style="stroke-width:1px"></path>
+        <path class="strand strand--fly" id="flyB" pathLength="1" style="stroke-width:0.8px"></path>
+        <path class="strand strand--main" id="main" pathLength="1"></path>
+        <path class="sheen" id="sheen" pathLength="1" style="stroke-width:2.6px"></path>
+      </g>
+      <!-- modo rosto: perfil em linha contínua (paths preenchidos via JS) -->
+      <g id="faceGroup">
+        <path class="face" id="faceProfile" pathLength="1"></path>
+        <path class="face" id="faceHair" pathLength="1" style="opacity:.7"></path>
+        <path class="sheen" id="faceSheen" pathLength="1" style="stroke-width:2.4px"></path>
+      </g>
+    </svg>
+  </div>
+
+  <header class="topbar">
+    <strong>Dr. Márcio Teixeira</strong>
+    <span>Amostra v2 · fio de cabelo</span>
+  </header>
+
+  <div class="wrap">
+    <!-- 1 hero -->
+    <section class="sec bg-hero" data-bg="hero" data-from=".52" data-to=".30">
+      <div class="center">
+        <p class="eyebrow"><i></i> Dermatologia · Tricologia · Porto Alegre</p>
+        <h1>Um <span class="hl"><i>fio</i></span> conduz o olhar pela sua história de pele</h1>
+        <p class="lede">Role devagar. O fio do nosso símbolo percorre o site, aparecendo sempre sobre as áreas claras, trocando de lado a cada seção, vivo como um cabelo.</p>
+        <span class="tag">↓ role para o fio começar a percorrer</span>
+      </div>
+    </section>
+
+    <!-- 2 Método 4D (branco) — começo da diagonal (direita-superior) -->
+    <section class="sec bg-white" data-bg="white" data-from=".80" data-to=".50">
+      <div class="center">
+        <p class="eyebrow"><i></i> Método 4D</p>
+        <h2>Avaliação correta, <span class="hl"><i>tratamento correto</i></span></h2>
+        <p class="lede">Esta seção e a próxima têm o mesmo fundo branco, então aqui o fio entra pela direita, no alto, e começa a cruzar.</p>
+      </div>
+    </section>
+
+    <!-- 3 vocação (branco) — fim da diagonal (esquerda-inferior) -->
+    <section class="sec bg-white" data-bg="white" data-from=".50" data-to=".20">
+      <div class="center">
+        <p class="eyebrow"><i></i> Vocação</p>
+        <h2>Cuidar da pele é <span class="hl"><i>minha vocação</i></span></h2>
+        <p class="lede">…e termina embaixo, à esquerda. As duas seções juntas formam uma diagonal do canto superior direito ao inferior esquerdo, exatamente como você descreveu.</p>
+      </div>
+    </section>
+
+    <!-- 4 fundo verde claro — fio pela direita -->
+    <section class="sec bg-mint" data-bg="mint" data-from=".78" data-to=".80">
+      <div class="center">
+        <p class="eyebrow"><i></i> Cuidado humano</p>
+        <h2>Ciência, tecnologia e <span class="hl"><i>empatia</i></span></h2>
+        <p class="lede">Fundo verde claro: o fio aparece pela direita. Repare no brilho que corre pelo fio, como luz num cabelo.</p>
+        <div class="card">
+          <p class="eyebrow"><i></i> Exemplo</p>
+          <p style="margin:0;color:var(--tinta-muted)">O fio passa atrás dos blocos sem nunca disputar com a leitura.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 branco — esquerda -->
+    <section class="sec bg-white" data-bg="white" data-from=".24" data-to=".26">
+      <div class="center">
+        <p class="eyebrow"><i></i> Tratamentos</p>
+        <h2>Do diagnóstico ao <span class="hl"><i>resultado natural</i></span></h2>
+        <p class="lede">De volta ao branco, o fio volta para a esquerda. O movimento entre seções é o próprio fio serpenteando.</p>
+      </div>
+    </section>
+
+    <!-- 6 faixa teal — fio clareia (inversão automática pelo gradiente) -->
+    <section class="sec bg-deep" data-bg="deep" data-from=".50" data-to=".50">
+      <div class="center">
+        <p class="eyebrow"><i></i> Sobre o teal</p>
+        <h2>Sobre a faixa escura, o fio clareia</h2>
+        <p class="lede">O mesmo fio inverte para um tom claro ao cruzar o teal escuro, como o branco do símbolo original.</p>
+      </div>
+    </section>
+
+    <!-- 7 branco final -->
+    <section class="sec bg-white" data-bg="white" data-from=".24" data-to=".22">
+      <div class="center">
+        <p class="eyebrow"><i></i> Final</p>
+        <h2>Sutil, com <span class="hl"><i>significado</i></span></h2>
+        <p class="lede">Subindo a página, o fio se recolhe. Troque para o modo "Rosto" no painel para ver o fio desenhando um perfil em linha contínua.</p>
+      </div>
+    </section>
+  </div>
+
+  <button class="panel-toggle" id="panelToggle" aria-label="Abrir ajustes">⚙</button>
+  <aside class="panel" id="panel" aria-label="Ajustes do fio">
+    <h4>Refine o fio</h4>
+    <p class="sub">Ajuste e me mande os valores que ficaram bons.</p>
+
+    <div class="modo">
+      <button data-modo="serp" class="on">Fio serpenteando</button>
+      <button data-modo="rosto">Rosto desenhado</button>
+    </div>
+
+    <label>Opacidade <b id="vOp">0.50</b></label>
+    <input type="range" id="cOp" min=".1" max="1" step=".02" value=".5">
+    <label>Espessura <b id="vSt">1.6</b></label>
+    <input type="range" id="cSt" min=".8" max="4" step=".1" value="1.6">
+    <label>Ondulação (vida) <b id="vWi">10</b></label>
+    <input type="range" id="cWi" min="0" max="26" step="1" value="10">
+    <label>Brilho que corre <b id="vGl">0.85</b></label>
+    <input type="range" id="cGl" min="0" max="1" step=".05" value=".85">
+    <label>Parallax (deriva) <b id="vPa">0.04</b></label>
+    <input type="range" id="cPa" min="0" max=".16" step=".01" value=".04">
+
+    <label class="chk"><input type="checkbox" id="cFly" checked> Fios soltos (tufo de cabelo)</label>
+
+    <div class="row">
+      <button class="b-reset" id="bReset">Padrão</button>
+      <button class="b-copy" id="bCopy">Copiar valores</button>
+    </div>
+    <textarea id="out" readonly></textarea>
+  </aside>
+
+<script>
+(function(){
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const svg=document.getElementById('fioSvg'), grad=document.getElementById('fioGrad');
+  const main=document.getElementById('main'), flyA=document.getElementById('flyA'),
+        flyB=document.getElementById('flyB'), sheen=document.getElementById('sheen');
+  const strandsG=document.getElementById('strands'), faceG=document.getElementById('faceGroup');
+  const faceProfile=document.getElementById('faceProfile'), faceHair=document.getElementById('faceHair'),
+        faceSheen=document.getElementById('faceSheen');
+  const cbg=document.querySelector('.fio-bg'), bgLayer=document.getElementById('bgLayer'), root=document.documentElement;
+  const BG={hero:'linear-gradient(180deg,#eef6f5 0%,#ffffff 70%)', white:'#ffffff', mint:'#e4f1ef', deep:'linear-gradient(160deg,#057f7f 0%,#03403f 100%)'};
+
+  const cfg={op:.5, st:1.6, wig:10, glow:.85, par:.04, fly:true, modo:'serp'};
+  let W=0,H=0, secs=[], faceTF=null, faceY0=0,faceY1=0;
+
+  const smooth=t=>t*t*(3-2*t);
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+  function measure(){
+    W=window.innerWidth;
+    cbg.style.height='0px';
+    H=Math.max(document.documentElement.scrollHeight, window.innerHeight);
+    cbg.style.height=H+'px';
+    svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+    secs=[...document.querySelectorAll('.sec')].map(el=>{
+      const r=el.getBoundingClientRect();
+      return { top:r.top+window.scrollY, bot:r.bottom+window.scrollY,
+        from:parseFloat(el.dataset.from), to:parseFloat(el.dataset.to), bg:el.dataset.bg, el };
+    });
+    // camada de fundo colorido, atrás do fio
+    bgLayer.style.height=H+'px';
+    bgLayer.innerHTML=secs.map(s=>`<div style="top:${s.top}px;height:${(s.bot-s.top)}px;background:${BG[s.bg]||'#fff'}"></div>`).join('');
+  }
+
+  // fração horizontal alvo em y (0..1 da largura)
+  function fracAt(y){
+    if(!secs.length) return .5;
+    if(y<=secs[0].top) return secs[0].from;
+    const last=secs[secs.length-1];
+    if(y>=last.bot) return last.to;
+    for(const s of secs){
+      if(y>=s.top && y<=s.bot){
+        const t=smooth((y-s.top)/Math.max(1,s.bot-s.top));
+        return s.from+(s.to-s.from)*t;
+      }
+    }
+    return .5;
+  }
+
+  // centro em px, com margem para não colar nas bordas + ondulação de cabelo
+  function centerX(y){
+    const margin=W*0.10;
+    const x = margin + fracAt(y)*(W-2*margin);
+    const yn=y/H;
+    const wig = cfg.wig*Math.sin(yn*Math.PI*2*6 + .7) + (cfg.wig*.45)*Math.sin(yn*Math.PI*2*13 + 2.1);
+    return x + wig;
+  }
+
+  function strandPath(offset, phase){
+    const step=Math.max(7,H/260);
+    let d='';
+    for(let y=0;y<=H;y+=step){
+      const x=centerX(y) + offset + (offset?Math.sin(y/H*Math.PI*2*9+phase)*offset*0.5:0);
+      d+=(y===0?'M':'L')+x.toFixed(1)+' '+y.toFixed(1)+' ';
+    }
+    return d;
+  }
+
+  // gradiente: insere tom claro sobre a faixa "deep" (inversão automática)
+  function buildGradient(){
+    const deep=secs.find(s=>s.bg==='deep');
+    let stops=[[0,'#19b3a6'],[.5,'#057f7f'],[1,'#044d4d']];
+    if(deep){
+      const a=clamp(deep.top/H,0,1), b=clamp(deep.bot/H,0,1);
+      stops=[[0,'#19b3a6'],[.5,'#057f7f'],
+        [Math.max(0,a-0.02),'#0a6b68'],
+        [a,'#d9f3ef'],[(a+b)/2,'#eafaf7'],[b,'#d9f3ef'],
+        [Math.min(1,b+0.02),'#0a6b68'],[1,'#044d4d']]
+        .filter(Boolean).sort((p,q)=>p[0]-q[0]);
+    }
+    grad.innerHTML = stops.map(s=>`<stop offset="${(+s[0]).toFixed(3)}" stop-color="${s[1]}"/>`).join('');
+  }
+
+  // ---- modo rosto: perfil em linha contínua (coords locais 0..300 x 0..380) ----
+  const PROFILE='M214 36 C150 30 120 64 118 120 C117 150 128 158 126 176 C124 192 96 196 86 220 '
+    +'C78 240 110 246 120 252 C132 259 130 266 120 276 C110 286 120 296 122 300 C124 306 112 312 120 330 '
+    +'C128 350 150 364 186 366 C214 367 232 360 246 352';
+  const HAIR='M214 36 C268 44 300 92 300 150 C300 210 280 250 250 300 '
+    +'M222 50 C262 70 280 110 276 156 M210 40 C150 44 132 96 140 150';
+  function placeFace(){
+    const sec=secs[1]||secs[0]; // Método 4D
+    const fw=Math.min(360, W*0.62), s=fw/300;
+    const fx=W*0.5 - fw/2, fy=sec.top + (sec.bot-sec.top)*0.16;
+    faceY0=sec.top; faceY1=sec.bot;
+    faceTF=`translate(${fx.toFixed(1)} ${fy.toFixed(1)}) scale(${s.toFixed(3)})`;
+    faceProfile.setAttribute('transform',faceTF); faceProfile.setAttribute('d',PROFILE);
+    faceHair.setAttribute('transform',faceTF); faceHair.setAttribute('d',HAIR);
+    faceSheen.setAttribute('transform',faceTF); faceSheen.setAttribute('d',PROFILE);
+  }
+
+  function applyVars(){ root.style.setProperty('--fio-opacity',cfg.op); root.style.setProperty('--fio-stroke',cfg.st+'px'); }
+
+  function rebuild(){
+    measure();
+    const d=strandPath(0,0);
+    main.setAttribute('d',d); sheen.setAttribute('d',d);
+    flyA.setAttribute('d',strandPath(6,1.2)); flyB.setAttribute('d',strandPath(-7,3.4));
+    flyA.style.display=flyB.style.display=cfg.fly?'':'none';
+    buildGradient(); placeFace(); applyVars(); setMode(cfg.modo); onScroll();
+  }
+
+  const seg=.06;
+  function onScroll(){
+    const docH=document.documentElement.scrollHeight||1;
+    const sY=window.scrollY;
+    // o fio cresce até um pouco abaixo da base da viewport: ele lidera o olhar
+    const progress=clamp((sY + innerHeight*0.92)/docH,0,1);
+    const viewPos=clamp((sY+innerHeight*.5)/docH,0,1);
+
+    if(cfg.modo==='serp'){
+      [main,flyA,flyB].forEach(p=>{ p.style.strokeDasharray=1; p.style.strokeDashoffset=reduce?0:(1-progress).toFixed(4); });
+      if(reduce){ sheen.style.opacity=0; }
+      else{ sheen.style.strokeDasharray=seg+' '+(1-seg); sheen.style.strokeDashoffset=(seg/2-viewPos).toFixed(4); sheen.style.opacity=cfg.glow*.9; }
+      svg.style.transform=`translateX(${(Math.sin(progress*Math.PI*2)*cfg.par*120).toFixed(1)}px)`;
+    } else {
+      // rosto: desenha conforme a seção do método 4d cruza a viewport
+      const fp=clamp((sY+innerHeight*0.72 - faceY0)/Math.max(1,(faceY1-faceY0)),0,1);
+      [faceProfile,faceHair].forEach(p=>{ p.style.strokeDasharray=1; p.style.strokeDashoffset=reduce?0:(1-fp).toFixed(4); });
+      if(reduce){ faceSheen.style.opacity=0; }
+      else{ faceSheen.style.strokeDasharray=seg+' '+(1-seg); faceSheen.style.strokeDashoffset=(seg/2 - fp).toFixed(4); faceSheen.style.opacity=cfg.glow*(fp>0&&fp<1?1:0); }
+    }
+  }
+
+  function setMode(m){
+    cfg.modo=m;
+    strandsG.style.display = m==='serp'?'inline':'none';
+    faceG.style.display    = m==='rosto'?'inline':'none';
+    document.querySelectorAll('.modo button').forEach(b=>b.classList.toggle('on',b.dataset.modo===m));
+    onScroll();
+  }
+
+  let ticking=false;
+  addEventListener('scroll',()=>{ if(ticking)return; ticking=true; requestAnimationFrame(()=>{onScroll();ticking=false;}); },{passive:true});
+  addEventListener('resize',rebuild); addEventListener('load',rebuild); rebuild();
+
+  /* painel */
+  const out=document.getElementById('out');
+  const writeOut=()=>{ out.value=`modo:${cfg.modo}; opacidade:${cfg.op}; espessura:${cfg.st}; ondulacao:${cfg.wig}; brilho:${cfg.glow}; parallax:${cfg.par}; fios_soltos:${cfg.fly}`; };
+  const bind=(id,vid,key,fmt,rebuildPath)=>{ const el=document.getElementById(id);
+    el.addEventListener('input',()=>{ cfg[key]=+el.value; document.getElementById(vid).textContent=fmt(el.value);
+      if(rebuildPath) rebuild(); else { applyVars(); onScroll(); } writeOut(); }); };
+  bind('cOp','vOp','op',v=>(+v).toFixed(2),false);
+  bind('cSt','vSt','st',v=>(+v).toFixed(1),false);
+  bind('cWi','vWi','wig',v=>Math.round(v),true);
+  bind('cGl','vGl','glow',v=>(+v).toFixed(2),false);
+  bind('cPa','vPa','par',v=>(+v).toFixed(2),false);
+  document.getElementById('cFly').addEventListener('change',e=>{ cfg.fly=e.target.checked; rebuild(); writeOut(); });
+  document.querySelectorAll('.modo button').forEach(b=>b.addEventListener('click',()=>{ setMode(b.dataset.modo); writeOut(); }));
+  document.getElementById('bReset').addEventListener('click',()=>{ Object.assign(cfg,{op:.5,st:1.6,wig:10,glow:.85,par:.04,fly:true,modo:'serp'});
+    cOp.value=.5;cSt.value=1.6;cWi.value=10;cGl.value=.85;cPa.value=.04;document.getElementById('cFly').checked=true;
+    vOp.textContent='0.50';vSt.textContent='1.6';vWi.textContent='10';vGl.textContent='0.85';vPa.textContent='0.04';
+    rebuild(); writeOut(); });
+  document.getElementById('bCopy').addEventListener('click',()=>{ writeOut(); out.select(); try{navigator.clipboard.writeText(out.value);}catch(e){} });
+  const panel=document.getElementById('panel'), tgl=document.getElementById('panelToggle');
+  panel.addEventListener('dblclick',()=>{ panel.classList.add('is-hidden'); tgl.style.display='grid'; });
+  tgl.addEventListener('click',()=>{ panel.classList.remove('is-hidden'); tgl.style.display='none'; });
+  writeOut();
+})();
+</script>
+</body>
+</html>
