@@ -194,7 +194,7 @@ body.fonts-pending .stats { visibility: hidden; }
     transition-duration: 0.001ms !important;
   }
   .reveal { opacity: 1 !important; transform: none !important; }
-  .parallax, .curve-watermark { transform: none !important; }
+  .parallax { transform: none !important; }
   .curve-draw path { stroke-dashoffset: 0 !important; }
 }
 
@@ -596,17 +596,6 @@ body.fonts-pending .stats { visibility: hidden; }
 .section__head--left .section__lede { margin-inline: 0; }
 
 .section__body { position: relative; z-index: var(--z-content); }
-
-.curve-watermark {
-  position: absolute;
-  inset: auto -10% -12% auto;
-  width: min(70vw, 880px);
-  color: var(--marca);
-  opacity: 0.05;
-  pointer-events: none;
-  z-index: var(--z-base);
-}
-.curve-watermark svg { width: 100%; height: auto; }
 
 /* Fio de cabelo lateral — um por seção, na margem livre (gerado por main.js).
    Vive em z-base (atrás do conteúdo, acima do fundo). overflow:clip da .section
@@ -1240,12 +1229,6 @@ body.fonts-pending .stats { visibility: hidden; }
   background: linear-gradient(180deg, #ecf6f1 0%, #dcefe7 100%);
   isolation: isolate;
 }
-.curve-watermark--casos {
-  inset: -8% auto auto -6%;
-  width: min(60vw, 720px);
-  opacity: 0.06;
-}
-
 /* header: intro on the left, arrows on the right (like the reference) */
 .casos__top { position: relative; z-index: var(--z-content); }
 .casos__head {
