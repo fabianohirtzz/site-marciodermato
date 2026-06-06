@@ -231,6 +231,53 @@
   });
 
   /* ------------------------------------------------------------------ */
+  /* Antes e Depois — full-bleed carousel + tap-to-reveal               */
+  /* ------------------------------------------------------------------ */
+  (function casos() {
+    const track = document.querySelector("[data-casos-track]");
+    if (!track) return;
+    const prev = document.querySelector("[data-casos-prev]");
+    const next = document.querySelector("[data-casos-next]");
+
+    const page = () => Math.max(track.clientWidth * 0.85, 240);
+    const go = (dir) =>
+      track.scrollBy({ left: dir * page(), behavior: reduceMotion() ? "auto" : "smooth" });
+    prev && prev.addEventListener("click", () => go(-1));
+    next && next.addEventListener("click", () => go(1));
+
+    const updateArrows = () => {
+      const max = track.scrollWidth - track.clientWidth - 2;
+      if (prev) prev.disabled = track.scrollLeft <= 2;
+      if (next) next.disabled = track.scrollLeft >= max;
+    };
+    let ticking = false;
+    track.addEventListener(
+      "scroll",
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          updateArrows();
+          ticking = false;
+        });
+      },
+      { passive: true }
+    );
+    window.addEventListener("resize", updateArrows);
+    updateArrows();
+
+    /* hover-less (touch) devices: tap toggles the "depois" persistently */
+    track.querySelectorAll(".caso__toggle").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const caso = btn.closest(".caso");
+        if (!caso) return;
+        const on = caso.classList.toggle("is-revealed");
+        btn.setAttribute("aria-pressed", String(on));
+      });
+    });
+  })();
+
+  /* ------------------------------------------------------------------ */
   /* Smooth anchor scroll (closes drawer, respects reduced motion)      */
   /* ------------------------------------------------------------------ */
   document.querySelectorAll('a[href^="#"]').forEach((a) => {

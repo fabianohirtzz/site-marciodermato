@@ -1228,3 +1228,177 @@ body.fonts-pending .stats { visibility: hidden; }
 .page-head__soon::before {
   content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--marca);
 }
+
+/* ------------------------------------------------------------------ */
+/* 19. Antes e Depois — full-bleed before/after gallery               */
+/* ------------------------------------------------------------------ */
+.section--casos {
+  --casos-off-step: clamp(8px, 1.4vw, 18px);
+  position: relative;
+  padding-block: clamp(72px, 9vw, 130px);
+  /* "verde claro" — light teal-green wash, kept inside the brand family */
+  background: linear-gradient(180deg, #ecf6f1 0%, #dcefe7 100%);
+  isolation: isolate;
+}
+.curve-watermark--casos {
+  inset: -8% auto auto -6%;
+  width: min(60vw, 720px);
+  opacity: 0.06;
+}
+
+/* header: intro on the left, arrows on the right (like the reference) */
+.casos__top { position: relative; z-index: var(--z-content); }
+.casos__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.casos__intro { max-width: 720px; }
+.casos__hint { margin-top: 16px; }
+
+.casos__nav { display: inline-flex; gap: 12px; flex: none; padding-bottom: 6px; }
+.casos__arrow {
+  width: 54px; height: 54px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--marca-ink);
+  border: 0;
+  box-shadow: 0 12px 30px rgba(5, 127, 127, 0.12), inset 0 0 0 1px var(--linha);
+  cursor: pointer;
+  transition: transform 0.26s var(--ease-calm), box-shadow 0.26s var(--ease-soft),
+    background-color 0.2s var(--ease-soft), color 0.2s var(--ease-soft);
+}
+.casos__arrow svg { width: 22px; height: 22px; }
+.casos__arrow:hover {
+  background: var(--marca); color: #fff; transform: translateY(-2px);
+  box-shadow: 0 16px 38px rgba(5, 127, 127, 0.26);
+}
+.casos__arrow:disabled {
+  opacity: 0.4; cursor: default; pointer-events: none;
+  background: #fff; color: var(--tinta-soft); transform: none;
+  box-shadow: inset 0 0 0 1px var(--linha);
+}
+
+/* full-bleed horizontal track */
+.casos__viewport {
+  position: relative; z-index: var(--z-content);
+  margin-top: clamp(34px, 4vw, 56px);
+}
+.casos__track {
+  --per: 6;
+  --gap: clamp(14px, 1.3vw, 22px);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap);
+  margin: 0;
+  padding: 18px var(--gutter) 26px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--gutter);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.casos__track::-webkit-scrollbar { display: none; }
+.casos__track:focus-visible { outline: 3px solid var(--marca); outline-offset: -3px; border-radius: var(--r-md); }
+
+.caso-item {
+  flex: 0 0 calc((100vw - 2 * var(--gutter) - (var(--per) - 1) * var(--gap)) / var(--per));
+  scroll-snap-align: start;
+}
+.caso { margin-top: calc(var(--off, 0) * var(--casos-off-step)); }
+
+.caso__toggle {
+  position: relative;
+  display: block; width: 100%;
+  padding: 0; border: 0; background: none; cursor: pointer;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.caso__media {
+  position: relative;
+  display: block;
+  aspect-ratio: 5 / 8;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--nevoa);
+  box-shadow: 0 16px 40px rgba(5, 127, 127, 0.12), 0 4px 12px rgba(22, 48, 47, 0.06);
+  transition: transform 0.4s var(--ease-calm), box-shadow 0.4s var(--ease-soft);
+}
+.caso__img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: opacity 0.55s var(--ease-glide), transform 0.8s var(--ease-calm);
+}
+.caso__img--depois { opacity: 0; transform: scale(1.04); }
+
+/* reveal "depois" on hover / keyboard focus / tap-toggled */
+.caso__toggle:hover .caso__img--depois,
+.caso__toggle:focus-visible .caso__img--depois,
+.caso.is-revealed .caso__img--depois { opacity: 1; transform: none; }
+.caso__toggle:hover .caso__img--antes,
+.caso__toggle:focus-visible .caso__img--antes,
+.caso.is-revealed .caso__img--antes { opacity: 0; }
+
+.caso__toggle:hover .caso__media,
+.caso__toggle:focus-visible .caso__media {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 64px rgba(5, 127, 127, 0.2), 0 8px 20px rgba(22, 48, 47, 0.08);
+}
+
+/* tag (Antes / Depois) + category chip */
+.caso__meta {
+  position: absolute; left: 12px; top: 12px; right: 12px;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+  pointer-events: none;
+}
+.caso__tag {
+  display: inline-grid;
+  padding: 6px 13px;
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 18px rgba(5, 127, 127, 0.14);
+  font: 600 11px/1 var(--font-body);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--marca-ink);
+}
+.caso__tag-state { grid-area: 1 / 1; transition: opacity 0.4s var(--ease-glide); }
+.caso__tag-state--depois { opacity: 0; color: var(--marca-deep); }
+.caso__toggle:hover .caso__tag-state--antes,
+.caso__toggle:focus-visible .caso__tag-state--antes,
+.caso.is-revealed .caso__tag-state--antes { opacity: 0; }
+.caso__toggle:hover .caso__tag-state--depois,
+.caso__toggle:focus-visible .caso__tag-state--depois,
+.caso.is-revealed .caso__tag-state--depois { opacity: 1; }
+
+.caso__cat {
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  background: rgba(4, 77, 77, 0.42);
+  backdrop-filter: blur(6px);
+  font: 600 11px/1.2 var(--font-body);
+  letter-spacing: 0.03em;
+  color: #fff;
+  text-align: right;
+}
+
+@media (max-width: 1200px) { .casos__track { --per: 5; } }
+@media (max-width: 980px)  { .casos__track { --per: 4; } }
+@media (max-width: 760px)  { .casos__track { --per: 3; } }
+@media (max-width: 560px)  {
+  .casos__track { --per: 2.2; }
+  .casos__head { align-items: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caso__img { transition: opacity 0.001ms; }
+  .caso__img--depois { transform: none; }
+  .caso__toggle:hover .caso__media,
+  .caso__toggle:focus-visible .caso__media { transform: none; }
+}
