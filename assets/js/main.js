@@ -239,9 +239,15 @@
     const prev = document.querySelector("[data-casos-prev]");
     const next = document.querySelector("[data-casos-next]");
 
-    const page = () => Math.max(track.clientWidth * 0.85, 240);
+    /* one card (width + gap) per arrow click */
+    const step = () => {
+      const card = track.querySelector(".caso-item");
+      if (!card) return track.clientWidth;
+      const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      return card.getBoundingClientRect().width + gap;
+    };
     const go = (dir) =>
-      track.scrollBy({ left: dir * page(), behavior: reduceMotion() ? "auto" : "smooth" });
+      track.scrollBy({ left: dir * step(), behavior: reduceMotion() ? "auto" : "smooth" });
     prev && prev.addEventListener("click", () => go(-1));
     next && next.addEventListener("click", () => go(1));
 
