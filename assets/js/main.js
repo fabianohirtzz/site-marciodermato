@@ -130,23 +130,34 @@
   const video = document.getElementById("hero-video");
   const pauseBtn = document.querySelector("[data-hero-pause]");
   if (video && pauseBtn) {
+    /* iOS only honors inline autoplay when muted is set as a property too. */
+    video.muted = true;
+    video.setAttribute("muted", "");
     const setPaused = (paused) => {
       pauseBtn.classList.toggle("is-paused", paused);
       pauseBtn.setAttribute("aria-label", paused ? "Reproduzir vídeo" : "Pausar vídeo");
+    };
+    const tryPlay = () => {
+      const p = video.play();
+      if (p && typeof p.catch === "function") {
+        p.then(() => setPaused(false)).catch(() => setPaused(true));
+      } else {
+        setPaused(video.paused);
+      }
     };
     if (reduceMotion()) {
       video.removeAttribute("autoplay");
       video.pause();
       setPaused(true);
     } else {
-      const p = video.play();
-      if (p && typeof p.catch === "function") p.catch(() => setPaused(true));
-      setPaused(video.paused);
+      tryPlay();
+      /* If the browser blocked autoplay, retry once the video can actually play. */
+      video.addEventListener("canplay", () => { if (video.paused) tryPlay(); }, { once: true });
     }
     pauseBtn.addEventListener("click", () => {
       if (video.paused) {
-        video.play();
-        setPaused(false);
+        video.muted = true;
+        tryPlay();
       } else {
         video.pause();
         setPaused(true);
@@ -228,6 +239,35 @@
     const apply = () => ba.style.setProperty("--pos", range.value + "%");
     range.addEventListener("input", apply);
     apply();
+
+    /* Press-and-drag anywhere on the image (touch + mouse), not just the thumb.
+       The range stays for keyboard a11y; pointer events drive the live drag. */
+    let dragging = false;
+    const setFromX = (clientX) => {
+      const rect = ba.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
+      range.value = pct;
+      ba.style.setProperty("--pos", pct + "%");
+    };
+    ba.addEventListener("pointerdown", (e) => {
+      dragging = true;
+      if (ba.setPointerCapture) {
+        try { ba.setPointerCapture(e.pointerId); } catch (_) {}
+      }
+      setFromX(e.clientX);
+    });
+    ba.addEventListener("pointermove", (e) => {
+      if (dragging) setFromX(e.clientX);
+    });
+    const stop = (e) => {
+      if (!dragging) return;
+      dragging = false;
+      if (ba.releasePointerCapture && e.pointerId != null) {
+        try { ba.releasePointerCapture(e.pointerId); } catch (_) {}
+      }
+    };
+    ba.addEventListener("pointerup", stop);
+    ba.addEventListener("pointercancel", stop);
   });
 
   /* ------------------------------------------------------------------ */
