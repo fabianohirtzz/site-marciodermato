@@ -344,21 +344,39 @@ body.fonts-pending .stats { visibility: hidden; }
 .nav__logo--solid { display: none; }
 
 .nav__links {
+  position: relative;
   display: flex;
   gap: 2px;
   margin-inline: auto;
 }
+/* sliding indicator — a single pill that glides between links on hover/focus,
+   resting under the current page. Positioned via JS-set CSS vars. */
+.nav__indicator {
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: var(--ind-w, 0);
+  transform: translateX(var(--ind-x, 0));
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.16);
+  opacity: var(--ind-o, 0);
+  pointer-events: none;
+  z-index: 0;
+  transition: transform 0.42s var(--ease-glide), width 0.42s var(--ease-glide),
+    opacity 0.3s var(--ease-soft), background 0.4s var(--ease-glide);
+}
 .nav__link {
+  position: relative;
+  z-index: 1;
   padding: 9px 16px;
   border-radius: var(--r-pill);
   font: 500 15px/1 var(--font-body);
   letter-spacing: 0.01em;
   color: rgba(255, 255, 255, 0.92);
-  transition: background 0.2s var(--ease-soft), color 0.2s var(--ease-soft);
+  transition: color 0.25s var(--ease-soft);
 }
 .nav__link:hover,
-.nav__link:focus-visible { background: rgba(255, 255, 255, 0.16); color: #fff; }
-.nav__link[aria-current="page"] { color: #fff; background: rgba(255, 255, 255, 0.16); }
+.nav__link:focus-visible,
+.nav__link[aria-current="page"] { color: #fff; }
 
 .nav__cta { flex: none; min-height: 46px; padding: 13px 24px; }
 
@@ -380,6 +398,7 @@ body.fonts-pending .stats { visibility: hidden; }
    the glass pill condenses into a frosted-white floating capsule */
 .nav.is-solid .nav__inner,
 .nav--solid .nav__inner {
+  max-width: 1090px; /* micro-shrink: the pill condenses as you scroll */
   background: rgba(255, 255, 255, 0.9);
   border-color: rgba(5, 127, 127, 0.12);
   box-shadow: 0 16px 42px rgba(5, 127, 127, 0.16), 0 3px 10px rgba(22, 48, 47, 0.06);
@@ -388,6 +407,8 @@ body.fonts-pending .stats { visibility: hidden; }
 }
 .nav.is-solid .nav__logo,
 .nav--solid .nav__logo { height: 38px; }
+.nav.is-solid .nav__indicator,
+.nav--solid .nav__indicator { background: var(--marca-soft); }
 .nav.is-solid .nav__logo--light,
 .nav--solid .nav__logo--light { display: none; }
 .nav.is-solid .nav__logo--solid,
@@ -397,9 +418,9 @@ body.fonts-pending .stats { visibility: hidden; }
 .nav.is-solid .nav__link:hover,
 .nav.is-solid .nav__link:focus-visible,
 .nav--solid .nav__link:hover,
-.nav--solid .nav__link:focus-visible { background: var(--marca-soft); color: var(--marca-deep); }
+.nav--solid .nav__link:focus-visible,
 .nav.is-solid .nav__link[aria-current="page"],
-.nav--solid .nav__link[aria-current="page"] { color: var(--marca-deep); background: var(--marca-soft); }
+.nav--solid .nav__link[aria-current="page"] { color: var(--marca-deep); }
 .nav.is-solid .nav__burger span,
 .nav--solid .nav__burger span { background: var(--marca-deep); }
 
@@ -416,6 +437,7 @@ body.fonts-pending .stats { visibility: hidden; }
 }
 @media (prefers-reduced-motion: reduce) {
   .nav { animation: none; }
+  .nav__indicator { transition: opacity 0.2s var(--ease-soft); }
 }
 
 /* mobile drawer */
@@ -1432,4 +1454,139 @@ body.fonts-pending .stats { visibility: hidden; }
   .caso__img--depois { transform: none; }
   .caso__toggle:hover .caso__media,
   .caso__toggle:focus-visible .caso__media { transform: none; }
+}
+
+/* ------------------------------------------------------------------ */
+/* 13. Avaliações (reviews carousel)                                  */
+/* ------------------------------------------------------------------ */
+.reviews {
+  position: relative;
+  padding-block: clamp(72px, 9vw, 130px);
+  overflow: hidden;
+}
+.reviews__top { position: relative; z-index: var(--z-content); }
+.reviews__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.reviews__intro { max-width: 720px; }
+
+/* Google rating chip — the trust anchor; one calm pill, real Google mark */
+.reviews__rating {
+  display: inline-flex; align-items: center; gap: 14px;
+  margin-top: 26px; padding: 11px 22px 11px 15px;
+  border-radius: var(--r-pill);
+  background: var(--branco);
+  box-shadow: 0 12px 30px rgba(5, 127, 127, 0.10), inset 0 0 0 1px var(--linha);
+  transition: transform 0.26s var(--ease-calm), box-shadow 0.26s var(--ease-soft);
+}
+.reviews__rating:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px rgba(5, 127, 127, 0.16), inset 0 0 0 1px var(--linha);
+}
+.reviews__rating-g { width: 30px; height: 30px; flex: none; display: grid; place-items: center; }
+.reviews__rating-g svg { width: 24px; height: 24px; }
+.reviews__rating-meta { display: flex; flex-direction: column; gap: 4px; }
+.reviews__rating-stars { display: inline-flex; gap: 2px; color: var(--marca); }
+.reviews__rating-stars svg { width: 16px; height: 16px; }
+.reviews__rating-score { font: 500 13px/1 var(--font-body); color: var(--tinta-muted); }
+.reviews__rating-score strong { color: var(--tinta); font-weight: 700; font-size: 14.5px; }
+
+/* arrows — mirror the casos carousel controls */
+.reviews__nav { display: inline-flex; gap: 12px; flex: none; padding-bottom: 6px; }
+.reviews__arrow {
+  width: 54px; height: 54px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: #fff; color: var(--marca-ink); border: 0;
+  box-shadow: 0 12px 30px rgba(5, 127, 127, 0.12), inset 0 0 0 1px var(--linha);
+  cursor: pointer;
+  transition: transform 0.26s var(--ease-calm), box-shadow 0.26s var(--ease-soft),
+    background-color 0.2s var(--ease-soft), color 0.2s var(--ease-soft);
+}
+.reviews__arrow svg { width: 22px; height: 22px; }
+.reviews__arrow:hover {
+  background: var(--marca); color: #fff; transform: translateY(-2px);
+  box-shadow: 0 16px 38px rgba(5, 127, 127, 0.26);
+}
+.reviews__arrow:disabled {
+  opacity: 0.4; cursor: default; pointer-events: none;
+  background: #fff; color: var(--tinta-soft); transform: none;
+  box-shadow: inset 0 0 0 1px var(--linha);
+}
+
+/* full-bleed horizontal track */
+.reviews__viewport { position: relative; z-index: var(--z-content); margin-top: clamp(34px, 4vw, 56px); }
+.reviews__track {
+  --per: 3;
+  --gap: clamp(16px, 1.6vw, 26px);
+  display: flex; align-items: stretch; gap: var(--gap); margin: 0;
+  padding: 18px var(--gutter) 26px;
+  overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--gutter);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.reviews__track::-webkit-scrollbar { display: none; }
+.reviews__track:focus-visible { outline: 3px solid var(--marca); outline-offset: -3px; border-radius: var(--r-lg); }
+
+.review-item {
+  flex: 0 0 calc((100vw - 2 * var(--gutter) - (var(--per) - 1) * var(--gap)) / var(--per));
+  scroll-snap-align: start;
+  display: flex;
+}
+.review-card {
+  position: relative;
+  display: flex; flex-direction: column; gap: 16px;
+  width: 100%; min-height: 300px;
+  background: var(--branco); border-radius: var(--r-lg);
+  padding: 32px 30px;
+  box-shadow: 0 14px 38px rgba(5, 127, 127, 0.08), 0 4px 12px rgba(22, 48, 47, 0.05);
+  transition: transform 0.28s var(--ease-calm), box-shadow 0.28s var(--ease-soft);
+}
+.review-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 66px rgba(5, 127, 127, 0.16), 0 8px 20px rgba(22, 48, 47, 0.08);
+}
+.review-card__stars { display: inline-flex; gap: 3px; color: var(--marca); }
+.review-card__stars svg { width: 19px; height: 19px; }
+.review-card__text {
+  margin: 0; font: 400 16px/1.72 var(--font-body); color: var(--tinta);
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 7; overflow: hidden;
+}
+.review-card__by { display: flex; align-items: center; gap: 13px; margin-top: auto; padding-top: 4px; }
+.review-card__avatar {
+  width: 46px; height: 46px; border-radius: 50%; flex: none;
+  display: grid; place-items: center;
+  background: var(--av-bg, var(--marca-soft)); color: var(--av-ink, var(--marca-ink));
+  font: 600 15px/1 var(--font-body); letter-spacing: 0.03em;
+}
+.review-card__id { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.review-card__name { font: 600 15px/1.25 var(--font-body); color: var(--tinta); }
+.review-card__src { font: 500 12px/1 var(--font-body); color: var(--tinta-soft); }
+
+.reviews__more {
+  margin-top: clamp(30px, 4vw, 44px);
+  text-align: center;
+  position: relative; z-index: var(--z-content);
+}
+
+@media (max-width: 1080px) { .reviews__track { --per: 2; } }
+@media (max-width: 680px) {
+  .reviews__track { --per: 1.12; }
+  .reviews__head { align-items: flex-start; }
+  .review-card__text { -webkit-line-clamp: 11; }
+}
+
+/* footer Google review icon keeps its multicolor mark */
+.footer__social--g svg { width: 19px; height: 19px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .review-card, .review-card:hover,
+  .reviews__rating, .reviews__rating:hover,
+  .reviews__arrow, .reviews__arrow:hover { transform: none; }
 }

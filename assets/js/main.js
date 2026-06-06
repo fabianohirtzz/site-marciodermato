@@ -98,6 +98,47 @@
   }
 
   /* ------------------------------------------------------------------ */
+  /* Nav sliding indicator (a pill that glides between links)           */
+  /* ------------------------------------------------------------------ */
+  (function navIndicator() {
+    const links = document.querySelector(".nav__links");
+    if (!links) return;
+    const ind = links.querySelector(".nav__indicator");
+    if (!ind) return;
+    const items = [...links.querySelectorAll(".nav__link")];
+    if (!items.length) return;
+
+    const active = () =>
+      links.querySelector('.nav__link[aria-current="page"]') || items[0];
+    const moveTo = (el) => {
+      if (!el) {
+        ind.style.setProperty("--ind-o", "0");
+        return;
+      }
+      ind.style.setProperty("--ind-x", el.offsetLeft + "px");
+      ind.style.setProperty("--ind-w", el.offsetWidth + "px");
+      ind.style.setProperty("--ind-o", "1");
+    };
+    const rest = () => moveTo(active());
+
+    items.forEach((a) => {
+      a.addEventListener("mouseenter", () => moveTo(a));
+      a.addEventListener("focus", () => moveTo(a));
+    });
+    links.addEventListener("mouseleave", rest);
+    links.addEventListener("focusout", rest);
+
+    rest();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(rest);
+    window.addEventListener("load", rest);
+    let rt;
+    window.addEventListener("resize", () => {
+      clearTimeout(rt);
+      rt = setTimeout(rest, 150);
+    });
+  })();
+
+  /* ------------------------------------------------------------------ */
   /* Mobile drawer                                                      */
   /* ------------------------------------------------------------------ */
   const drawer = document.querySelector("[data-drawer]");
@@ -321,6 +362,48 @@
         btn.setAttribute("aria-pressed", String(on));
       });
     });
+  })();
+
+  /* ------------------------------------------------------------------ */
+  /* Avaliações — manual carousel with arrows (mirrors casos)           */
+  /* ------------------------------------------------------------------ */
+  (function reviews() {
+    const track = document.querySelector("[data-reviews-track]");
+    if (!track) return;
+    const prev = document.querySelector("[data-reviews-prev]");
+    const next = document.querySelector("[data-reviews-next]");
+
+    const step = () => {
+      const card = track.querySelector(".review-item");
+      if (!card) return track.clientWidth;
+      const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      return card.getBoundingClientRect().width + gap;
+    };
+    const go = (dir) =>
+      track.scrollBy({ left: dir * step(), behavior: reduceMotion() ? "auto" : "smooth" });
+    prev && prev.addEventListener("click", () => go(-1));
+    next && next.addEventListener("click", () => go(1));
+
+    const updateArrows = () => {
+      const max = track.scrollWidth - track.clientWidth - 2;
+      if (prev) prev.disabled = track.scrollLeft <= 2;
+      if (next) next.disabled = track.scrollLeft >= max;
+    };
+    let ticking = false;
+    track.addEventListener(
+      "scroll",
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          updateArrows();
+          ticking = false;
+        });
+      },
+      { passive: true }
+    );
+    window.addEventListener("resize", updateArrows);
+    updateArrows();
   })();
 
   /* ------------------------------------------------------------------ */
