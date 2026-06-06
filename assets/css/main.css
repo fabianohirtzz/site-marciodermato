@@ -727,6 +727,8 @@ body.fonts-pending .stats { visibility: hidden; }
   pointer-events: none;
 }
 .ba__img--before { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+/* "Depois" sits higher in its source photo — drop it so features line up with "Antes". */
+.ba__img--after { object-position: center 9%; }
 
 .ba__label {
   position: absolute;
