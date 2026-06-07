@@ -255,6 +255,39 @@ body.fonts-pending .stats { visibility: hidden; }
   box-shadow: 0 16px 40px rgba(5, 127, 127, 0.30);
 }
 
+/* White WhatsApp button for the hero — replaces the floating button on
+   desktop. A Lottie pulse ring loops around the icon to draw the eye. */
+.btn--wa-hero {
+  background: #f9f9f9;
+  color: var(--tinta);
+  box-shadow: 0 12px 30px rgba(3, 32, 31, 0.22);
+}
+.btn--wa-hero:hover {
+  background: #ffffff;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(3, 32, 31, 0.30);
+}
+.btn-wa__ico {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 22px; height: 22px;
+}
+.btn-wa__pulse {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 62px; height: 62px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+}
+.btn-wa__icon {
+  position: relative;
+  z-index: 1;
+  width: 20px; height: 20px;
+  color: #25d366;
+}
+
 .btn--on-deep { background: #fff; color: var(--marca-deep); box-shadow: 0 12px 30px rgba(3, 32, 31, 0.28); }
 .btn--on-deep:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(3, 32, 31, 0.36); }
 .btn--ghost-on-deep { background: rgba(255, 255, 255, 0.10); color: #fff; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.7); }
@@ -492,7 +525,9 @@ body.fonts-pending .stats { visibility: hidden; }
   right: clamp(16px, 3vw, 28px);
   bottom: clamp(16px, 3vw, 28px);
   z-index: var(--z-float);
-  display: flex;
+  /* Desktop surfaces WhatsApp inline in the hero (.btn--wa-hero), so the
+     floating button is hidden here and only returns on mobile (≤600px). */
+  display: none;
   align-items: center;
   justify-content: flex-end;
   text-decoration: none;
@@ -635,11 +670,17 @@ body.fonts-pending .stats { visibility: hidden; }
     radial-gradient(120% 90% at 18% 70%, rgba(3, 64, 63, 0.45), transparent 60%);
 }
 
-/* Lateral rails — vertical heritage marks flanking the hero */
+/* Lateral rails — vertical heritage marks flanking the hero.
+   The strip is centred on a fixed gutter (--rail-gutter) regardless of
+   text length, so both sides sit at the same inset. The hero content
+   reserves --hero-px ≥ rail strip so the title never overlaps them. */
+.hero {
+  --rail-gutter: 30px;
+  --hero-px: clamp(64px, 5vw, 76px);
+}
 .hero__rail {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%) rotate(-90deg);
   transform-origin: center;
   display: inline-flex;
   align-items: center;
@@ -654,8 +695,8 @@ body.fonts-pending .stats { visibility: hidden; }
   z-index: 2;
   text-shadow: 0 1px 12px rgba(3, 64, 63, 0.55);
 }
-.hero__rail--left  { left: -62px; }
-.hero__rail--right { right: -62px; }
+.hero__rail--left  { left: var(--rail-gutter);  transform: translate(-50%, -50%) rotate(-90deg); }
+.hero__rail--right { right: var(--rail-gutter); transform: translate(50%, -50%) rotate(-90deg); }
 .hero__rail-bar {
   width: 30px;
   height: 1px;
@@ -667,7 +708,7 @@ body.fonts-pending .stats { visibility: hidden; }
   max-width: var(--container-wide);
   width: 100%;
   margin-inline: auto;
-  padding: calc(var(--nav-h) + 40px) clamp(20px, 5vw, 56px) 80px;
+  padding: calc(var(--nav-h) + 40px) var(--hero-px) 80px;
   position: relative;
   z-index: 1;
 }
@@ -743,8 +784,18 @@ body.fonts-pending .stats { visibility: hidden; }
 @media (max-width: 600px) {
   .hero__actions { flex-direction: column; align-items: stretch; }
   .hero__actions .btn { width: 100%; }
-  /* vertical rails clip off-canvas on narrow screens */
+  /* vertical rails clip off-canvas on narrow screens — reclaim the padding */
   .hero__rail { display: none; }
+  .hero { --hero-px: clamp(20px, 5vw, 28px); }
+  /* mobile keeps the floating button, just moved to the bottom-left;
+     the inline hero WhatsApp button is desktop-only */
+  .btn--wa-hero { display: none; }
+  .wpp {
+    display: flex;
+    left: clamp(16px, 4vw, 22px);
+    right: auto;
+    justify-content: flex-start;
+  }
   /* the scroll cue collided with the stacked CTA buttons; redundant on touch */
   .hero__cue { display: none; }
   .hero::after {
