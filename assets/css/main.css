@@ -492,16 +492,127 @@ body.fonts-pending .stats { visibility: hidden; }
   right: clamp(16px, 3vw, 28px);
   bottom: clamp(16px, 3vw, 28px);
   z-index: var(--z-float);
-  width: 58px; height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  text-decoration: none;
+  animation: wpp-in 0.8s var(--ease-calm) 0.7s both;
+}
+
+/* hover-reveal pill label (left of the button) */
+.wpp__label {
+  max-width: 0;
+  margin-right: 0;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font: 600 0.9rem/1 var(--font-body);
+  letter-spacing: 0.005em;
+  color: var(--marca-deep, #044d4d);
+  background: #fff;
+  border-radius: 999px;
+  box-shadow: 0 12px 30px rgba(5, 127, 127, 0.16);
+  opacity: 0;
+  transform: translateX(10px);
+  transition: max-width 0.46s var(--ease-calm), opacity 0.32s var(--ease-soft),
+    transform 0.46s var(--ease-calm), padding 0.46s var(--ease-calm),
+    margin 0.46s var(--ease-calm);
+}
+
+/* the round button */
+.wpp__btn {
+  position: relative;
+  width: 60px; height: 60px;
   border-radius: 50%;
   display: grid; place-items: center;
-  background: #25d366;
+  flex: none;
+  background: linear-gradient(150deg, #2ce86c 0%, #25d366 45%, #12b34f 100%);
   color: #fff;
-  box-shadow: 0 14px 34px rgba(37, 211, 102, 0.42);
+  box-shadow: 0 14px 34px rgba(18, 179, 79, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32);
+  animation: wpp-breathe 3.8s var(--ease-calm) infinite;
   transition: transform 0.26s var(--ease-calm), box-shadow 0.26s var(--ease-soft);
 }
-.wpp:hover { transform: translateY(-4px) scale(1.04); box-shadow: 0 20px 44px rgba(37, 211, 102, 0.5); }
-.wpp svg { width: 30px; height: 30px; }
+.wpp__icon {
+  width: 30px; height: 30px;
+  transform-origin: 52% 58%;
+  animation: wpp-wiggle 5s var(--ease-calm) 2.2s infinite;
+}
+
+/* radar ripple rings */
+.wpp__rings { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; }
+.wpp__rings::before,
+.wpp__rings::after {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(37, 211, 102, 0.55);
+  animation: wpp-ring 3s var(--ease-soft) infinite;
+}
+.wpp__rings::after { animation-delay: 1.5s; }
+
+/* unread-style pip */
+.wpp__pip {
+  position: absolute; top: -3px; right: -3px;
+  min-width: 20px; height: 20px;
+  padding: 0 5px;
+  border-radius: 999px;
+  display: grid; place-items: center;
+  font: 700 11px/1 var(--font-body);
+  color: #fff;
+  background: #ec4d4d;
+  border: 2px solid #fff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+  animation: wpp-pip 0.5s var(--ease-calm) 1.6s both;
+}
+
+.wpp:hover .wpp__btn,
+.wpp:focus-visible .wpp__btn {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 22px 48px rgba(18, 179, 79, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.36);
+}
+.wpp:hover .wpp__label,
+.wpp:focus-visible .wpp__label {
+  max-width: 260px;
+  opacity: 1;
+  transform: translateX(0);
+  padding: 12px 18px;
+  margin-right: 14px;
+}
+
+@keyframes wpp-in {
+  from { opacity: 0; transform: translateY(22px) scale(0.82); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes wpp-breathe {
+  0%, 100% { box-shadow: 0 14px 34px rgba(18, 179, 79, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.32); }
+  50% { box-shadow: 0 18px 42px rgba(18, 179, 79, 0.56), inset 0 1px 0 rgba(255, 255, 255, 0.32); }
+}
+@keyframes wpp-wiggle {
+  0%, 84%, 100% { transform: rotate(0); }
+  87% { transform: rotate(-13deg); }
+  90% { transform: rotate(11deg); }
+  93% { transform: rotate(-7deg); }
+  96% { transform: rotate(4deg); }
+}
+@keyframes wpp-ring {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(1.85); opacity: 0; }
+}
+@keyframes wpp-pip {
+  from { opacity: 0; transform: scale(0); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wpp { animation: none; }
+  .wpp__btn { animation: none; }
+  .wpp__icon { animation: none; }
+  .wpp__rings::before,
+  .wpp__rings::after { animation: none; opacity: 0; }
+  .wpp__pip { animation: none; }
+}
 
 /* ------------------------------------------------------------------ */
 /* 8. Video hero                                                      */
@@ -1584,7 +1695,7 @@ body.fonts-pending .stats { visibility: hidden; }
   .review-card__text { -webkit-line-clamp: 11; }
 }
 
-/* footer Google review icon keeps its multicolor mark */
+/* footer Google review icon: monochrome to match the other social marks */
 .footer__social--g svg { width: 19px; height: 19px; }
 
 @media (prefers-reduced-motion: reduce) {
