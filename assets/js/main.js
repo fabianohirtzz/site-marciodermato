@@ -554,28 +554,4 @@
     if (document.readyState === "complete") build();
     else window.addEventListener("load", build);
   })();
-
-  /* ------------------------------------------------------------------ */
-  /* Lottie attention pulse on the hero WhatsApp button                 */
-  /* Draws the eye to the inline WhatsApp CTA. Skipped under            */
-  /* prefers-reduced-motion; degrades silently if lottie fails to load. */
-  /* ------------------------------------------------------------------ */
-  (function waPulse() {
-    const host = document.querySelector(".btn-wa__pulse");
-    if (!host || reduceMotion()) return;
-    const mount = () => {
-      if (!window.lottie) return;
-      try {
-        window.lottie.loadAnimation({
-          container: host,
-          renderer: "svg",
-          loop: true,
-          autoplay: true,
-          path: "assets/lottie/wa-pulse.json",
-        });
-      } catch (_) {}
-    };
-    if (window.lottie) mount();
-    else window.addEventListener("load", mount, { once: true });
-  })();
 })();
