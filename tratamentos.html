@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Tratamentos · Dr. Márcio Teixeira · Dermatologista em Porto Alegre</title>
-  <meta name="description" content="Tratamentos faciais organizados pelos quatro eixos do Método 4D, no consultório do Dr. Márcio Teixeira em Porto Alegre." />
+  <title>Tratamentos em Porto Alegre · Dr. Márcio Teixeira</title>
+  <meta name="description" content="Tratamentos dermatológicos e estéticos em Porto Alegre, organizados pelos quatro eixos do Método 4D do Dr. Márcio Teixeira. Avaliação correta, tratamento correto." />
   <meta name="theme-color" content="#057f7f" />
+  <link rel="canonical" href="https://drmarcioteixeira.com.br/tratamentos.html" />
   <link rel="icon" type="image/png" href="logo/logo-header-colorido.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,6 +23,7 @@
         <img class="nav__logo nav__logo--solid" src="logo/logo-header-colorido.png" alt="Dr. Márcio Teixeira" />
       </a>
       <nav class="nav__links" aria-label="Navegação principal">
+        <span class="nav__indicator" aria-hidden="true"></span>
         <a class="nav__link" href="index.html">Início</a>
         <a class="nav__link" href="tratamentos.html" aria-current="page">Tratamentos</a>
         <a class="nav__link" href="metodo-4d.html">Método 4D</a>
@@ -49,12 +51,290 @@
   </aside>
 
   <main>
+    <!-- =========================== INTRO =========================== -->
     <section class="page-head" id="conteudo" aria-labelledby="page-title">
       <div class="container page-head__inner">
         <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Tratamentos</p>
-        <h1 id="page-title" class="section__title">Cuidados <span class="hl hl--italic">sob medida</span> para a sua pele</h1>
-        <p class="section__lede">Cansado(a) dos mesmos resultados? O segredo é a avaliação correta, para o tratamento correto.</p>
-        <span class="page-head__soon">Conteúdo em breve</span>
+        <h1 id="page-title" class="section__title">Cansado(a) dos <span class="hl hl--italic">mesmos resultados</span>?</h1>
+        <p class="section__lede">O segredo é a avaliação correta, para o tratamento correto. Nossos tratamentos são organizados pelos quatro eixos do Método 4D, exclusivo do Dr. Márcio.</p>
+
+        <div class="treat-filter" data-treat-filter role="group" aria-label="Filtrar tratamentos por eixo do Método 4D">
+          <button class="filter-chip" type="button" data-eixo="all" aria-pressed="true">Todos</button>
+          <button class="filter-chip" type="button" data-eixo="1" aria-pressed="false">Eixo 1 · Superfície</button>
+          <button class="filter-chip" type="button" data-eixo="2" aria-pressed="false">Eixo 2 · Linhas de Expressão</button>
+          <button class="filter-chip" type="button" data-eixo="3" aria-pressed="false">Eixo 3 · Volume da Face</button>
+          <button class="filter-chip" type="button" data-eixo="4" aria-pressed="false">Eixo 4 · Flacidez</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== EIXO 1 ===================== -->
+    <section class="section section--branco eixo-group" data-eixo-group="1" aria-labelledby="eixo-1-title" data-fio="left">
+      <div class="container">
+        <header class="eixo-group__head">
+          <span class="eixo-group__num" aria-hidden="true">01</span>
+          <div>
+            <p class="eixo-group__eyebrow">Método 4D · Eixo 1</p>
+            <h2 id="eixo-1-title" class="eixo-group__name">A Superfície da Pele</h2>
+            <p class="eixo-group__intro">O primeiro eixo cuida da camada mais visível da sua pele: cor, textura, luminosidade e uniformidade. É aqui que tratamos manchas, poros, oleosidade, sensibilidade e a perda de viço, do skincare à tecnologia.</p>
+          </div>
+        </header>
+
+        <div class="grid grid--treat section__body">
+          <a class="treat-card reveal" data-eixo="1" style="--i:0" href="tratamentos/skincare-personalizado/">
+            <figure class="treat-card__media"><img src="imagens/skincare-personalizado.png" alt="Skincare personalizado" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Skincare Personalizado</h3>
+              <p class="treat-card__eixo">Eixo 1 · Superfície</p>
+              <p class="treat-card__desc">Rotina de cuidados sob medida, prescrita para o seu tipo de pele.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="treat-card reveal" data-eixo="1" style="--i:1" href="tratamentos/skincare-via-oral/">
+            <figure class="treat-card__media"><img src="imagens/skincare-oral.png" alt="Skincare via oral, nutracêuticos" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Skincare Via Oral</h3>
+              <p class="treat-card__eixo">Eixo 1 · Superfície</p>
+              <p class="treat-card__desc">Nutracêuticos que cuidam da pele de dentro para fora.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="treat-card reveal" data-eixo="1" style="--i:2" href="tratamentos/peelings-quimicos/">
+            <figure class="treat-card__media"><img src="imagens/peelings-quimicos.png" alt="Peelings químicos" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Peelings Químicos</h3>
+              <p class="treat-card__eixo">Eixo 1 · Superfície</p>
+              <p class="treat-card__desc">Esfoliação controlada que renova, clareia e uniformiza a pele.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="treat-card reveal" data-eixo="1" style="--i:3" href="tratamentos/terapia-fotodinamica/">
+            <figure class="treat-card__media"><img src="imagens/photo-aging.png" alt="Terapia fotodinâmica" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Terapia Fotodinâmica</h3>
+              <p class="treat-card__eixo">Eixo 1 · Superfície</p>
+              <p class="treat-card__desc">Luz e fotossensibilizante para tratar lesões do sol e renovar.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="treat-card reveal" data-eixo="1" style="--i:4" href="tratamentos/laser-luz-intensa-pulsada/">
+            <figure class="treat-card__media"><img src="imagens/laserterapia.png" alt="Laserterapia e luz intensa pulsada" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Laserterapia e LIP</h3>
+              <p class="treat-card__eixo">Eixo 1 · Superfície</p>
+              <p class="treat-card__desc">Tecnologia de luz para manchas, vasinhos, poros e viço.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="treat-card reveal" data-eixo="1" style="--i:5" href="tratamentos/skinbooster/">
+            <figure class="treat-card__media"><img src="imagens/skinnbooster.png" alt="Skinbooster" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Skinbooster</h3>
+              <p class="treat-card__eixo">Eixo 1 · Superfície</p>
+              <p class="treat-card__desc">Microinjeções de ácido hialurônico para hidratação profunda.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="treat-card reveal" data-eixo="1" style="--i:6" href="tratamentos/mmp-dna-salmao-exossomas/">
+            <figure class="treat-card__media"><img src="imagens/mmp.png" alt="MMP com DNA de salmão e exossomas" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">MMP · DNA de Salmão e Exossomas</h3>
+              <p class="treat-card__eixo">Eixo 1 · Superfície</p>
+              <p class="treat-card__desc">Microcanais que levam ativos regenerativos à pele.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== EIXO 2 ===================== -->
+    <section class="section section--neve eixo-group" data-eixo-group="2" aria-labelledby="eixo-2-title" data-fio="right">
+      <div class="container">
+        <header class="eixo-group__head">
+          <span class="eixo-group__num" aria-hidden="true">02</span>
+          <div>
+            <p class="eixo-group__eyebrow">Método 4D · Eixo 2</p>
+            <h2 id="eixo-2-title" class="eixo-group__name">Linhas de Expressão</h2>
+            <p class="eixo-group__intro">As linhas de expressão contam a história do seu rosto. O segundo eixo trata as rugas dinâmicas e estáticas com precisão, sem apagar a sua expressão. O objetivo não é mudar você: é suavizar as marcas e preservar a naturalidade.</p>
+          </div>
+        </header>
+
+        <div class="grid grid--treat section__body">
+          <a class="treat-card reveal" data-eixo="2" style="--i:0" href="tratamentos/toxina-botulinica/">
+            <figure class="treat-card__media"><img src="imagens/toxina-butolinica.png" alt="Toxina botulínica" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Toxina Botulínica</h3>
+              <p class="treat-card__eixo">Eixo 2 · Linhas de Expressão</p>
+              <p class="treat-card__desc">Suaviza rugas dinâmicas preservando a sua expressão.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="treat-card reveal" data-eixo="2" style="--i:1" href="tratamentos/acido-hialuronico/">
+            <figure class="treat-card__media"><img src="imagens/preenchimento-acido-hialuronico.png" alt="Preenchimento com ácido hialurônico" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Preenchimento com Ácido Hialurônico</h3>
+              <p class="treat-card__eixo">Eixo 2 · Linhas de Expressão</p>
+              <p class="treat-card__desc">Repõe volume e suaviza sulcos com resultado natural.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="treat-card reveal" data-eixo="2" style="--i:2" href="tratamentos/bioestimuladores-de-colageno/">
+            <figure class="treat-card__media"><img src="imagens/bioestimulador-colageno.png" alt="Bioestimuladores de colágeno" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Bioestimuladores de Colágeno</h3>
+              <p class="treat-card__eixo">Eixo 2 · Linhas de Expressão</p>
+              <p class="treat-card__desc">Estimulam colágeno novo para firmeza progressiva.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="treat-card reveal" data-eixo="2" style="--i:3" href="tratamentos/skinbooster/">
+            <figure class="treat-card__media"><img src="imagens/skinnbooster.png" alt="Skinbooster para linhas finas" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Skinbooster</h3>
+              <p class="treat-card__eixo">Eixo 2 · Linhas de Expressão</p>
+              <p class="treat-card__desc">Hidratação profunda que suaviza linhas finas.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="treat-card reveal" data-eixo="2" style="--i:4" href="tratamentos/laser-luz-intensa-pulsada/">
+            <figure class="treat-card__media"><img src="imagens/tecnologia-de-apoio.png" alt="Tecnologias de apoio" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Tecnologias de Apoio</h3>
+              <p class="treat-card__eixo">Eixo 2 · Linhas de Expressão</p>
+              <p class="treat-card__desc">Laser e LIP que apoiam textura e qualidade da pele.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== EIXO 3 ===================== -->
+    <section class="section section--branco eixo-group" data-eixo-group="3" aria-labelledby="eixo-3-title" data-fio="left">
+      <div class="container">
+        <header class="eixo-group__head">
+          <span class="eixo-group__num" aria-hidden="true">03</span>
+          <div>
+            <p class="eixo-group__eyebrow">Método 4D · Eixo 3</p>
+            <h2 id="eixo-3-title" class="eixo-group__name">Alterações do Volume da Face</h2>
+            <p class="eixo-group__intro">Volume é juventude e harmonia. O terceiro eixo restaura o que se perdeu, têmporas, maçãs, olheiras e contorno, e reduz o que está em excesso, como papada e bolsas de gordura, sempre buscando proporção e equilíbrio, sem padronizar o seu rosto.</p>
+          </div>
+        </header>
+
+        <div class="grid grid--treat section__body">
+          <a class="treat-card reveal" data-eixo="3" style="--i:0" href="tratamentos/acido-hialuronico/">
+            <figure class="treat-card__media"><img src="imagens/preenchedores-acido-hialuronico.png" alt="Preenchedores à base de ácido hialurônico" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Preenchedores de Ácido Hialurônico</h3>
+              <p class="treat-card__eixo">Eixo 3 · Volume da Face</p>
+              <p class="treat-card__desc">Volume e contorno para maçãs, olheiras, lábios e mandíbula.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="treat-card reveal" data-eixo="3" style="--i:1" href="tratamentos/bioestimuladores-de-colageno/">
+            <figure class="treat-card__media"><img src="imagens/bioestimulador-colageno.png" alt="Bioestimuladores de colágeno" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Bioestimuladores de Colágeno</h3>
+              <p class="treat-card__eixo">Eixo 3 · Volume da Face</p>
+              <p class="treat-card__desc">Densidade e sustentação a partir do seu próprio colágeno.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="treat-card reveal" data-eixo="3" style="--i:2" href="tratamentos/lipo-facial-clinica/">
+            <figure class="treat-card__media"><img src="imagens/lipo-facical.png" alt="Redução de gordura localizada, lipo facial clínica" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Redução de Gordura Localizada</h3>
+              <p class="treat-card__eixo">Eixo 3 · Volume da Face</p>
+              <p class="treat-card__desc">Lipo facial clínica para papada e contorno, sem cirurgia.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="treat-card reveal" data-eixo="3" style="--i:3" href="tratamentos/harmonizacao-facial/">
+            <figure class="treat-card__media"><img src="imagens/harmonizacao-facial.png" alt="Harmonização facial integrada" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Harmonização Facial Integrada</h3>
+              <p class="treat-card__eixo">Eixo 3 · Volume da Face</p>
+              <p class="treat-card__desc">Planejamento do rosto como um todo, sem padronizar.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== EIXO 4 ===================== -->
+    <section class="section section--neve eixo-group" data-eixo-group="4" aria-labelledby="eixo-4-title" data-fio="right">
+      <div class="container">
+        <header class="eixo-group__head">
+          <span class="eixo-group__num" aria-hidden="true">04</span>
+          <div>
+            <p class="eixo-group__eyebrow">Método 4D · Eixo 4</p>
+            <h2 id="eixo-4-title" class="eixo-group__name">Flacidez</h2>
+            <p class="eixo-group__intro">A flacidez é uma das marcas mais visíveis do tempo. O quarto eixo recupera sustentação, firmeza e contorno com uma abordagem multimodal e não cirúrgica, para um efeito lifting natural e duradouro.</p>
+          </div>
+        </header>
+
+        <div class="grid grid--treat section__body">
+          <a class="treat-card reveal" data-eixo="4" style="--i:0" href="tratamentos/bioestimuladores-de-colageno/">
+            <figure class="treat-card__media"><img src="imagens/bioestimulador-colageno.png" alt="Bioestimuladores de colágeno para flacidez" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Bioestimuladores de Colágeno</h3>
+              <p class="treat-card__eixo">Eixo 4 · Flacidez</p>
+              <p class="treat-card__desc">Firmeza natural e progressiva para a flacidez.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="treat-card reveal" data-eixo="4" style="--i:1" href="tratamentos/ultrassom-microfocado-liftera/">
+            <figure class="treat-card__media"><img src="imagens/ultrassom-microfocado.png" alt="Ultrassom microfocado Liftera" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Ultrassom Microfocado (Liftera)</h3>
+              <p class="treat-card__eixo">Eixo 4 · Flacidez</p>
+              <p class="treat-card__desc">Efeito lifting que age na camada do SMAS, sem cortes.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="treat-card reveal" data-eixo="4" style="--i:2" href="tratamentos/radiofrequencia/">
+            <figure class="treat-card__media"><img src="imagens/radiofrequencia.png" alt="Radiofrequência facial" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Radiofrequência</h3>
+              <p class="treat-card__eixo">Eixo 4 · Flacidez</p>
+              <p class="treat-card__desc">Calor terapêutico que contrai e estimula colágeno.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="treat-card reveal" data-eixo="4" style="--i:3" href="tratamentos/fios-de-sustentacao-pdo/">
+            <figure class="treat-card__media"><img src="imagens/fios-de-pdo.png" alt="Fios de sustentação PDO" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Fios de Sustentação (PDO)</h3>
+              <p class="treat-card__eixo">Eixo 4 · Flacidez</p>
+              <p class="treat-card__desc">Reposicionam os tecidos e dão sustentação imediata.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+          <a class="treat-card reveal" data-eixo="4" style="--i:4" href="tratamentos/laser-luz-intensa-pulsada/">
+            <figure class="treat-card__media"><img src="imagens/tecnologias-complementares.png" alt="Tecnologias complementares e skincare" loading="lazy" /></figure>
+            <div class="treat-card__body">
+              <h3 class="treat-card__title">Tecnologias Complementares</h3>
+              <p class="treat-card__eixo">Eixo 4 · Flacidez</p>
+              <p class="treat-card__desc">Laser, LIP e skincare que prolongam o efeito lifting.</p>
+              <span class="treat-card__more">Saiba mais <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= CTA BAND ========================= -->
+    <section class="section section--deep cta-band" id="agende" aria-labelledby="cta-title">
+      <div class="container">
+        <img class="cta-band__logo" src="logo/logo-header-branco.png" alt="Dr. Márcio Teixeira" loading="lazy" />
+        <h2 id="cta-title" class="section__title">Cada pele pede um <span class="hl hl--italic">plano próprio</span>. Vamos montar o seu?</h2>
+        <p class="cta-band__lede">Agende sua avaliação e descubra, pelo Método 4D, o tratamento certo para o seu caso.</p>
+        <div class="cta-band__actions">
+          <a class="btn btn--on-deep" href="https://wa.me/5551999704848?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">Agende sua consulta</a>
+          <a class="btn btn--ghost-on-deep" href="metodo-4d.html">Conheça o Método 4D</a>
+        </div>
       </div>
     </section>
   </main>

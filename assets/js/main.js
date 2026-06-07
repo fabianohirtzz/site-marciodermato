@@ -555,3 +555,49 @@
     else window.addEventListener("load", build);
   })();
 })();
+
+/* =====================================================================
+   Tratamentos — axis filter (índice) + FAQ single-open (sub-páginas)
+   Self-contained; honors prefers-reduced-motion via the reveal contract.
+   ===================================================================== */
+(function () {
+  "use strict";
+
+  /* --- axis filter: chips hide/show whole eixo groups ---------------- */
+  const filterBar = document.querySelector("[data-treat-filter]");
+  if (filterBar) {
+    const chips = Array.from(filterBar.querySelectorAll(".filter-chip"));
+    const groups = Array.from(document.querySelectorAll("[data-eixo-group]"));
+
+    const apply = (eixo) => {
+      groups.forEach((g) => {
+        const match = eixo === "all" || g.getAttribute("data-eixo-group") === eixo;
+        g.hidden = !match;
+        if (match) {
+          // guarantee revealed cards never stay invisible after a re-show
+          g.querySelectorAll(".reveal").forEach((el) => el.classList.add("is-in"));
+        }
+      });
+    };
+
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        chips.forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
+        apply(chip.getAttribute("data-eixo") || "all");
+      });
+    });
+  }
+
+  /* --- FAQ: keep a single item open at a time ------------------------ */
+  document.querySelectorAll("[data-accordion]").forEach((acc) => {
+    const items = Array.from(acc.querySelectorAll("details.faq__item"));
+    items.forEach((item) => {
+      item.addEventListener("toggle", () => {
+        if (!item.open) return;
+        items.forEach((other) => {
+          if (other !== item) other.open = false;
+        });
+      });
+    });
+  });
+})();
