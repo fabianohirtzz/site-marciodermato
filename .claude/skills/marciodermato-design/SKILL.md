@@ -35,7 +35,7 @@ Always read the relevant reference file before producing code. The SKILL.md only
 These rule out the vast majority of generic mistakes before they happen.
 
 1. **The canvas is white and faint teal-off-white; teal lives in accents.** Base background is `--branco: #ffffff` and `--neve: #f4f9f9`. Teal enters through headings, the brand mark, eyebrows, buttons, icon tiles, dividers and key accents — not by flooding viewports. At most **one** deep-teal full-color band per page (a CTA or the footer), never more.
-2. **One teal, used with discipline.** The brand is `--marca: #057f7f`. Use `--marca-deep: #044d4d` for large display ink and dark bands, `--marca-bright: #19b3a6` only as a gradient partner / subtle highlight, and `--marca-ink: #055f5f` when teal becomes body-size text (contrast). Do not introduce a second saturated hue — the only secondary is the quiet warm **sand/nude** for skin/beauty warmth.
+2. **One teal, used with discipline.** The brand is `--marca: #057f7f`. Use `--marca-deep: #044d4d` for large display ink and dark bands, `--marca-bright: #19b3a6` only as a gradient partner / subtle highlight, and `--marca-ink: #055f5f` when teal becomes body-size text (contrast). Do not introduce a second saturated hue — the only secondary is the quiet warm **sand/nude** for skin/beauty warmth. The **only** sanctioned non-teal colors are two *functional brand* exceptions: **Google gold `#fbbc05`** on review stars/rating, and **WhatsApp green** on the floating WhatsApp button — both are external-platform identities, never decorative palette.
 3. **Ink is a deep cool slate, never pure black.** Body text is `--tinta: #16302f` (a teal-leaning charcoal). Never `#000`. Pure black is harsh and cheap; this brand is refined.
 4. **Display is an elegant serif; everything else is Poppins.** Headings use **Cormorant Garamond** (elegant, high-contrast — it echoes the logotype and signals premium care). Body, UI, eyebrows, labels, buttons are **Poppins** (the brandbook's mandated font). Never set body in the serif; never set a hero display in Poppins-bold and call it premium. (See `references/DESIGN.md` § Typography.)
 5. **Generous whitespace is the luxury signal.** Premium reads as *space*, not density. Sections breathe (`96–140px` vertical). Don't cram. If a layout feels busy, remove an element before shrinking the gaps.
@@ -49,13 +49,14 @@ These rule out the vast majority of generic mistakes before they happen.
 
 You always have these tools available — picking the right one is the senior move. All degrade gracefully under `prefers-reduced-motion`.
 
-- **Gentle reveal** — `IntersectionObserver` adds `is-in`; elements rise `16px` and fade in over `700–900ms` with `--ease-calm`. The default for almost everything.
-- **Soft parallax** — hero media and decorative curve drift slowly on scroll (`translateY` a few %), subtle and smooth, never aggressive.
-- **Curve draw** — the brand's sinuous curve `stroke-dashoffset` draws in on reveal, or sits as a faint watermark behind a section. The signature brand gesture.
-- **Soft hover lift** — cards translate `-6px` and deepen their teal-tinted shadow over `260ms`; buttons brighten / fill.
-- **Stagger-in** — grids of treatment cards or axis cards reveal in sequence with a `70–90ms` step, so the page assembles with composure.
-- **Count-up** — stat numbers (anos de atuação, eixos, tratamentos) tick up once on reveal. One per stat, never looping.
-- **Smooth axis switch** — the Método 4D tabs cross-fade their panel (`opacity` + slight `translateY`) over `350–450ms` — calm, never a hard cut.
+- **Gentle reveal** — `.reveal` → `IntersectionObserver` adds `.is-in`; elements rise and fade in over `700–900ms` with `--ease-calm`. The default for almost everything.
+- **Fio de cabelo scroll motif** — the signature brand gesture. `fioMotif()` (in `main.js`) injects the mark's sinuous curve as an SVG hair-strand into the free lateral gutter of every `data-fio="left|right"` section, alternating sides down the page; it self-draws on scroll with a gradient stroke + travelling sheen. Opt a light section in with `data-fio`. (A generic `.curve-draw` watermark helper still ships for one-off accents.)
+- **Soft parallax** — the hero media (`.hero__media.parallax`) drifts slowly on scroll, subtle and smooth, never aggressive.
+- **Nav indicator slide** — the `.nav__indicator` pill glides under the active/hovered link (JS sets `--ind-x/--ind-w/--ind-o`); the glass island also condenses to `.is-solid` past `scrollY > 60`.
+- **Soft hover lift** — cards translate up a few px and deepen their teal-tinted shadow; buttons brighten / fill.
+- **Stagger-in** — grids of treatment avatars or axis cards reveal in sequence with an `--i`-indexed step, so the page assembles with composure.
+- **Hero heritage rails** — the rotated lateral rails ("+30 anos de excelência" / "Desde 1993") are *deliberately static* (they replaced the old hero count-up stats — do not animate them as counters). The `countUp()` helper still ships in `main.js` but is currently dormant (no `[data-count]` elements on the home).
+- **Carousel + comparator motion** — the casos and reviews tracks scroll-snap one card per arrow; the antes/depois `.ba` comparator clips on a drag-driven `--pos`; casos cards cross-fade antes↔depois on hover/tap. All flatten under reduced motion.
 
 ## How to start any new piece of UI
 
@@ -94,11 +95,20 @@ Páginas:     Início · Tratamentos · Método 4D · Tricologia · Sobre · Con
 
 The full extracted site copy, the treatments-by-axis list, and the image→treatment mapping live in the project `README.md` at the repo root — read it when you need real content.
 
-## Where the assets live
+## Where the code & assets live
 
-- `logo/` — `logo-header-colorido.png` (on light), `logo-header-branco.png` (on teal/dark or video), `logo-rodape.png`/`logo-rodape2.png` (footer), `brandbook.pdf` (the source of the teal + Poppins decision). The mark's sinuous **white curve** is the reusable brand motif — extract it as an SVG for dividers/accents.
+The site is **plain HTML + one external stylesheet + one external script** — nothing inline. When you change styling or behavior, edit these, not the HTML `<head>`:
+
+- `assets/css/main.css` — **all** styles (tokens on `:root`, every component). The reference implementation the `references/` docs mirror.
+- `assets/js/main.js` — **all** behavior (reveal observer, nav indicator + scroll state, drawer, hero play/pause, soft parallax, the `fioMotif()` motif generator, the antes/depois comparator, the casos + reviews carousels).
+- `assets/img/` — page-specific images authored for this build (e.g. `home-antes.jpg`, `home-depois.jpg` for the comparator).
+- `index.html` is the canonical, fully-built page; `tratamentos.html`, `metodo-4d.html`, `tricologia.html`, `sobre.html`, `contato.html` are page stubs to build out against the same system.
+
+Brand assets:
+
+- `logo/` — `logo-header-colorido.png` (on light / scrolled nav), `logo-header-branco.png` (white, over hero/dark), `logo-rodape.png`/`logo-rodape2.png` (footer), `brandbook.pdf` (the source of the teal + Poppins decision). The mark's sinuous **white curve** is the reusable brand motif — it's already extracted and generated per-section by `fioMotif()`.
 - `video-hero/video-hero.mp4` — hero background video.
-- `imagens/` — per-treatment art (`toxina-butolinica.png`, `skinbooster`, `radiofrequencia.png`, the four axis images `superficie-da-pele*`, `linhas-de-expressao`, `volumes-da-face`, `flacidez`, etc.), plus `sobre*.jpg`, `contato.jpg`, `metodo4d-sobre*.jpg`, `rodape-site*`. (`*.wpress` is an old WordPress backup — ignore.)
+- `imagens/` — per-treatment art (`toxina-butolinica.png`, `skinbooster`, `radiofrequencia.png`, the four axis images `superficie-da-pele*`, `linhas-de-expressao`, `volumes-da-face`, `flacidez`, etc.), plus `sobre*.jpg`, `contato.jpg`, `metodo4d-sobre*.jpg`, `rodape-site*`, and `imagens/casos/*-antes.jpg`/`*-depois.jpg` for the Antes e Depois carousel. (`*.wpress` is an old WordPress backup — ignore.)
 - `ambiente/` — `dermaclin1…15.jpg`, photos of the physical clinic for the "Nosso Espaço" gallery.
 
 When building, prefer the real photography and the bespoke treatment art over generic stock — it is what keeps the brand specific and trustworthy.

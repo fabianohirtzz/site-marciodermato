@@ -90,6 +90,15 @@ Use `--grad-marca` for the primary CTA, the mark, and small feature accents. `--
 
 One teal + white + sand. **Do not invent a second saturated hue.** Health/clinical sections lean teal; beauty/results sections may warm with sand. Every coded color that becomes text uses `--marca-ink` or `--marca-deep`, never `--marca-bright`. When you feel the urge to add "a pop of color", add **space** instead.
 
+**The two sanctioned non-teal exceptions.** Two outside colors are allowed, and *only* because they are external-platform brand identities the user must recognize, never decorative palette:
+
+| Color | Hex | Where, and only there |
+|---|---|---|
+| Google gold | `#fbbc05` | Review/rating stars (`.review-card__stars`, `.reviews__rating-stars`). The Google "G" keeps its full four-color logo. |
+| WhatsApp green | `#25d366` family | The floating WhatsApp button (`.wpp`) only. Everywhere else the WhatsApp icon inherits teal/ink like any brand glyph. |
+
+Do not let either leak into the general palette (no gold headings, no green buttons elsewhere). They earn their place by being *literal platform marks*.
+
 ---
 
 ## 3. Typography
@@ -107,7 +116,7 @@ Two families. The brandbook mandates **Poppins**; the elegant serif is chosen to
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
-  href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Poppins:wght@300;400;500;600;700&display=swap"
+  href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Poppins:wght@300;400;500;600;700&display=swap"
   rel="stylesheet"
 />
 ```
@@ -343,7 +352,24 @@ Treatments are grouped under these axes on the Tratamentos page (e.g. Eixo 1: Sk
 
 A clean white card, big serif (or thin Poppins) eixo number in teal, serif title, Poppins description, soft teal shadow. The number is the recurring motif.
 
-### Stat cell
+### Heritage rails (the home's headline credibility device)
+
+The home no longer opens with a count-up stats band. Instead, two rotated lateral rails frame the hero — quiet, static, premium:
+
+```html
+<div class="hero__rail hero__rail--left" aria-hidden="true">
+  <span class="hero__rail-bar"></span>
+  <span>+30 anos de excelência</span>
+</div>
+<div class="hero__rail hero__rail--right" aria-hidden="true">
+  <span>Desde 1993</span>
+  <span class="hero__rail-bar"></span>
+</div>
+```
+
+Poppins caps, teal hairline bar, rotated `-90deg` into the hero gutter, hidden on small screens. They are **deliberately motionless** — heritage stated with confidence, not a ticking counter. See COMPONENTS.md § Hero.
+
+### Stat cell (legacy — dormant on home)
 
 ```html
 <div class="stat">
@@ -352,7 +378,15 @@ A clean white card, big serif (or thin Poppins) eixo number in teal, serif title
 </div>
 ```
 
-Display serif number in `--marca-deep` + Poppins uppercase key in `--tinta-muted`. Use for: anos, eixos, tratamentos, congressos.
+Display serif number in `--marca-deep` + Poppins uppercase key in `--tinta-muted`. The `countUp()` helper still ships in `main.js` but **no `[data-count]` element renders on the home** — the hero heritage rails replaced it. Keep this pattern available for inner pages (Sobre, Método 4D) where a small stat row genuinely fits; don't reintroduce it to the home hero.
+
+### Review card avatar (Google reviews)
+
+```html
+<span class="review-card__avatar" style="--av-bg:#e8f4f4;--av-ink:#055f5f" aria-hidden="true">JM</span>
+```
+
+An initials chip whose ground/ink are set per-card via `--av-bg`/`--av-ink`, drawn from the teal-soft and warm-sand families (e.g. `#e8f4f4`/`#055f5f`, `#f1e7db`/`#8a6a4c`) so the carousel reads varied but on-palette. Stars use the sanctioned Google gold `#fbbc05`. See COMPONENTS.md § Reviews carousel.
 
 ### Contact row
 
@@ -409,7 +443,7 @@ A health brand must be impeccable here.
 |---|---|---|
 | Dark / near-black default sections | This brand is light & premium | White / `--neve` canvas, one optional deep-teal band |
 | Pure black `#000` text | Harsh, cheap | `--tinta: #16302f` deep cool slate |
-| A second saturated hue (purple, pink, gold) | Breaks the one-teal discipline | Teal + white + restrained sand only |
+| A second saturated hue (purple, pink, gold) | Breaks the one-teal discipline | Teal + white + restrained sand only — the *only* outside colors are Google gold on review stars and WhatsApp green on the float, both as literal platform marks |
 | `--marca-bright` (#19b3a6) as text or big fills | Fails contrast, reads neon | Gradient partner / thin accent only; text uses `--marca-ink` |
 | Tight, dense layout | Reads clinical/cheap, not premium | Generous whitespace, fewer elements |
 | Heading set in Poppins-bold called "premium" | Skips the brand's display voice | Cormorant Garamond 600 for display |

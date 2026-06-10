@@ -2,89 +2,66 @@
 
 Animation is *how things move* (see ANIMATIONS.md). Interaction is *how the patient makes things move*. This is the behavior layer for **Dr. Márcio Teixeira** — every interactive control on a premium dermatology site. For a health brand, **accessibility is brand-defining**: every control is a real `<button>`/`<a>` (never a `<div>` with a click), carries proper ARIA state, works fully from the keyboard, shows a visible focus ring (`outline: 3px solid var(--marca); outline-offset: 3px`), and degrades to instant / opacity-only under `prefers-reduced-motion: reduce`.
 
-The tone of the behavior must match the brand: **calm, predictable, forgiving.** No surprise pop-ups, no controls that vanish, no motion that can't be stopped. A click responds within ~100ms, confirms within ~350ms, settles within ~550ms with `--ease-calm` — never bouncy, never snappy.
+The tone of the behavior must match the brand: **calm, predictable, forgiving.** No surprise pop-ups, no controls that vanish, no motion that can't be stopped. A click responds within ~100ms, confirms within ~350ms, settles within ~550ms with the calm easings (`--ease-glide`, `--ease-soft`, `--ease-calm`) — never bouncy, never snappy.
 
 All copy in the UI is Portuguese (pt-BR), warm and doctor-led. **No travessões (—)** in any string; use commas, colons, or `·`. Real `…` for ellipsis.
 
+> **This file describes what actually ships.** All behavior lives in `assets/js/main.js` (one IIFE, no build step, no framework). Function names, `[data-*]` hooks, and the classes the JS toggles below are the real ones in the file. CSS state classes referenced here live in `assets/css/main.css`. When you wire new behavior, follow the patterns here; when you change behavior, update this file.
+
 ## Index
 
-0. Shared helpers (reduced-motion flag, focus trap, throttle)
-1. Scrolled nav (transparent → solid, swap logo)
-2. Mobile drawer (focus trap, Esc, scroll lock)
-3. **Método 4D axis switcher** (the centerpiece — tablist + hash deep-link)
-4. **Treatment filter by axis** (data-eixo + aria-live count)
-5. Clinic gallery lightbox (focus trap, prev/next, arrows)
-6. FAQ accordion (button + region, teal +/− indicator)
-7. Contact form (inline validation → wa.me deep link, mailto fallback)
-8. Smooth anchor scrolling with header offset
-9. Count-up + scroll-reveal init (IntersectionObserver bootstrap)
-10. WhatsApp float reveal after scroll
-11. The init pattern (DOMContentLoaded) + reduced-motion in JS
+The shipped, wired behaviors (in `main.js` order):
 
-Verified brand constants used below: WhatsApp `5551999704848` ((51) 99970-4848), e-mail `secretaria@dermaclin.poa.br`. The four axes are locked in § 3 exactly as DESIGN.md defines them.
+0. Shared truths (live reduced-motion flag, rAF-throttle, boot/font guards)
+1. **Gentle reveal** — one-shot IntersectionObserver, `.reveal` → `.is-in`
+2. **Curve draw** — signature gesture, `.curve-draw` → `.is-in`
+3. **Scrolled nav** — `.is-solid` toggle + logo swap (`[data-nav]`)
+4. **Nav sliding indicator** — the pill that glides between links
+5. **Mobile drawer** — `[data-drawer]` open/close, Esc, scroll lock
+6. **Hero video play/pause** — `[data-hero-pause]`, motion-safe autoplay
+7. **Soft hero parallax** — `.hero__media.parallax`
+8. **Antes/Depois drag comparator** — `[data-ba]` + `.ba__range` → `--pos`
+9. **Casos carousel** — `[data-casos-track]` + tap-to-reveal-depois
+10. **Avaliações carousel** — `[data-reviews-track]`
+11. **Smooth anchor scrolling** — in-page `#` links
+12. **Fio de cabelo motif** — `fioMotif()`, per-section SVG generation
+13. The IIFE pattern + reduced-motion in JS
+
+Verified brand constants: WhatsApp `5551999704848` ((51) 99970-4848). The nav links are real page routes (`index.html`, `tratamentos.html`, `metodo-4d.html`, `tricologia.html`, `sobre.html`, `contato.html`), not in-page tabs.
 
 ---
 
-## 0. Shared helpers
+## 0. Shared truths
 
-Drop these once near the top of `main.js`. Everything else uses them.
+`main.js` is a single IIFE (`(function () { "use strict"; … })();`) so nothing leaks to the global scope. A few helpers are read by everything below.
 
 ```js
 /* prefers-reduced-motion is the brand's accessibility contract.
-   prefersReduced() is read live (not cached) so OS changes apply mid-session. */
-const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-const prefersReduced = () => motionQuery.matches;
-
-/* Honor a manual override too, if you ever ship a "reduzir animações" toggle:
-   <html class="reduzir-movimento"> would also count. */
-const calm = () =>
-  prefersReduced() || document.documentElement.classList.contains('reduzir-movimento');
-
-/* rAF-throttle for scroll/resize listeners. Coalesces bursts into one paint. */
-function rafThrottle(fn) {
-  let ticking = false;
-  return (...args) => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => { fn(...args); ticking = false; });
-  };
-}
-
-/* Focus trap for the drawer and the lightbox. Returns a release() cleanup fn. */
-const FOCUSABLE =
-  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
-
-function trapFocus(container) {
-  const nodes = () => [...container.querySelectorAll(FOCUSABLE)].filter(el => el.offsetParent !== null);
-  function onKey(e) {
-    if (e.key !== 'Tab') return;
-    const f = nodes();
-    if (!f.length) return;
-    const first = f[0], last = f[f.length - 1];
-    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-  }
-  container.addEventListener('keydown', onKey);
-  return () => container.removeEventListener('keydown', onKey);
-}
-
-/* Body scroll lock that survives nested overlays (drawer + lightbox) via a counter. */
-let scrollLocks = 0;
-function lockScroll() {
-  if (scrollLocks++ === 0) {
-    document.body.style.paddingRight = (window.innerWidth - document.documentElement.clientWidth) + 'px';
-    document.body.style.overflow = 'hidden';
-  }
-}
-function unlockScroll() {
-  if (scrollLocks > 0 && --scrollLocks === 0) {
-    document.body.style.overflow = '';
-    document.body.style.paddingRight = '';
-  }
-}
+   reduceMotion() is read live (not cached) so an OS change applies mid-session. */
+const reduceMotion = () =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 ```
 
-The shared focus-ring rule belongs in CSS, applied globally so no control is ever missed:
+Every scroll/resize listener in the file uses the same hand-rolled rAF throttle inline (`let ticking = false; … requestAnimationFrame(() => { …; ticking = false; })`) so bursts coalesce into one paint, and every listener is registered `{ passive: true }`.
+
+Two boot guards run first so the page never paints a half-styled or reflowing first frame:
+
+```js
+/* boot: drop .is-loading after two rAFs so entrance transitions can run */
+function boot() {
+  requestAnimationFrame(() =>
+    requestAnimationFrame(() => document.body.classList.remove("is-loading"))
+  );
+}
+
+/* font guard: keep .fonts-pending until webfonts settle (or 1.5s safety
+   timeout) so font-sensitive layout never paints in the fallback face and
+   then reflows. */
+document.fonts?.ready.then(drop);
+setTimeout(drop, 1500);
+```
+
+`<body class="is-loading fonts-pending">` is the no-JS / pre-paint state; both classes are dropped once JS runs. The shared focus-ring rule belongs in CSS, applied globally so no control is ever missed:
 
 ```css
 :focus-visible {
@@ -98,901 +75,546 @@ The shared focus-ring rule belongs in CSS, applied globally so no control is eve
 
 ---
 
-## 1. Scrolled nav
+## 1. Gentle reveal
 
-Past a threshold the nav swaps from transparent-over-hero to a solid white bar, and the white logo swaps to the colored one. State lives in a single `.is-scrolled` class on the header; CSS does the visual work.
+The brand's default entrance. A **one-shot** IntersectionObserver adds `.is-in` to each `.reveal` element the first time it crosses into view, then unobserves it so it never loops or re-fires on scroll-back.
+
+### How it's wired
+
+```js
+const revealEls = document.querySelectorAll(".reveal");
+const io = new IntersectionObserver(
+  (entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting && e.intersectionRatio > 0.12) {
+        e.target.classList.add("is-in");
+        io.unobserve(e.target);          // once only
+      }
+    }
+  },
+  { threshold: [0, 0.12], rootMargin: "0px 0px -8% 0px" }
+);
+revealEls.forEach((el) => io.observe(el));
+```
+
+The element must be **>12% visible** to reveal (`intersectionRatio > 0.12` against the `[0, 0.12]` threshold list), and the `-8%` bottom rootMargin holds the trigger until the element is comfortably on-screen. Per-item stagger inside a grid is handled in CSS via `--i` on each card (e.g. the diferenciais and axes grids set `style="--i:0…4"`); the JS only flips `.is-in` on the wrapper.
+
+### Accessibility / reduced-motion
+
+No `IntersectionObserver` support → every `.reveal` gets `.is-in` immediately (`revealEls.forEach(el => el.classList.add("is-in"))`), so content is never trapped hidden. The reveal *visual* (opacity + small lift, see `.reveal.is-in`/`.reveal--lift.is-in` in CSS and ANIMATIONS.md) collapses to opacity-only / instant under reduced-motion via the CSS media query — the JS does not branch on motion here, the stylesheet does.
+
+---
+
+## 2. Curve draw
+
+The signature gesture: the hair-strand curve that strokes itself on as it enters view. Separate, simpler observer from the reveal one.
+
+```js
+const cio = new IntersectionObserver(
+  (entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) {
+        e.target.classList.add("is-in");   // CSS animates stroke-dashoffset → 0
+        cio.unobserve(e.target);
+      }
+    }
+  },
+  { threshold: 0.4 }
+);
+document.querySelectorAll(".curve-draw").forEach((el) => cio.observe(el));
+```
+
+Fires at **40% visible** (`threshold: 0.4`), one-shot. The draw itself is `.curve-draw.is-in path { stroke-dashoffset: 0 }` in CSS — see ANIMATIONS.md for the stroke-dash anatomy. Reduced-motion is handled in the stylesheet.
+
+---
+
+## 3. Scrolled nav
+
+The nav starts as a translucent glass capsule over the hero and, past a small scroll threshold, condenses into a frosted-white floating capsule with the colored logo. State is a single `.is-solid` class on the header; CSS does all the visual work (capsule shrink, shadow, link-color flip, logo swap).
 
 ### Markup hooks
 
 ```html
 <header class="nav" data-nav>
-  <a class="nav__brand" href="/">
-    <img class="nav__logo nav__logo--branco"   src="logo/logo-header-branco.png"   alt="Dr. Márcio Teixeira" />
-    <img class="nav__logo nav__logo--colorido"  src="logo/logo-header-colorido.png" alt="Dr. Márcio Teixeira" aria-hidden="true" />
+  <a class="nav__brand" href="index.html" aria-label="Dr. Márcio Teixeira, página inicial">
+    <img class="nav__logo nav__logo--light" src="logo/logo-header-branco.png"   alt="Dr. Márcio Teixeira" />
+    <img class="nav__logo nav__logo--solid" src="logo/logo-header-colorido.png" alt="Dr. Márcio Teixeira" />
   </a>
-  <!-- nav links + CTA + burger -->
+  <nav class="nav__links" aria-label="Navegação principal">
+    <span class="nav__indicator" aria-hidden="true"></span>
+    <a class="nav__link" href="index.html" aria-current="page">Início</a>
+    <!-- … more nav__link routes … -->
+  </nav>
+  <a class="btn btn--primary nav__cta" href="https://wa.me/5551999704848?text=…">Agende sua consulta</a>
+  <button class="nav__burger" data-drawer-open aria-label="Abrir menu" aria-expanded="false" aria-controls="drawer">…</button>
 </header>
 ```
 
-Both logos ship in the DOM; CSS cross-fades between them so there is no flash of a missing image. The colored one is `aria-hidden` because the white one already provides the accessible name.
+Both logos ship in the DOM; CSS swaps which is `display: block` per state, so there is no flash of a missing image.
 
-### JS
+### How it's wired
 
 ```js
-function initScrolledNav() {
-  const nav = document.querySelector('[data-nav]');
-  if (!nav) return;
-  const THRESHOLD = 40;
-  const update = () => nav.classList.toggle('is-scrolled', window.scrollY > THRESHOLD);
-  window.addEventListener('scroll', rafThrottle(update), { passive: true });
-  update(); // set correct state on load / refresh mid-page
+const nav = document.querySelector("[data-nav]");
+if (nav && !nav.classList.contains("nav--solid")) {   // inner pages can be solid from the top
+  const onNavScroll = () =>
+    requestAnimationFrame(() => nav.classList.toggle("is-solid", window.scrollY > 60));
+  window.addEventListener("scroll", onNavScroll, { passive: true });
+  onNavScroll();   // correct state on load / refresh mid-page
 }
 ```
 
-### CSS
+Threshold is **`scrollY > 60`**. If the header already carries `.nav--solid` (an inner page with no media hero, which is solid from the top), the scroll listener is **never attached** — the static class wins and there is nothing to toggle.
 
-```css
-.nav {
-  position: fixed; inset: 0 0 auto; z-index: 100;
-  background: transparent;
-  transition: background .4s var(--ease-soft), box-shadow .4s var(--ease-soft);
-}
-.nav.is-scrolled {
-  background: var(--branco);
-  box-shadow: 0 6px 24px rgba(5, 127, 127, 0.08);
-}
-.nav__logo { transition: opacity .4s var(--ease-soft); grid-area: 1 / 1; }
-.nav__brand { display: grid; }                 /* stack both logos */
-.nav__logo--colorido { opacity: 0; }
-.nav.is-scrolled .nav__logo--branco   { opacity: 0; }
-.nav.is-scrolled .nav__logo--colorido { opacity: 1; }
+### CSS hooks the JS relies on
 
-/* On pages without a media hero, the nav is solid from the top. */
-.nav--solid { background: var(--branco); }
-
-@media (prefers-reduced-motion: reduce) {
-  .nav, .nav__logo { transition: none; }
-}
-```
-
-The nav-link color also flips with `.is-scrolled` (white text on the hero, `--tinta` on the solid bar) — that is pure CSS, no JS.
+`.nav.is-solid` and `.nav--solid` share the same rule block: they shrink `.nav__inner` (`max-width: 1090px`), add the frosted white background + shadow, set `.nav__logo--light { display: none }` / `.nav__logo--solid { display: block }`, repaint `.nav__link` to `--marca-ink` (and `--marca-deep` on hover/`[aria-current]`), and recolor the burger. The link-color flip is pure CSS, no JS.
 
 ---
 
-## 2. Mobile drawer
+## 4. Nav sliding indicator
 
-The burger opens a full-height teal/white drawer sliding from the right. It traps focus, locks body scroll, closes on Esc / backdrop / link click, and drives everything from `aria-expanded` as the single source of truth.
+A single pill (`.nav__indicator`) glides between nav links on hover/focus and rests under the current page. Position is driven by three JS-set CSS vars; the glide is a CSS transition.
+
+### How it's wired (`navIndicator()`)
+
+```js
+const ind = links.querySelector(".nav__indicator");
+const items = [...links.querySelectorAll(".nav__link")];
+const active = () => links.querySelector('.nav__link[aria-current="page"]') || items[0];
+
+const moveTo = (el) => {
+  if (!el) { ind.style.setProperty("--ind-o", "0"); return; }
+  ind.style.setProperty("--ind-x", el.offsetLeft + "px");   // slide
+  ind.style.setProperty("--ind-w", el.offsetWidth + "px");  // width to match link
+  ind.style.setProperty("--ind-o", "1");                    // show
+};
+const rest = () => moveTo(active());
+
+items.forEach((a) => {
+  a.addEventListener("mouseenter", () => moveTo(a));
+  a.addEventListener("focus",      () => moveTo(a));   // keyboard tracks too
+});
+links.addEventListener("mouseleave", rest);
+links.addEventListener("focusout",  rest);
+rest();
+```
+
+- The pill measures the target link's `offsetLeft`/`offsetWidth` and writes `--ind-x` (transform translate), `--ind-w` (width), `--ind-o` (opacity) on the indicator. CSS (`.nav__indicator { transform: translateX(var(--ind-x)); width: var(--ind-w); opacity: var(--ind-o); transition: transform/width/opacity }`) does the actual glide.
+- **Resting position** is the `[aria-current="page"]` link, falling back to the first link.
+- Both `mouseenter` *and* `focus` move it, so it tracks keyboard tabbing as well as the mouse; `mouseleave`/`focusout` return it to rest.
+- It is **re-measured** after fonts settle (`document.fonts.ready.then(rest)`), on `window.load`, and on a 150ms-debounced `resize`, because link widths change with the font and the breakpoint.
+
+### Accessibility
+
+The indicator is `aria-hidden="true"` decoration; the accessible "current page" signal is `aria-current="page"` on the link itself, never the pill. The pill has `pointer-events: none` so it never intercepts clicks.
+
+---
+
+## 5. Mobile drawer
+
+The burger opens a panel; a scrim dims the page. It closes on the close button, the scrim, any link tap, or Esc, and locks body scroll while open. `aria-expanded` (on the burger) and `aria-hidden` (on the drawer) are kept in sync as the source of truth.
 
 ### Markup hooks
 
 ```html
-<button class="nav__burger" data-burger aria-expanded="false" aria-controls="nav-drawer"
-        aria-label="Abrir menu">
+<button class="nav__burger" data-drawer-open aria-label="Abrir menu" aria-expanded="false" aria-controls="drawer">
   <span></span><span></span><span></span>
 </button>
 
-<div class="nav-backdrop" data-drawer-backdrop hidden></div>
-
-<nav class="nav-drawer" id="nav-drawer" data-drawer aria-label="Menu principal" hidden>
-  <ul class="nav-drawer__list">
-    <li><a class="nav-drawer__link" href="/">Início</a></li>
-    <li><a class="nav-drawer__link" href="/tratamentos.html">Tratamentos</a></li>
-    <li><a class="nav-drawer__link" href="/metodo-4d.html">Método 4D</a></li>
-    <li><a class="nav-drawer__link" href="/sobre.html">Sobre</a></li>
-    <li><a class="nav-drawer__link" href="/contato.html">Contato</a></li>
-  </ul>
-  <a class="btn btn--whats" href="https://wa.me/5551999704848">AGENDE SUA CONSULTA</a>
-</nav>
+<div class="nav-scrim" data-drawer-scrim></div>
+<aside class="drawer" id="drawer" data-drawer aria-hidden="true">
+  <button class="drawer__close" data-drawer-close aria-label="Fechar menu">&times;</button>
+  <a class="drawer__link" href="index.html" aria-current="page">Início</a>
+  <!-- … drawer__link routes … -->
+  <a class="btn btn--primary drawer__cta" href="https://wa.me/5551999704848?text=…">Agende sua consulta</a>
+</aside>
 ```
 
-### JS
+### How it's wired
 
 ```js
-function initDrawer() {
-  const burger = document.querySelector('[data-burger]');
-  const drawer = document.querySelector('[data-drawer]');
-  const backdrop = document.querySelector('[data-drawer-backdrop]');
-  if (!burger || !drawer) return;
-  let release = () => {};
-
-  function open() {
-    drawer.hidden = false; if (backdrop) backdrop.hidden = false;
-    requestAnimationFrame(() => {                 // next frame so the transition runs
-      drawer.classList.add('is-open');
-      backdrop?.classList.add('is-open');
-    });
-    burger.setAttribute('aria-expanded', 'true');
-    burger.setAttribute('aria-label', 'Fechar menu');
-    lockScroll();
-    release = trapFocus(drawer);
-    drawer.querySelector(FOCUSABLE)?.focus();
-  }
-
-  function close() {
-    drawer.classList.remove('is-open');
-    backdrop?.classList.remove('is-open');
-    burger.setAttribute('aria-expanded', 'false');
-    burger.setAttribute('aria-label', 'Abrir menu');
-    unlockScroll();
-    release();
-    burger.focus();                               // return focus to the trigger
-    const hide = () => { drawer.hidden = true; if (backdrop) backdrop.hidden = true; };
-    if (calm()) hide();
-    else drawer.addEventListener('transitionend', hide, { once: true });
-  }
-
-  const isOpen = () => burger.getAttribute('aria-expanded') === 'true';
-  burger.addEventListener('click', () => (isOpen() ? close() : open()));
-  backdrop?.addEventListener('click', close);
-  drawer.addEventListener('click', (e) => { if (e.target.closest('a')) close(); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen()) close(); });
-}
-```
-
-### CSS
-
-```css
-.nav-drawer {
-  position: fixed; inset: 0 0 0 auto; z-index: 120;
-  width: min(86vw, 360px);
-  display: flex; flex-direction: column; gap: 28px;
-  padding: 96px 32px 40px;
-  background: var(--branco);
-  border-radius: var(--r-xl) 0 0 var(--r-xl);
-  box-shadow: -24px 0 60px rgba(5, 127, 127, 0.14);
-  transform: translateX(100%);
-  transition: transform .42s var(--ease-calm);
-}
-.nav-drawer.is-open { transform: translateX(0); }
-.nav-drawer__link { font-size: 19px; font-weight: 500; color: var(--tinta); padding: 12px 0; display: block; }
-
-.nav-backdrop {
-  position: fixed; inset: 0; z-index: 110;
-  background: rgba(4, 77, 77, 0.32);
-  opacity: 0; transition: opacity .42s var(--ease-soft);
-}
-.nav-backdrop.is-open { opacity: 1; }
-
-/* burger → X morph driven purely by aria-expanded */
-.nav__burger span { display: block; width: 22px; height: 2px; background: currentColor; border-radius: 2px;
-  transition: transform .3s var(--ease-soft), opacity .3s var(--ease-soft); }
-.nav__burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.nav__burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
-.nav__burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-@media (prefers-reduced-motion: reduce) {
-  .nav-drawer, .nav-backdrop, .nav__burger span { transition: none; }
-}
-```
-
----
-
-## 3. Método 4D axis switcher (centerpiece)
-
-The brand's proprietary IP, rendered as a segmented control. Clicking a tab cross-fades to that axis's panel (description + its treatments). Full WAI-ARIA tablist pattern: roving `tabindex`, `aria-selected`, arrow-key navigation, Home/End, and a hash deep-link (`#eixo-2`) so an axis is shareable and bookmarkable.
-
-**The four axes are locked — names and order are exact (from DESIGN.md):**
-
-| Eixo | id | Nome | Foca em |
-|---|---|---|---|
-| 1 | `eixo-1` | A Superfície da Pele | coloração, textura, poros, luminosidade, manchas, sensibilidade |
-| 2 | `eixo-2` | Linhas de Expressão | rugas dinâmicas e estáticas, sulcos |
-| 3 | `eixo-3` | Alterações do Volume da Face | perda/excesso de volume, contornos, definição |
-| 4 | `eixo-4` | Flacidez | firmeza, sustentação, flacidez cutânea e muscular |
-
-### Markup hooks
-
-```html
-<div class="metodo4d" data-axis-switcher>
-  <div class="metodo4d__tabs" role="tablist" aria-label="Eixos do Método 4D">
-    <button class="metodo4d__tab" id="tab-eixo-1" role="tab" aria-selected="true"
-            aria-controls="panel-eixo-1" tabindex="0">
-      <span class="metodo4d__tab-num">01</span> A Superfície da Pele
-    </button>
-    <button class="metodo4d__tab" id="tab-eixo-2" role="tab" aria-selected="false"
-            aria-controls="panel-eixo-2" tabindex="-1">
-      <span class="metodo4d__tab-num">02</span> Linhas de Expressão
-    </button>
-    <button class="metodo4d__tab" id="tab-eixo-3" role="tab" aria-selected="false"
-            aria-controls="panel-eixo-3" tabindex="-1">
-      <span class="metodo4d__tab-num">03</span> Alterações do Volume da Face
-    </button>
-    <button class="metodo4d__tab" id="tab-eixo-4" role="tab" aria-selected="false"
-            aria-controls="panel-eixo-4" tabindex="-1">
-      <span class="metodo4d__tab-num">04</span> Flacidez
-    </button>
-  </div>
-
-  <div class="metodo4d__panel" id="panel-eixo-1" role="tabpanel"
-       aria-labelledby="tab-eixo-1" tabindex="0">
-    <p class="metodo4d__desc">Avalia coloração, textura, poros, luminosidade, manchas e sensibilidade da pele.</p>
-    <ul class="metodo4d__treats">
-      <li>Skincare Personalizado</li><li>Laserterapia / LIP</li><li>Skinbooster</li><li>MMP</li>
-    </ul>
-  </div>
-  <div class="metodo4d__panel" id="panel-eixo-2" role="tabpanel"
-       aria-labelledby="tab-eixo-2" tabindex="0" hidden>…</div>
-  <div class="metodo4d__panel" id="panel-eixo-3" role="tabpanel"
-       aria-labelledby="tab-eixo-3" tabindex="0" hidden>…</div>
-  <div class="metodo4d__panel" id="panel-eixo-4" role="tabpanel"
-       aria-labelledby="tab-eixo-4" tabindex="0" hidden>…</div>
-</div>
-```
-
-### JS
-
-```js
-function initAxisSwitcher() {
-  const root = document.querySelector('[data-axis-switcher]');
-  if (!root) return;
-  const tabs = [...root.querySelectorAll('[role="tab"]')];
-  const panelFor = (tab) => document.getElementById(tab.getAttribute('aria-controls'));
-
-  function select(tab, { focus = true, push = true } = {}) {
-    tabs.forEach((t) => {
-      const on = t === tab;
-      t.setAttribute('aria-selected', String(on));
-      t.tabIndex = on ? 0 : -1;                  // roving tabindex
-      const panel = panelFor(t);
-      if (on) {
-        panel.hidden = false;
-        requestAnimationFrame(() => panel.classList.add('is-in')); // cross-fade in
-      } else {
-        panel.classList.remove('is-in');
-        panel.hidden = true;
-      }
-    });
-    if (focus) tab.focus();
-    if (push) {
-      const id = tab.getAttribute('aria-controls').replace('panel-', '');  // eixo-2
-      history.replaceState(null, '', '#' + id);
-    }
-  }
-
-  // Arrow / Home / End keyboard navigation (WAI-ARIA tabs pattern)
-  root.querySelector('[role="tablist"]').addEventListener('keydown', (e) => {
-    const i = tabs.indexOf(document.activeElement);
-    if (i < 0) return;
-    let next = null;
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = tabs[(i + 1) % tabs.length];
-    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = tabs[(i - 1 + tabs.length) % tabs.length];
-    else if (e.key === 'Home') next = tabs[0];
-    else if (e.key === 'End') next = tabs[tabs.length - 1];
-    if (next) { e.preventDefault(); select(next); }
-  });
-
-  tabs.forEach((tab) => tab.addEventListener('click', () => select(tab)));
-
-  // Deep-link: open #eixo-N on load, and react to hash changes
-  function fromHash(focus) {
-    const id = location.hash.slice(1);                 // eixo-2
-    const tab = tabs.find((t) => t.getAttribute('aria-controls') === 'panel-' + id);
-    if (tab) select(tab, { focus, push: false });
-  }
-  if (/^#eixo-[1-4]$/.test(location.hash)) fromHash(false);
-  window.addEventListener('hashchange', () => fromHash(true));
-}
-```
-
-### CSS (cross-fade, reduced-motion aware)
-
-```css
-.metodo4d__panel { opacity: 0; transform: translateY(10px);
-  transition: opacity .42s var(--ease-glide), transform .42s var(--ease-glide); }
-.metodo4d__panel.is-in { opacity: 1; transform: none; }
-
-.metodo4d__tab[aria-selected="true"] { color: var(--marca-deep); }
-.metodo4d__tab[aria-selected="true"] .metodo4d__tab-num { color: var(--marca); }
-
-@media (prefers-reduced-motion: reduce) {
-  .metodo4d__panel { transition: none; transform: none; }
-}
-```
-
-`hidden` is the *functional* swap (keeps inactive panels out of the a11y tree and tab order); `.is-in` is the *visual* swap. Never conflate them. Tabs are real `<button>`s, so Enter/Space already activate them.
-
----
-
-## 4. Treatment filter by axis
-
-On the Tratamentos page, a segmented filter (Todos · Eixo 1 – 4) shows/hides cards by `data-eixo`, animates them in/out gracefully, and announces the visible count through an `aria-live` region. It mirrors the axis-switcher concept so the two stay conceptually in sync (same eixo ids, same order, same labels).
-
-### Markup hooks
-
-```html
-<div class="treat-filter" role="tablist" aria-label="Filtrar tratamentos por eixo">
-  <button class="chip chip--on" role="tab" aria-selected="true"  data-eixo="todos">Todos</button>
-  <button class="chip" role="tab" aria-selected="false" data-eixo="1">Eixo 1 · Superfície</button>
-  <button class="chip" role="tab" aria-selected="false" data-eixo="2">Eixo 2 · Linhas de Expressão</button>
-  <button class="chip" role="tab" aria-selected="false" data-eixo="3">Eixo 3 · Volume</button>
-  <button class="chip" role="tab" aria-selected="false" data-eixo="4">Eixo 4 · Flacidez</button>
-</div>
-
-<p class="treat-filter__count" data-treat-count role="status" aria-live="polite"></p>
-
-<div class="treat-grid" data-treat-grid>
-  <article class="treat-card" data-eixo="1">…</article>
-  <article class="treat-card" data-eixo="2">…</article>
-  <!-- … -->
-</div>
-```
-
-### JS
-
-```js
-function initTreatmentFilter() {
-  const chips = [...document.querySelectorAll('.treat-filter [data-eixo]')];
-  const cards = [...document.querySelectorAll('.treat-card[data-eixo]')];
-  const count = document.querySelector('[data-treat-count]');
-  if (!chips.length || !cards.length) return;
-
-  function apply(value) {
-    let shown = 0;
-    cards.forEach((card) => {
-      const match = value === 'todos' || card.dataset.eixo === value;
-      if (match) {
-        shown++;
-        card.hidden = false;
-        if (!calm()) { card.classList.remove('is-out'); requestAnimationFrame(() => card.classList.add('is-in')); }
-      } else {
-        card.classList.remove('is-in');
-        if (calm()) { card.hidden = true; }
-        else {
-          card.classList.add('is-out');                          // fade/scale out, then unmount
-          card.addEventListener('transitionend', function done() {
-            if (card.classList.contains('is-out')) card.hidden = true;
-            card.removeEventListener('transitionend', done);
-          }, { once: true });
-        }
-      }
-    });
-    if (count) {
-      const label = value === 'todos' ? 'todos os eixos' : 'o Eixo ' + value;
-      count.textContent = shown === 1
-        ? '1 tratamento em ' + label + '.'
-        : shown + ' tratamentos em ' + label + '.';
-    }
-  }
-
-  function activate(chip) {
-    chips.forEach((c) => {
-      const on = c === chip;
-      c.classList.toggle('chip--on', on);
-      c.setAttribute('aria-selected', String(on));
-      c.tabIndex = on ? 0 : -1;
-    });
-    apply(chip.dataset.eixo);
-  }
-
-  chips.forEach((chip) => chip.addEventListener('click', () => activate(chip)));
-
-  // arrow-key navigation across the filter chips
-  document.querySelector('.treat-filter').addEventListener('keydown', (e) => {
-    const i = chips.indexOf(document.activeElement);
-    if (i < 0) return;
-    let next = null;
-    if (e.key === 'ArrowRight') next = chips[(i + 1) % chips.length];
-    else if (e.key === 'ArrowLeft') next = chips[(i - 1 + chips.length) % chips.length];
-    else if (e.key === 'Home') next = chips[0];
-    else if (e.key === 'End') next = chips[chips.length - 1];
-    if (next) { e.preventDefault(); next.focus(); activate(next); }
-  });
-
-  activate(chips[0]); // default: Todos, sets initial count
-}
-```
-
-### CSS
-
-```css
-.treat-card { transition: opacity .4s var(--ease-calm), transform .4s var(--ease-calm); }
-.treat-card.is-out { opacity: 0; transform: translateY(8px) scale(.98); }
-.treat-card.is-in  { opacity: 1; transform: none; }
-.treat-filter__count { font-size: 14px; color: var(--tinta-muted); margin: 18px 0 0; }
-
-@media (prefers-reduced-motion: reduce) {
-  .treat-card { transition: none; }
-}
-```
-
----
-
-## 5. Clinic gallery lightbox
-
-Opens the `ambiente/dermaclin*.jpg` photos of the Dermaclin space in an accessible modal: `aria-modal`, focus trap, Esc to close, prev/next buttons, arrow keys, and a returned-focus contract. Reduced-motion friendly (instant under `calm()`).
-
-### Markup hooks
-
-```html
-<ul class="gallery" data-gallery>
-  <li><button class="gallery__thumb" data-lightbox="0">
-    <img src="ambiente/dermaclin1.jpg" alt="Recepção da Dermaclin" loading="lazy" /></button></li>
-  <li><button class="gallery__thumb" data-lightbox="1">
-    <img src="ambiente/dermaclin2.jpg" alt="Sala de atendimento" loading="lazy" /></button></li>
-  <!-- … dermaclin3.jpg … dermaclin15.jpg … -->
-</ul>
-
-<div class="lightbox" data-lightbox-modal role="dialog" aria-modal="true"
-     aria-label="Galeria do espaço Dermaclin" hidden>
-  <button class="lightbox__close" data-lb-close aria-label="Fechar galeria">&times;</button>
-  <button class="lightbox__nav lightbox__nav--prev" data-lb-prev aria-label="Foto anterior">&#8249;</button>
-  <figure class="lightbox__stage">
-    <img class="lightbox__img" data-lb-img alt="" />
-    <figcaption class="lightbox__cap" data-lb-cap></figcaption>
-  </figure>
-  <button class="lightbox__nav lightbox__nav--next" data-lb-next aria-label="Próxima foto">&#8250;</button>
-</div>
-```
-
-### JS
-
-```js
-function initLightbox() {
-  const modal = document.querySelector('[data-lightbox-modal]');
-  const thumbs = [...document.querySelectorAll('[data-lightbox]')];
-  if (!modal || !thumbs.length) return;
-
-  const imgEl = modal.querySelector('[data-lb-img]');
-  const capEl = modal.querySelector('[data-lb-cap]');
-  const items = thumbs.map((btn) => {
-    const img = btn.querySelector('img');
-    return { src: img.src, alt: img.alt };
-  });
-  let index = 0, release = () => {}, lastFocused = null;
-
-  function render() {
-    const it = items[index];
-    imgEl.src = it.src;
-    imgEl.alt = it.alt;
-    capEl.textContent = it.alt + ' · ' + (index + 1) + ' de ' + items.length;
-  }
-  const go = (delta) => { index = (index + delta + items.length) % items.length; render(); };
-
-  function open(i) {
-    index = i;
-    lastFocused = document.activeElement;
-    modal.hidden = false;
-    requestAnimationFrame(() => modal.classList.add('is-open'));
-    lockScroll();
-    render();
-    release = trapFocus(modal);
-    modal.querySelector('[data-lb-close]').focus();
-  }
-  function close() {
-    modal.classList.remove('is-open');
-    unlockScroll();
-    release();
-    const hide = () => { modal.hidden = true; lastFocused?.focus(); };
-    if (calm()) hide();
-    else modal.addEventListener('transitionend', hide, { once: true });
-  }
-
-  thumbs.forEach((btn, i) => btn.addEventListener('click', () => open(i)));
-  modal.querySelector('[data-lb-close]').addEventListener('click', close);
-  modal.querySelector('[data-lb-prev]').addEventListener('click', () => go(-1));
-  modal.querySelector('[data-lb-next]').addEventListener('click', () => go(1));
-  modal.addEventListener('click', (e) => { if (e.target === modal) close(); }); // backdrop
-
-  document.addEventListener('keydown', (e) => {
-    if (modal.hidden) return;
-    if (e.key === 'Escape') close();
-    else if (e.key === 'ArrowRight') go(1);
-    else if (e.key === 'ArrowLeft') go(-1);
-  });
-}
-```
-
-### CSS
-
-```css
-.lightbox {
-  position: fixed; inset: 0; z-index: 200;
-  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px;
-  padding: clamp(16px, 4vw, 48px);
-  background: rgba(4, 77, 77, 0.86);
-  opacity: 0; transition: opacity .4s var(--ease-soft);
-}
-.lightbox.is-open { opacity: 1; }
-.lightbox__img { max-width: 100%; max-height: 86vh; border-radius: var(--r-lg); display: block; margin: 0 auto; }
-.lightbox__cap { color: var(--branco); text-align: center; font-size: 14px; margin-top: 12px; }
-.lightbox__nav, .lightbox__close { background: rgba(255,255,255,.14); color: var(--branco);
-  border: 0; border-radius: var(--r-pill); width: 48px; height: 48px; cursor: pointer; font-size: 24px; }
-.lightbox__close { position: absolute; top: 20px; right: 20px; }
-
-@media (prefers-reduced-motion: reduce) { .lightbox { transition: none; } }
-```
-
----
-
-## 6. FAQ accordion
-
-The button + region pattern (more controllable than `<details>` for the teal +/− indicator and smooth height). Each header is a `<button>` with `aria-expanded` + `aria-controls`; each answer is a region labelled by its button. Multi-open by default; flip `SINGLE_OPEN` to true for single-open.
-
-### Markup hooks
-
-```html
-<div class="faq" data-faq>
-  <div class="faq__item">
-    <h3 class="faq__head">
-      <button class="faq__trigger" aria-expanded="false" aria-controls="faq-a1" id="faq-q1">
-        O Método 4D substitui a consulta dermatológica?
-        <span class="faq__icon" aria-hidden="true"></span>
-      </button>
-    </h3>
-    <div class="faq__panel" id="faq-a1" role="region" aria-labelledby="faq-q1" hidden>
-      <div class="faq__inner">
-        <p>Não. O Método 4D é a forma como o Dr. Márcio organiza a avaliação durante a sua consulta…</p>
-      </div>
-    </div>
-  </div>
-  <!-- more .faq__item … -->
-</div>
-```
-
-### JS
-
-```js
-function initFaq() {
-  const faq = document.querySelector('[data-faq]');
-  if (!faq) return;
-  const SINGLE_OPEN = false;
-  const triggers = [...faq.querySelectorAll('.faq__trigger')];
-
-  function setOpen(trigger, open) {
-    const panel = document.getElementById(trigger.getAttribute('aria-controls'));
-    trigger.setAttribute('aria-expanded', String(open));
-    if (open) {
-      panel.hidden = false;
-      if (calm()) return;
-      panel.style.height = '0px';
-      requestAnimationFrame(() => { panel.style.height = panel.scrollHeight + 'px'; });
-      panel.addEventListener('transitionend', function done() {
-        panel.style.height = 'auto'; panel.removeEventListener('transitionend', done);
-      }, { once: true });
-    } else {
-      if (calm()) { panel.hidden = true; return; }
-      panel.style.height = panel.scrollHeight + 'px';
-      requestAnimationFrame(() => { panel.style.height = '0px'; });
-      panel.addEventListener('transitionend', function done() {
-        panel.hidden = true; panel.style.height = ''; panel.removeEventListener('transitionend', done);
-      }, { once: true });
-    }
-  }
-
-  triggers.forEach((trigger) => {
-    trigger.addEventListener('click', () => {
-      const open = trigger.getAttribute('aria-expanded') === 'true';
-      if (SINGLE_OPEN && !open) {
-        triggers.forEach((t) => { if (t !== trigger && t.getAttribute('aria-expanded') === 'true') setOpen(t, false); });
-      }
-      setOpen(trigger, !open);
-    });
-  });
-}
-```
-
-### CSS (teal +/− indicator)
-
-```css
-.faq__panel { overflow: hidden; transition: height .4s var(--ease-glide); }
-.faq__inner { padding: 4px 0 24px; color: var(--tinta-muted); }
-
-.faq__icon { position: relative; width: 18px; height: 18px; flex: 0 0 auto; }
-.faq__icon::before, .faq__icon::after { content: ""; position: absolute; inset: 50% 0 auto;
-  height: 2px; background: var(--marca); border-radius: 2px; transition: transform .3s var(--ease-soft); }
-.faq__icon::after { transform: translateY(-50%) rotate(90deg); }     /* vertical bar = "+" */
-.faq__trigger[aria-expanded="true"] .faq__icon::after { transform: translateY(-50%) rotate(0); } /* "−" */
-
-@media (prefers-reduced-motion: reduce) {
-  .faq__panel { transition: none; }
-  .faq__icon::before, .faq__icon::after { transition: none; }
-}
-```
-
-Native button keyboard support (Enter/Space) is inherited. The `+` collapses to `−` via the rotating pseudo-element. The teal indicator is paired with the open/closed state semantically (`aria-expanded`), never color alone.
-
----
-
-## 7. Contact form
-
-Labeled fields (nome, telefone/WhatsApp, e-mail, mensagem) with inline validation in clear pt-BR. There is no backend, so a valid submit composes a prefilled WhatsApp message and opens `wa.me/5551999704848`; if `wa.me` cannot open, it falls back to a `mailto:` to `secretaria@dermaclin.poa.br`.
-
-### Markup hooks
-
-```html
-<form class="form" data-contact-form novalidate>
-  <div class="form__row">
-    <label class="form__label" for="cf-nome">Nome <span aria-hidden="true">*</span></label>
-    <input class="form__input" id="cf-nome" name="nome" type="text" autocomplete="name"
-           required aria-required="true" aria-describedby="cf-nome-err" />
-    <p class="form__err" id="cf-nome-err" hidden></p>
-  </div>
-  <div class="form__row">
-    <label class="form__label" for="cf-tel">Telefone / WhatsApp <span aria-hidden="true">*</span></label>
-    <input class="form__input" id="cf-tel" name="telefone" type="tel" inputmode="tel"
-           autocomplete="tel" required aria-required="true" aria-describedby="cf-tel-err"
-           placeholder="(51) 99999-9999" />
-    <p class="form__err" id="cf-tel-err" hidden></p>
-  </div>
-  <div class="form__row">
-    <label class="form__label" for="cf-email">E-mail</label>
-    <input class="form__input" id="cf-email" name="email" type="email" autocomplete="email"
-           aria-describedby="cf-email-err" />
-    <p class="form__err" id="cf-email-err" hidden></p>
-  </div>
-  <div class="form__row">
-    <label class="form__label" for="cf-msg">Mensagem <span aria-hidden="true">*</span></label>
-    <textarea class="form__input" id="cf-msg" name="mensagem" rows="4"
-              required aria-required="true" aria-describedby="cf-msg-err"></textarea>
-    <p class="form__err" id="cf-msg-err" hidden></p>
-  </div>
-  <button class="btn btn--primary" type="submit">AGENDE SUA CONSULTA</button>
-  <p class="form__status" data-form-status role="status" aria-live="polite"></p>
-</form>
-```
-
-### JS — validation + the wa.me builder
-
-```js
-function initContactForm() {
-  const form = document.querySelector('[data-contact-form]');
-  if (!form) return;
-  const WHATS = '5551999704848';
-  const EMAIL = 'secretaria@dermaclin.poa.br';
-  const status = form.querySelector('[data-form-status]');
-
-  const rules = {
-    nome: (v) => v.trim().length >= 2 || 'Por favor, informe seu nome.',
-    telefone: (v) => (v.replace(/\D/g, '').length >= 10) || 'Confira o telefone, parece faltar um número.',
-    email: (v) => v === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Esse e-mail não parece válido.',
-    mensagem: (v) => v.trim().length >= 5 || 'Conte rapidamente como podemos ajudar.',
-  };
-
-  function fieldError(field) {
-    const test = rules[field.name];
-    if (!test) return '';
-    const res = test(field.value);
-    return res === true ? '' : res;
-  }
-  function showError(field, msg) {
-    const err = document.getElementById(field.getAttribute('aria-describedby'));
-    field.setAttribute('aria-invalid', msg ? 'true' : 'false');
-    if (err) { err.textContent = msg; err.hidden = !msg; }
-  }
-
-  // validate on blur (forgiving, not on every keystroke)
-  form.querySelectorAll('input, textarea').forEach((field) => {
-    field.addEventListener('blur', () => showError(field, fieldError(field)));
-    field.addEventListener('input', () => { if (field.getAttribute('aria-invalid') === 'true') showError(field, fieldError(field)); });
-  });
-
-  // Build the prefilled WhatsApp message text
-  function buildMessage(data) {
-    const linhas = [
-      'Olá! Gostaria de agendar uma consulta.',
-      'Nome: ' + data.nome,
-      'Telefone: ' + data.telefone,
-      data.email ? 'E-mail: ' + data.email : null,
-      'Mensagem: ' + data.mensagem,
-    ].filter(Boolean);
-    return linhas.join('\n');
-  }
-  // The exact wa.me URL builder
-  function whatsappURL(data) {
-    return 'https://wa.me/' + WHATS + '?text=' + encodeURIComponent(buildMessage(data));
-  }
-  function mailtoURL(data) {
-    const subject = encodeURIComponent('Agendamento de consulta · ' + data.nome);
-    const body = encodeURIComponent(buildMessage(data));
-    return 'mailto:' + EMAIL + '?subject=' + subject + '&body=' + body;
-  }
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const fields = [...form.querySelectorAll('input, textarea')];
-    let firstInvalid = null;
-    fields.forEach((field) => {
-      const msg = fieldError(field);
-      showError(field, msg);
-      if (msg && !firstInvalid) firstInvalid = field;
-    });
-    if (firstInvalid) { firstInvalid.focus(); status.textContent = 'Confira os campos destacados, por favor.'; return; }
-
-    const data = Object.fromEntries(new FormData(form).entries());
-    const url = whatsappURL(data);
-    status.textContent = 'Abrindo o WhatsApp, conclua o envio por lá. Se não abrir, enviaremos por e-mail.';
-    const win = window.open(url, '_blank', 'noopener');
-    if (!win) window.location.href = mailtoURL(data);    // popup blocked → graceful mailto fallback
-  });
-}
-```
-
-### CSS (error state)
-
-```css
-.form__input { width: 100%; min-height: 48px; padding: 14px 16px;
-  border: 1.5px solid var(--linha); border-radius: var(--r-sm);
-  background: var(--neve); color: var(--tinta); font: inherit; }
-.form__input[aria-invalid="true"] { border-color: #b4453c; background: #fdf3f2; } /* warm error, not neon red */
-.form__err { color: #b4453c; font-size: 13px; margin: 6px 0 0; }
-.form__status { color: var(--marca-ink); font-size: 14px; margin-top: 14px; }
-```
-
-Errors never rely on color alone — there is always a text message tied via `aria-describedby` and `aria-invalid`. The error red is a muted, warm tone, never an alarming neon.
-
----
-
-## 8. Smooth anchor scrolling with header offset
-
-In-page anchors scroll smoothly with the fixed nav's height subtracted, and jump instantly under reduced-motion. The cleanest part is CSS; JS only handles the offset + hash update.
-
-```css
-html { scroll-behavior: smooth; }
-:target, section[id] { scroll-margin-top: 96px; }   /* clears the fixed nav */
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-```
-
-```js
-function initAnchorScroll() {
-  const NAV_OFFSET = 96;
-  document.querySelectorAll('a[href^="#"]').forEach((a) => {
-    const href = a.getAttribute('href');
-    if (href === '#' || href.length < 2) return;
-    a.addEventListener('click', (e) => {
-      const target = document.querySelector(href);
-      if (!target) return;                            // let real off-page links pass
-      e.preventDefault();
-      const top = target.getBoundingClientRect().top + window.scrollY - NAV_OFFSET;
-      window.scrollTo({ top, behavior: calm() ? 'auto' : 'smooth' });
-      history.pushState(null, '', href);
-      target.setAttribute('tabindex', '-1');          // move focus for screen readers
-      target.focus({ preventScroll: true });
-    });
-  });
-}
-```
-
-Note: the axis switcher (§3) owns `#eixo-N` hashes, so guard those if they collide with this handler (e.g. skip anchors handled by `[data-axis-switcher]`).
-
----
-
-## 9. Count-up + scroll-reveal init
-
-The reveal and count-up *visuals* live in ANIMATIONS.md; this is the wiring that drives them. One shared `IntersectionObserver` adds `.is-in` to `.reveal` elements and ticks each `[data-count]` once. Under `calm()`, reveals are shown immediately and numbers print their final value with no animation.
-
-```js
-function initReveal() {
-  const reveals = document.querySelectorAll('.reveal');
-  const counters = document.querySelectorAll('[data-count]');
-
-  if (calm() || !('IntersectionObserver' in window)) {
-    reveals.forEach((el) => el.classList.add('is-in'));
-    counters.forEach((el) => { el.textContent = el.dataset.count; });
-    return;
-  }
-
-  const io = new IntersectionObserver((entries, obs) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      const el = entry.target;
-      el.classList.add('is-in');
-      if (el.dataset.stagger) {                       // optional grid stagger
-        [...el.children].forEach((child, i) => child.style.setProperty('--rev-i', i));
-      }
-      if (el.dataset.count !== undefined) countUp(el);
-      obs.unobserve(el);                              // once only, never loops
-    });
-  }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
-
-  reveals.forEach((el) => io.observe(el));
-  counters.forEach((el) => { if (!el.classList.contains('reveal')) io.observe(el); });
-}
-
-function countUp(el) {
-  const target = parseFloat(el.dataset.count);
-  const suffix = el.dataset.suffix || '';
-  const dur = 1400, start = performance.now();
-  const ease = (t) => 1 - Math.pow(1 - t, 3);          // ease-out cubic, calm
-  function tick(now) {
-    const p = Math.min((now - start) / dur, 1);
-    el.textContent = Math.round(target * ease(p)) + suffix;
-    if (p < 1) requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-}
-```
-
-Markup: `<span class="stat__num" data-count="30" data-suffix="">30</span>`. The literal `30` inside is the no-JS / reduced-motion fallback.
-
----
-
-## 10. WhatsApp float reveal after scroll
-
-The floating WhatsApp button stays hidden over the hero and reveals once the user scrolls past it, so it never competes with the first impression.
-
-### Markup hooks
-
-```html
-<a class="whats-float" data-whats-float href="https://wa.me/5551999704848"
-   aria-label="Falar no WhatsApp com a Dermaclin" hidden>
-  <svg viewBox="0 0 24 24" aria-hidden="true" width="26" height="26"><!-- whatsapp glyph --></svg>
-</a>
-```
-
-### JS
-
-```js
-function initWhatsFloat() {
-  const float = document.querySelector('[data-whats-float]');
-  if (!float) return;
-  const SHOW_AFTER = 600;                              // px scrolled before it appears
-  const update = () => {
-    const show = window.scrollY > SHOW_AFTER;
-    if (show) float.hidden = false;
-    requestAnimationFrame(() => float.classList.toggle('is-in', show));
-  };
-  window.addEventListener('scroll', rafThrottle(update), { passive: true });
-  update();
-}
-```
-
-### CSS
-
-```css
-.whats-float {
-  position: fixed; right: 20px; bottom: 20px; z-index: 90;
-  width: 56px; height: 56px; display: grid; place-items: center;
-  background: var(--marca); color: var(--branco); border-radius: var(--r-pill);
-  box-shadow: 0 12px 30px rgba(5, 127, 127, 0.28);
-  opacity: 0; transform: translateY(12px) scale(.9);
-  transition: opacity .4s var(--ease-calm), transform .4s var(--ease-calm);
-}
-.whats-float.is-in { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) { .whats-float { transition: none; } }
-```
-
----
-
-## 11. The init pattern + reduced-motion in JS
-
-One `DOMContentLoaded` entry point wires everything. Each `init*` guards on its own elements (returns early if absent), so the same `main.js` runs safely on every page (Início, Tratamentos, Método 4D, Tricologia, Sobre, Contato) without errors.
-
-```js
-function init() {
-  initScrolledNav();      // 1
-  initDrawer();           // 2
-  initAxisSwitcher();     // 3
-  initTreatmentFilter();  // 4
-  initLightbox();         // 5
-  initFaq();              // 6
-  initContactForm();      // 7
-  initAnchorScroll();     // 8
-  initReveal();           // 9
-  initWhatsFloat();       // 10
-
-  const yr = document.querySelector('[data-year]');     // dynamic footer year
-  if (yr) yr.textContent = new Date().getFullYear();
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
-} else {
-  init();
-}
-```
-
-### Honoring prefers-reduced-motion via matchMedia
-
-`calm()` (§0) is the single gate. Read it **live** at the moment of each interaction rather than caching a boolean, so a patient who toggles the OS setting mid-visit gets the calmer experience immediately. To re-apply static state when the preference flips, listen on the media query:
-
-```js
-motionQuery.addEventListener('change', () => {
-  if (motionQuery.matches) {
-    // reveal everything that was waiting to animate, print final counter values
-    document.querySelectorAll('.reveal:not(.is-in)').forEach((el) => el.classList.add('is-in'));
-    document.querySelectorAll('[data-count]').forEach((el) => { el.textContent = el.dataset.count; });
-  }
+const drawer  = document.querySelector("[data-drawer]");
+const scrim   = document.querySelector("[data-drawer-scrim]");
+const openBtn = document.querySelector("[data-drawer-open]");
+const closeBtn = document.querySelector("[data-drawer-close]");
+
+const setDrawer = (open) => {
+  drawer.classList.toggle("is-open", open);          // CSS slides the panel in
+  scrim.classList.toggle("is-open", open);           // CSS fades the scrim
+  drawer.setAttribute("aria-hidden", String(!open));
+  openBtn.setAttribute("aria-expanded", String(open));
+  document.body.style.overflow = open ? "hidden" : "";   // scroll lock
+};
+
+openBtn.addEventListener("click", () => setDrawer(true));
+closeBtn?.addEventListener("click", () => setDrawer(false));
+scrim.addEventListener("click", () => setDrawer(false));
+drawer.querySelectorAll("a").forEach((a) =>
+  a.addEventListener("click", () => setDrawer(false))   // tapping any link closes it
+);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") setDrawer(false);
 });
 ```
 
-The contract, restated because it is brand-defining for a health site: **every interactive control is a real focusable element, carries correct ARIA state, is fully keyboard operable, shows the 3px teal focus ring, and never depends on motion to be usable.** When a behavior cannot meet all five, it does not ship.
+- Single `setDrawer(open)` drives the whole state: `.is-open` on both drawer and scrim, `aria-hidden`/`aria-expanded`, and `body.style.overflow`.
+- Close affordances: the close button, the scrim, **any anchor inside the drawer** (so navigating closes it), and **Esc** (global `keydown`).
+- The whole block guards on `drawer && scrim && openBtn`, so pages without a drawer no-op.
+
+### Accessibility
+
+`aria-hidden` toggles the drawer in/out of the a11y tree; `aria-expanded` on the burger reflects open state; the burger declares `aria-controls="drawer"`. Esc closes from anywhere. (Note: this implementation does **not** trap Tab focus inside the drawer or restore focus to the burger on close — it relies on `aria-hidden` + scroll-lock + Esc. If you harden it, that is the gap to fill.)
+
+---
+
+## 6. Hero video play/pause
+
+The hero `<video>` autoplays muted (motion-safe), and a single button (`[data-hero-pause]`) toggles play/pause and swaps its glyph + accessible label.
+
+### Markup hooks
+
+```html
+<video class="hero__video" id="hero-video" muted loop playsinline autoplay preload="auto" disablepictureinpicture>
+  <source src="video-hero/video-hero.mp4" type="video/mp4" />
+</video>
+
+<button class="hero__pause" data-hero-pause type="button" aria-label="Pausar vídeo">
+  <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">…</svg>
+  <svg class="icon-play"  viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">…</svg>
+</button>
+```
+
+Both icons ship in the button; CSS shows the pause glyph by default and swaps to play under `.is-paused` (`.hero__pause.is-paused .icon-pause { display: none } / .icon-play { display: block }`).
+
+### How it's wired
+
+```js
+const video = document.getElementById("hero-video");
+const pauseBtn = document.querySelector("[data-hero-pause]");
+
+video.muted = true; video.setAttribute("muted", "");   // iOS honors inline autoplay only when muted is set as a property too
+
+const setPaused = (paused) => {
+  pauseBtn.classList.toggle("is-paused", paused);       // swaps the icon
+  pauseBtn.setAttribute("aria-label", paused ? "Reproduzir vídeo" : "Pausar vídeo");
+};
+
+const tryPlay = () => {
+  const p = video.play();
+  if (p?.catch) p.then(() => setPaused(false)).catch(() => setPaused(true));
+  else setPaused(video.paused);
+};
+
+if (reduceMotion()) {
+  video.removeAttribute("autoplay"); video.pause(); setPaused(true);
+} else {
+  tryPlay();
+  video.addEventListener("canplay", () => { if (video.paused) tryPlay(); }, { once: true }); // retry if autoplay was blocked
+}
+
+pauseBtn.addEventListener("click", () => {
+  if (video.paused) { video.muted = true; tryPlay(); }
+  else { video.pause(); setPaused(true); }
+});
+```
+
+- The button is a true toggle: paused → `tryPlay()` (re-mutes first, for autoplay policy); playing → `pause()`.
+- `setPaused()` is the single source of the visual + label, so the glyph and `aria-label` can never drift from reality. The label reads **"Pausar vídeo"** while playing, **"Reproduzir vídeo"** while paused.
+- Autoplay is wrapped in promise handling: if the browser blocks it, the catch sets the paused state, and a one-shot `canplay` retry attempts play once the video is actually ready.
+
+### Accessibility / reduced-motion
+
+Under `prefers-reduced-motion: reduce` the video **does not autoplay** — `autoplay` is removed, the video is paused, and the button starts in its "Reproduzir vídeo" (play) state, so motion is opt-in. The control is a real `<button>` with an always-accurate `aria-label`; the decorative scrim/glyphs are `aria-hidden`.
+
+---
+
+## 7. Soft hero parallax
+
+A whisper of depth: the hero media drifts at ~6% of scroll, only while the hero is on screen, and never under reduced-motion.
+
+```js
+const heroMedia = document.querySelector(".hero__media.parallax");
+const onScroll = () => {
+  if (ticking || reduceMotion()) return;        // motion-gated, rAF-throttled
+  ticking = true;
+  requestAnimationFrame(() => {
+    const y = window.scrollY;
+    if (y < window.innerHeight * 1.2)            // stop once the hero is well past
+      heroMedia.style.transform = `translate3d(0, ${(y * 0.06).toFixed(2)}px, 0)`;
+    ticking = false;
+  });
+};
+window.addEventListener("scroll", onScroll, { passive: true });
+```
+
+`reduceMotion()` is checked **live inside the handler**, so toggling the OS preference mid-scroll stops the drift immediately. The early-out at `1.2 × innerHeight` avoids transforming once the hero is offscreen.
+
+---
+
+## 8. Antes/Depois drag comparator
+
+A single before/after image where the patient drags to wipe between the two states. A real `<input type="range">` is the keyboard-accessible engine; pointer events let you press-and-drag anywhere on the image. Both write the same `--pos` CSS var that clips the "before" image and positions the divider.
+
+### Markup hooks
+
+```html
+<div class="ba" data-ba style="--pos:50%">
+  <img class="ba__img ba__img--after"  src="…/home-depois.jpg" alt="Pele após o tratamento…" />
+  <img class="ba__img ba__img--before" src="…/home-antes.jpg"  alt="Pele antes do tratamento" />
+  <span class="ba__label ba__label--before">Antes</span>
+  <span class="ba__label ba__label--after">Depois</span>
+  <div class="ba__divider" aria-hidden="true"><span class="ba__handle">…chevrons…</span></div>
+  <input class="ba__range" type="range" min="0" max="100" value="50" step="0.1"
+         aria-label="Comparar antes e depois" />
+</div>
+```
+
+CSS consumes `--pos`: `.ba__img--before { clip-path: inset(0 calc(100% - var(--pos)) 0 0) }` and `.ba__divider { left: var(--pos) }`.
+
+### How it's wired
+
+```js
+document.querySelectorAll("[data-ba]").forEach((ba) => {
+  const range = ba.querySelector(".ba__range");
+  const apply = () => ba.style.setProperty("--pos", range.value + "%");
+  range.addEventListener("input", apply);   // keyboard + native thumb drag
+  apply();
+
+  /* Press-and-drag anywhere on the image (touch + mouse). The range stays for
+     keyboard a11y; pointer events drive the live drag and keep range.value in sync. */
+  let dragging = false;
+  const setFromX = (clientX) => {
+    const rect = ba.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
+    range.value = pct;
+    ba.style.setProperty("--pos", pct + "%");
+  };
+  ba.addEventListener("pointerdown", (e) => {
+    dragging = true;
+    ba.setPointerCapture?.(e.pointerId);     // keep receiving moves outside the box
+    setFromX(e.clientX);
+  });
+  ba.addEventListener("pointermove", (e) => { if (dragging) setFromX(e.clientX); });
+  const stop = (e) => { dragging = false; ba.releasePointerCapture?.(e.pointerId); };
+  ba.addEventListener("pointerup", stop);
+  ba.addEventListener("pointercancel", stop);
+});
+```
+
+- **Two input paths, one var.** The range's `input` event (fired by keyboard arrows, the native thumb, and assistive tech) calls `apply()`. Pointer events anywhere on `.ba` call `setFromX()`, which clamps to 0–100, **writes back to `range.value`** (so the two stay in sync), and updates `--pos`.
+- **Pointer events** unify mouse + touch + pen, and `setPointerCapture` means a drag started on the image keeps tracking even if the cursor leaves the box. `pointercancel` (e.g. a touch interrupted by the browser) stops cleanly. No separate touch handlers are needed.
+- `[data-ba]` is queried with `forEach`, so multiple comparators on a page each wire independently.
+
+### Accessibility / reduced-motion
+
+The `<input type="range">` carries the interaction's accessibility: it is fully keyboard operable (Arrow/Home/End/PageUp-Down move `--pos` in real time via `input`) and labelled `aria-label="Comparar antes e depois"`. The divider/handle are `aria-hidden` decoration. There is no time-based animation, so nothing to gate for reduced-motion — the wipe is direct manipulation.
+
+---
+
+## 9. Casos carousel (Antes e Depois)
+
+A full-bleed, horizontally-scrolling track of before/after case cards. Arrows step one card at a time and disable at the ends; each card reveals its "depois" on hover/focus (desktop) and on tap (touch), with `aria-pressed` tracking the tapped state.
+
+### Markup hooks
+
+```html
+<div class="casos__nav" role="group" aria-label="Navegar pelos resultados">
+  <button class="casos__arrow" type="button" data-casos-prev aria-label="Ver caso anterior" disabled>…</button>
+  <button class="casos__arrow" type="button" data-casos-next aria-label="Ver próximo caso">…</button>
+</div>
+
+<div class="casos__viewport">
+  <ul class="casos__track" data-casos-track tabindex="0" role="list" aria-label="Casos de antes e depois">
+    <li class="caso-item">
+      <article class="caso" style="--off:2.6">
+        <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Tratamento Capilar: ver o depois">
+          <span class="caso__media">
+            <img class="caso__img caso__img--antes"  … />
+            <img class="caso__img caso__img--depois" … />
+          </span>
+          <span class="caso__meta">…tag (Antes/Depois) + category…</span>
+        </button>
+      </article>
+    </li>
+    <!-- … more .caso-item … -->
+  </ul>
+</div>
+```
+
+### How it's wired (`casos()`)
+
+```js
+const track = document.querySelector("[data-casos-track]");
+const prev  = document.querySelector("[data-casos-prev]");
+const next  = document.querySelector("[data-casos-next]");
+
+/* one card (its width + the track's column-gap) per arrow click */
+const step = () => {
+  const card = track.querySelector(".caso-item");
+  if (!card) return track.clientWidth;
+  const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+  return card.getBoundingClientRect().width + gap;
+};
+const go = (dir) =>
+  track.scrollBy({ left: dir * step(), behavior: reduceMotion() ? "auto" : "smooth" });
+prev?.addEventListener("click", () => go(-1));
+next?.addEventListener("click", () => go(1));
+
+/* enable/disable arrows at the ends, rAF-throttled on scroll + on resize */
+const updateArrows = () => {
+  const max = track.scrollWidth - track.clientWidth - 2;
+  if (prev) prev.disabled = track.scrollLeft <= 2;
+  if (next) next.disabled = track.scrollLeft >= max;
+};
+track.addEventListener("scroll", /* rAF-throttled */ updateArrows, { passive: true });
+window.addEventListener("resize", updateArrows);
+updateArrows();
+
+/* hover-less (touch) devices: tap toggles the "depois" persistently */
+track.querySelectorAll(".caso__toggle").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const caso = btn.closest(".caso");
+    const on = caso.classList.toggle("is-revealed");
+    btn.setAttribute("aria-pressed", String(on));
+  });
+});
+```
+
+- **Native scroll is the engine.** Arrows call `scrollBy` by exactly one card (measured width + computed `column-gap`); the track is also free-scroll/swipe by the user. Smooth scroll degrades to `"auto"` under reduced-motion.
+- **Arrow disabling** is computed from `scrollLeft` against `scrollWidth - clientWidth` (with a 2px tolerance): `prev` disables at the start, `next` at the end. Recomputed on every (throttled) scroll and on resize, and once on init — so the first card starts with `prev` disabled (matching the `disabled` attribute in the markup).
+- **Reveal model.** On pointer devices, hover/focus reveals the depois purely in CSS (`.caso__toggle:hover .caso__img--depois`, `:focus-visible …`). On touch there is no hover, so the tap handler **toggles `.caso.is-revealed`** persistently and flips `aria-pressed` — the same CSS rule (`.caso.is-revealed .caso__img--depois`) drives the visual. Hover and the toggled class share one stylesheet path, so the two never diverge.
+
+### Accessibility / keyboard
+
+Each card's reveal control is a real `<button class="caso__toggle">` with `aria-pressed` (toggle semantics) and a descriptive `aria-label` ("`<categoria>`: ver o depois"); Enter/Space activate it natively, and `:focus-visible` reveals the depois exactly like hover. The track is `tabindex="0"` + `role="list"` with an `aria-label`, so it is focusable and can be scrolled with the keyboard. Arrow buttons carry `aria-label`s and use the native `disabled` attribute at the ends. The Antes/Depois tag inside each card is `aria-hidden` (decorative state mirror).
+
+---
+
+## 10. Avaliações carousel
+
+The Google-reviews carousel. Mechanically a twin of the casos carousel (arrows + native scroll + end-disabling), minus the reveal — review cards have no hover state.
+
+### Markup hooks
+
+```html
+<div class="reviews__nav" role="group" aria-label="Navegar pelas avaliações">
+  <button class="reviews__arrow" type="button" data-reviews-prev aria-label="Ver avaliação anterior" disabled>…</button>
+  <button class="reviews__arrow" type="button" data-reviews-next aria-label="Ver próxima avaliação">…</button>
+</div>
+
+<div class="reviews__viewport">
+  <ul class="reviews__track" data-reviews-track tabindex="0" role="list" aria-label="Avaliações de pacientes no Google">
+    <li class="review-item"><article class="review-card">…stars · text · author…</article></li>
+    <!-- … more .review-item … -->
+  </ul>
+</div>
+```
+
+### How it's wired (`reviews()`)
+
+Identical pattern to §9 with `[data-reviews-track]`, `[data-reviews-prev/next]`, and `.review-item` as the step unit:
+
+```js
+const step = () => {
+  const card = track.querySelector(".review-item");
+  if (!card) return track.clientWidth;
+  const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+  return card.getBoundingClientRect().width + gap;
+};
+const go = (dir) =>
+  track.scrollBy({ left: dir * step(), behavior: reduceMotion() ? "auto" : "smooth" });
+// …same updateArrows() (scrollLeft vs scrollWidth - clientWidth - 2), throttled scroll + resize…
+```
+
+Arrows step one review card; they disable at the ends; smooth scroll falls back to `"auto"` under reduced-motion; the track is free-scroll/swipe and focusable (`tabindex="0"`, `role="list"`, `aria-label`). No tap-to-reveal here.
+
+### Accessibility
+
+Arrow buttons have `aria-label`s and use native `disabled` at the ends. Each `review-card__stars` carries an `aria-label` ("5 de 5 estrelas") so the rating is announced; the star SVGs are `aria-hidden`. The header's Google rating is a real `<a>` to the Google review page with a full `aria-label` ("4,9 de 5 estrelas em 216 avaliações no Google…").
+
+---
+
+## 11. Smooth anchor scrolling
+
+In-page `#` links scroll smoothly to their target, instantly under reduced-motion. This is deliberately minimal — `scrollIntoView`, no JS offset math (the fixed nav clearance is handled in CSS via `scroll-margin-top` on section targets).
+
+```js
+document.querySelectorAll('a[href^="#"]').forEach((a) => {
+  a.addEventListener("click", (e) => {
+    const id = a.getAttribute("href");
+    if (id === "#" || id.length < 2) return;        // ignore bare "#"
+    const target = document.querySelector(id);
+    if (!target) return;                            // let real off-page links pass
+    e.preventDefault();
+    target.scrollIntoView({
+      behavior: reduceMotion() ? "auto" : "smooth",
+      block: "start",
+    });
+  });
+});
+```
+
+`reduceMotion()` is read live so the jump is instant when the preference is set. Note this handler does **not** push to `history` or move focus — keep it that way unless you also add `scroll-margin-top` accounting and a focus-shift, and make sure not to hijack off-page links (the `querySelector(id)` guard already lets those through).
+
+---
+
+## 12. Fio de cabelo motif
+
+The brand's hair-strand signature, generated per section. `fioMotif()` scans `[data-fio]` sections and injects one self-drawing SVG strand into each section's free outer gutter, on the chosen side, that strokes on as the section crosses the viewport. (Deep anatomy lives in COMPONENTS.md / ANIMATIONS.md — this is just the wiring.)
+
+### Markup hooks
+
+```html
+<section class="section section--branco" data-fio="left">…</section>
+<section class="section section--branco" data-fio="right">…</section>
+<!-- on a teal band, add section--deep so the strand inverts to light: -->
+<section class="section section--deep" data-fio="left">…</section>
+```
+
+`data-fio="left"|"right"` picks the side; `.section--deep` flips the stroke to a light tint for dark bands.
+
+### How it's wired (`fioMotif()`)
+
+- **Once, shared:** appends a hidden `<svg id="fio-defs">` to `<body>` holding the teal `linearGradient#fio-grad` and a soft-blur filter, reused by every strand.
+- **Per section:** for each `[data-fio]`, creates an `<svg class="fio-sec" aria-hidden="true" preserveAspectRatio="none">` with two paths — `.fio-sec__main` (the strand) and `.fio-sec__sheen` (the moving highlight) — and **appends it as the section's last child** so it sits at z-base, behind the content. Stroke is the teal gradient, or light tints (`#dff3ef` / `#f1fffb`) when `.section--deep`.
+- **`build()`** (on `load`, and 150ms-debounced on `resize`): measures the section and its `.container` to find the free gutter on the chosen side, computes a band X and amplitude, and **generates the path `d`** as a vertical sine strand that tapers to a point at the top and base (so it kisses the section divide), with a high-frequency micro-wave for "hair life". It **hides the strand** when the viewport is narrow (`< 1080px`) or the gutter is too thin (`< 26px`) by setting `display: none`.
+- **`onScroll()`** (rAF-throttled scroll listener): maps the section's viewport position to a `0→1` progress and drives the draw via `stroke-dasharray`/`stroke-dashoffset` on the main path, plus a traveling sheen segment whose opacity fades out near the strand's tips.
+
+### Accessibility / reduced-motion
+
+Every generated SVG is `aria-hidden="true"` — pure decoration, never in the a11y tree or tab order. Under `prefers-reduced-motion: reduce`, `reduceMotion()` is read once in this module: the strand is drawn **fully and statically** (dashoffset 0, no scroll-linked draw) and the sheen is hidden (`opacity: 0`). The motif also self-suppresses on narrow/cramped layouts, so it never crowds the content.
+
+---
+
+## 13. The IIFE pattern + reduced-motion in JS
+
+All of the above lives inside one IIFE in `main.js`, executed top-to-bottom on parse. There is no `init()` registry and no framework — each block guards on its own elements (`if (!el) return;`, or `forEach` over a possibly-empty NodeList), so the same `main.js` runs safely on every page (Início, Tratamentos, Método 4D, Tricologia, Sobre, Contato) without errors when a given section is absent.
+
+```js
+(function () {
+  "use strict";
+  const reduceMotion = () =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function boot() { /* drop .is-loading after 2 rAFs */ }
+  if (document.readyState === "loading")
+    document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+
+  /* reveal, curve-draw, nav scrolled, nav indicator, drawer, hero video,
+     parallax, before/after, casos, reviews, anchor scroll, fioMotif … */
+})();
+```
+
+### Honoring prefers-reduced-motion
+
+`reduceMotion()` (§0) is the single gate, and it is read **live at the moment of each interaction** — never cached — so a patient who toggles the OS setting mid-visit gets the calmer experience immediately for parallax, hero autoplay, carousel smooth-scroll, anchor scroll, and the fio draw. Where the effect is purely CSS (reveal, curve-draw, the before/after wipe visuals), reduced-motion is honored by the stylesheet's media query, not by JS branching.
+
+### Dormant code to know about
+
+`main.js` still contains a `countUp()` helper and a `.stat__num[data-count]` observer (threshold 0.6, with prefix/suffix and a width-lock so Cormorant's proportional figures can't reflow mid-count). The current home page **no longer renders count-up stats** (the hero's heritage rails replaced them), so this code is **dormant** — it finds no matching elements and does nothing. If you reintroduce a stat with `<span class="stat__num" data-count="30" data-suffix=" anos">30</span>`, it will animate on scroll-in (and print the final value instantly under reduced-motion). Treat it as available-but-unused, not as a shipped behavior.
+
+---
+
+The contract, restated because it is brand-defining for a health site: **every interactive control is a real focusable element, carries correct ARIA state, is keyboard operable, shows the 3px teal focus ring, and never depends on motion to be usable.** When a behavior cannot meet all of these, it does not ship.

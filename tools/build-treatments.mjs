@@ -6,33 +6,66 @@
 
        node tools/build-treatments.mjs
 
+   Each page is a sectioned conversion landing page (NOT a blog article):
+   hero + "o que é" split + benefícios/indicações + como funciona split +
+   resultados/caso (warm band) + cuidados + médico + FAQ + CTA band, with a
+   call-to-action repeated in every section. Real clinical photography is
+   pulled from imagens/<folder>/ at build time.
+
    Plain Node (ESM), no dependencies.
    ===================================================================== */
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const COPY = readFileSync(join(ROOT, "COPY-TRATAMENTOS.md"), "utf8");
+const SITE = "https://drmarcioteixeira.com.br";
 
-/* --- slug → bespoke art (filenames are irregular in /imagens) -------- */
-const IMG = {
-  "skincare-personalizado": "skincare-personalizado.png",
-  "skincare-via-oral": "skincare-oral.png",
-  "peelings-quimicos": "peelings-quimicos.png",
-  "terapia-fotodinamica": "photo-aging.png",
-  "laser-luz-intensa-pulsada": "laserterapia.png",
-  "skinbooster": "skinnbooster.png",
-  "mmp-dna-salmao-exossomas": "mmp.png",
-  "toxina-botulinica": "toxina-butolinica.png",
-  "acido-hialuronico": "preenchimento-acido-hialuronico.png",
-  "bioestimuladores-de-colageno": "bioestimulador-colageno.png",
-  "lipo-facial-clinica": "lipo-facical.png",
-  "harmonizacao-facial": "harmonizacao-facial.png",
-  "ultrassom-microfocado-liftera": "ultrassom-microfocado.png",
-  "radiofrequencia": "radiofrequencia.png",
-  "fios-de-sustentacao-pdo": "fios-de-pdo.png",
+/* --- slug → image folder (names in /imagens are irregular) ----------- */
+const FOLDER = {
+  "skincare-personalizado": "skincare-personalizado",
+  "skincare-via-oral": "skincare-oral",
+  "peelings-quimicos": "peelings-quimicos",
+  "terapia-fotodinamica": "terapia-fotodinamica",
+  "laser-luz-intensa-pulsada": "laserterapia",
+  "skinbooster": "skinbooster",
+  "mmp-dna-salmao-exossomas": "mmp",
+  "toxina-botulinica": "toxina-butolínica",
+  "acido-hialuronico": "preenchimento-acido-hialuronico",
+  "bioestimuladores-de-colageno": "bioestimulador-colageno",
+  "lipo-facial-clinica": "lipo-facial",
+  "harmonizacao-facial": "harmonizacao-facial",
+  "ultrassom-microfocado-liftera": "ultrassom-microfocado",
+  "radiofrequencia": "radiofrequencia",
+  "fios-de-sustentacao-pdo": "fios-de-pdo",
 };
+
+/* Scan a treatment's image folder. Returns the round "icon" art (a digit-less
+   .png) plus the real clinical photos, all as URL-encoded relative paths from
+   tratamentos/<slug>/. Photos are preferred over the icon for hero + splits. */
+function scanArt(slug) {
+  const folder = FOLDER[slug] || slug;
+  let files = [];
+  try {
+    files = readdirSync(join(ROOT, "imagens", folder));
+  } catch {
+    /* folder missing — handled by caller */
+  }
+  files = files.filter((f) => /\.(jpe?g|png|webp)$/i.test(f));
+  const icon =
+    files.find((f) => /\.png$/i.test(f) && !/\d/.test(f.replace(/\.png$/i, ""))) ||
+    files.find((f) => /\.png$/i.test(f)) ||
+    files[0] ||
+    "";
+  const photos = files
+    .filter((f) => f !== icon)
+    .sort((a, b) => a.localeCompare(b, "pt"))
+    .sort((a, b) => (/\.jpe?g$/i.test(b) ? 1 : 0) - (/\.jpe?g$/i.test(a) ? 1 : 0));
+  const url = (f) => (f ? encodeURI(`../../imagens/${folder}/${f}`) : "");
+  const abs = (f) => (f ? encodeURI(`${SITE}/imagens/${folder}/${f}`) : "");
+  return { folder, iconUrl: url(icon), iconAbs: abs(icon), photos: photos.map(url), count: files.length };
+}
 
 /* --- "Links internos" display name → destination -------------------- */
 const NAME_TO_SLUG = [
@@ -58,8 +91,6 @@ const NAME_TO_SLUG = [
 ];
 
 const WA = "5551999704848";
-const REVISED =
-  "Conteúdo revisado pelo Dr. Márcio Teixeira · Dermatologista · CREMERS 20214 · RQE 10858 | 12078 · Membro titular da Sociedade Brasileira de Dermatologia.";
 const DISCLAIMER =
   "O conteúdo desta página é informativo e não substitui a consulta médica. A indicação, a técnica e os produtos são definidos individualmente em avaliação presencial. Resultados variam de pessoa para pessoa. Procedimentos realizados por médico dermatologista. Conteúdo em conformidade com as normas do CFM sobre publicidade médica.";
 
@@ -67,10 +98,7 @@ const DISCLAIMER =
 /* helpers                                                            */
 /* ------------------------------------------------------------------ */
 const esc = (s) =>
-  s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 /* inline markdown → HTML (bold, italic, strip backticks) */
 const inline = (s) => {
@@ -84,8 +112,7 @@ const inline = (s) => {
 const attr = (s) =>
   s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-const waLink = (msg) =>
-  `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+const waLink = (msg) => `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
 
 /* split a chunk of text into paragraphs on blank lines */
 const paras = (text) =>
@@ -116,7 +143,6 @@ function parse() {
       return m ? m[1].replace(/`/g, "").trim() : "";
     };
     const field = (key) => {
-      // matches "**Key:** value" inside ### Hero etc.
       const re = new RegExp("\\*\\*" + key + ":\\*\\*\\s*(.+)");
       const m = block.match(re);
       return m ? m[1].trim() : "";
@@ -137,7 +163,6 @@ function parse() {
       sec[t.replace(/\s*\(.*?\)\s*$/, "").trim()] = parts[i].slice(nl + 1).trim();
     }
 
-    // hero fields
     const eyebrow = field("Eyebrow").replace(/\s*\*\(.*?\)\*/g, "").trim();
     const subhead = field("Subheadline");
 
@@ -194,7 +219,7 @@ function parse() {
     const ctaParas = paras(ctaRaw.replace(/→.*$/ms, ""));
     const closing = ctaParas.join(" ");
     const ctxMatch = ctaRaw.match(/WhatsApp[^"”]*["“]([^"”]+)["”]/);
-    const ctxMsg = ctxMatch ? ctxMatch[1].trim() : "Olá, gostaria de agendar uma avaliação.";
+    const ctxMsg = ctxMatch ? ctxMatch[1].trim() : `Olá, gostaria de agendar uma avaliação sobre ${name}.`;
 
     // Links internos → related chips
     const linksRaw = (block.match(/\*\*Links internos:\*\*\s*(.+)/) || [])[1] || "";
@@ -213,7 +238,6 @@ function parse() {
           if (hit && hit[1] !== slug) related.push({ label, href: `../${hit[1]}/` });
         }
       });
-    // de-dup by href
     const seen = new Set();
     const relatedUniq = related.filter((r) => (seen.has(r.href) ? false : seen.add(r.href)));
 
@@ -232,10 +256,18 @@ function parse() {
 }
 
 /* ------------------------------------------------------------------ */
-/* render one page                                                    */
+/* icons + shared chrome                                              */
 /* ------------------------------------------------------------------ */
 const ARROW =
   '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const CHECK =
+  '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ICO_SHIELD =
+  '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ICO_4D =
+  '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="1.6"/></svg>';
+const ICO_PIN =
+  '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg>';
 const WPP_ICON =
   '<svg class="wpp__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163A11.867 11.867 0 0 1 .14 11.86C.14 5.32 5.46.001 12 .001S23.86 5.32 23.86 11.86 18.54 23.72 12 23.72a11.82 11.82 0 0 1-5.66-1.44L.057 24zM6.6 20.13c1.65.98 3.22 1.57 5.4 1.57 5.44 0 9.86-4.42 9.86-9.84S17.44 2.02 12 2.02 2.14 6.44 2.14 11.86c0 2.29.67 4 1.79 5.78l-.99 3.62 3.66-1.13zM17.4 14.3c-.07-.12-.27-.19-.56-.34-.29-.14-1.71-.84-1.97-.94-.27-.1-.46-.14-.65.15-.19.29-.75.94-.92 1.13-.17.19-.34.22-.63.07-.29-.14-1.22-.45-2.32-1.43-.86-.77-1.44-1.71-1.61-2-.17-.29-.02-.45.13-.59.13-.13.29-.34.43-.51.14-.17.19-.29.29-.48.1-.19.05-.36-.02-.51-.07-.14-.65-1.56-.89-2.14-.23-.56-.47-.48-.65-.49l-.55-.01c-.19 0-.5.07-.76.36-.26.29-1 .98-1 2.38s1.02 2.76 1.17 2.95c.14.19 2.01 3.07 4.86 4.3.68.29 1.21.47 1.62.6.68.22 1.3.19 1.79.11.55-.08 1.71-.7 1.95-1.37.24-.67.24-1.25.17-1.37z"/></svg>';
 
@@ -344,7 +376,7 @@ function footerHTML() {
   <script src="../../assets/js/main.js" defer></script>`;
 }
 
-function jsonLD(t) {
+function jsonLD(t, ogImg) {
   const faqLD = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -359,6 +391,7 @@ function jsonLD(t) {
     "@type": "MedicalWebPage",
     name: t.h1,
     description: t.description,
+    image: ogImg,
     about: { "@type": "MedicalProcedure", name: t.name },
     author: {
       "@type": "Physician",
@@ -381,24 +414,52 @@ function jsonLD(t) {
     .join("\n");
 }
 
+/* ------------------------------------------------------------------ */
+/* render one page                                                    */
+/* ------------------------------------------------------------------ */
 function render(t) {
-  const img = IMG[t.slug];
-  const heroCta = waLink(t.ctxMsg);
+  const art = scanArt(t.slug);
+  const photo = (i) => (art.photos.length ? art.photos[i % art.photos.length] : art.iconUrl);
+  const heroImg = photo(0);
+  const splitA = photo(1);
+  const splitB = photo(2);
+  const ogImg = art.iconAbs;
+
   const eixoNames = {
     "1": "A Superfície da Pele",
     "2": "Linhas de Expressão",
     "3": "Alterações do Volume da Face",
     "4": "Flacidez",
   };
+  const eixoLabel = t.eyebrow || `Eixo ${t.eixo} · ${eixoNames[t.eixo]}`;
+  const eixoShort = `Eixo ${t.eixo} · ${eixoNames[t.eixo].replace(/^(A |Alterações do )/, "")}`;
 
-  const P = (arr) => arr.map((p) => `          <p>${inline(p)}</p>`).join("\n");
+  const heroCta = waLink(t.ctxMsg);
+  const dudaCta = waLink(`Olá, tenho dúvidas sobre ${t.name}. Pode me ajudar?`);
 
-  const indicHTML = t.indic.length
-    ? `        <ul class="t-list">\n${t.indic.map((i) => `          <li>${inline(i)}</li>`).join("\n")}\n        </ul>`
+  const P = (arr, ind = "          ") => arr.map((p) => `${ind}<p>${inline(p)}</p>`).join("\n");
+
+  const ctaBtn = (label) =>
+    `<a class="btn btn--primary" href="${attr(heroCta)}" target="_blank" rel="noopener">${esc(label || "Agende sua consulta")}</a>`;
+  const ctaRow = (label, center) =>
+    `        <div class="ts-cta${center ? " ts-cta--center" : ""}">
+          ${ctaBtn(label)}
+          <a class="btn btn--ghost" href="${attr(dudaCta)}" target="_blank" rel="noopener">Tirar dúvidas no WhatsApp</a>
+        </div>`;
+
+  const beneHTML = t.indic.length
+    ? `        <div class="bene-grid">
+${t.indic
+  .map(
+    (i, n) =>
+      `          <div class="bene-card reveal" style="--i:${n}"><span class="bene-card__ico" aria-hidden="true">${CHECK}</span><p>${inline(i)}</p></div>`
+  )
+  .join("\n")}
+        </div>`
     : "";
   const careHTML = t.care
     ? `        <div class="callout">
-          <p class="callout__title">Para quem não é · cuidado</p>
+          <p class="callout__title">Atenção · avaliação necessária</p>
           <p>${inline(t.care)}</p>
         </div>`
     : "";
@@ -408,24 +469,26 @@ function render(t) {
         `          <li><span class="steps__t">${inline(s.t)}</span>${s.d ? `<span class="steps__d">${inline(s.d)}</span>` : ""}</li>`
     )
     .join("\n");
-  const casoHTML = t.casoText.length
-    ? `      <div class="case reveal">
-        <p class="case__label">Caso ilustrativo</p>
-        <p class="case__text">${inline(t.casoText.join(" "))}</p>
-${t.casoNotes.map((n) => `        <p class="case__note">${inline(n)}</p>`).join("\n")}
-      </div>`
+  const caseHTML = t.casoText.length
+    ? `        <figure class="case reveal">
+          <p class="case__label">Caso ilustrativo</p>
+          <blockquote class="case__text">${inline(t.casoText.join(" "))}</blockquote>
+${t.casoNotes.map((n) => `          <figcaption class="case__note">${inline(n)}</figcaption>`).join("\n")}
+        </figure>`
     : "";
   const faqHTML = t.faq
     .map(
-      (f) => `        <details class="faq__item">
-          <summary class="faq__q">${inline(f.q)}<span class="faq__sign" aria-hidden="true"></span></summary>
-          <div class="faq__a"><p>${inline(f.a)}</p></div>
-        </details>`
+      (f) => `          <details class="faq__item">
+            <summary class="faq__q">${inline(f.q)}<span class="faq__sign" aria-hidden="true"></span></summary>
+            <div class="faq__a"><p>${inline(f.a)}</p></div>
+          </details>`
     )
     .join("\n");
   const relatedHTML = t.related
-    .map((r) => `        <a class="related__chip" href="${attr(r.href)}">${esc(r.label)}</a>`)
+    .map((r) => `            <a class="related__chip" href="${attr(r.href)}">${esc(r.label)}</a>`)
     .join("\n");
+
+  const heroAlt = attr(`${t.name} na clínica do Dr. Márcio Teixeira em Porto Alegre`);
 
   return `<!doctype html>
 <html lang="pt-BR">
@@ -440,13 +503,13 @@ ${t.casoNotes.map((n) => `        <p class="case__note">${inline(n)}</p>`).join(
   <meta property="og:type" content="article" />
   <meta property="og:title" content="${attr(t.title)}" />
   <meta property="og:description" content="${attr(t.description)}" />
-  <meta property="og:image" content="https://drmarcioteixeira.com.br/imagens/${img}" />
+  <meta property="og:image" content="${attr(ogImg)}" />
   <link rel="icon" type="image/png" href="../../logo/logo-header-colorido.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../../assets/css/main.css" />
-${jsonLD(t)}
+${jsonLD(t, ogImg)}
 </head>
 <body class="is-loading">
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
@@ -466,93 +529,144 @@ ${navHTML()}
               <span class="crumbs__sep" aria-hidden="true">/</span>
               <span class="crumbs__current">${esc(t.name)}</span>
             </nav>
-            <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> ${esc(t.eyebrow || "Eixo " + t.eixo + " · " + eixoNames[t.eixo])}</p>
+            <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> ${esc(eixoLabel)}</p>
             <h1 id="t-title" class="treat-hero__title">${esc(t.h1)}</h1>
             <p class="treat-hero__lede">${inline(t.subhead)}</p>
             <div class="treat-hero__actions">
-              <a class="btn btn--primary" href="${attr(heroCta)}" target="_blank" rel="noopener">Agende sua consulta</a>
+              ${ctaBtn("Agende sua consulta")}
               <a class="btn btn--ghost" href="../../metodo-4d.html">Conheça o Método 4D</a>
             </div>
+            <ul class="treat-trust" aria-label="Por que o Dr. Márcio">
+              <li class="treat-trust__item">${ICO_SHIELD}<span><strong>Excelência</strong>desde 1993</span></li>
+              <li class="treat-trust__item">${ICO_4D}<span><strong>Avaliação</strong>Método 4D</span></li>
+              <li class="treat-trust__item">${ICO_PIN}<span><strong>Porto Alegre</strong>Av. Nilo Peçanha</span></li>
+            </ul>
           </div>
           <figure class="treat-hero__media">
-            <img src="../../imagens/${img}" alt="${attr(t.name + " na clínica do Dr. Márcio Teixeira em Porto Alegre")}" />
+            <img src="${heroImg}" alt="${heroAlt}" />
           </figure>
         </div>
       </div>
     </section>
 
-    <!-- ========================= ARTIGO ========================= -->
-    <section class="section section--branco" aria-label="${attr(t.name)}" data-fio="right">
+    <!-- ========================= O QUE É ========================= -->
+    <section class="section section--branco tsec" data-fio="right" aria-labelledby="oque-title">
       <div class="container">
-        <article class="treat-body">
-          <div class="t-block">
-            <h2 class="t-block__title">O que é</h2>
+        <div class="grid-12 tsplit">
+          <figure class="col-6 media-frame reveal">
+            <img src="${splitA}" alt="${attr(t.name + ", atendimento na clínica do Dr. Márcio Teixeira")}" loading="lazy" />
+          </figure>
+          <div class="col-6 tsplit__copy">
+            <header class="ts-head ts-head--left">
+              <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> O tratamento</p>
+              <h2 id="oque-title" class="ts-title">O que é <span class="hl hl--italic">${esc(t.name)}</span></h2>
+            </header>
             <div class="t-prose">
 ${P(t.oque)}
             </div>
+            <a class="ts-link" href="${attr(heroCta)}" target="_blank" rel="noopener">Agende sua avaliação ${ARROW}</a>
           </div>
+        </div>
+      </div>
+    </section>
 
-          <div class="t-block">
-            <h2 class="t-block__title">Por que fazer</h2>
-            <div class="t-prose">
-${P(t.porque)}
-            </div>
-          </div>
-
-          <div class="t-block">
-            <h2 class="t-block__title">Para quem é</h2>
-${indicHTML}
+    <!-- ===================== POR QUE / INDICAÇÕES ===================== -->
+    <section class="section section--neve tsec" data-fio="left" aria-labelledby="porque-title">
+      <div class="container">
+        <header class="ts-head ts-head--center">
+          <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Por que fazer</p>
+          <h2 id="porque-title" class="ts-title">Benefícios para a <span class="hl hl--italic">sua pele</span></h2>
+${t.porque.length ? `          <p class="ts-lede">${inline(t.porque[0])}</p>` : ""}
+        </header>
+${t.porque.length > 1 ? `        <div class="t-prose t-prose--center">\n${P(t.porque.slice(1))}\n        </div>` : ""}
+        <p class="ts-subhead">Indicado para você?</p>
+${beneHTML}
 ${careHTML}
-          </div>
+${ctaRow("Quero uma avaliação", true)}
+      </div>
+    </section>
 
-          <div class="t-block">
-            <h2 class="t-block__title">Como funciona</h2>
+    <!-- ====================== COMO FUNCIONA ====================== -->
+    <section class="section section--branco tsec" data-fio="right" aria-labelledby="como-title">
+      <div class="container">
+        <div class="grid-12 tsplit">
+          <div class="col-7 tsplit__copy">
+            <header class="ts-head ts-head--left">
+              <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Passo a passo</p>
+              <h2 id="como-title" class="ts-title">Como <span class="hl hl--italic">funciona</span></h2>
+            </header>
             <ol class="steps">
 ${stepsHTML}
             </ol>
+${ctaRow("Agende sua consulta")}
           </div>
+          <figure class="col-5 media-frame media-frame--tall reveal">
+            <img src="${splitB}" alt="${attr(t.name + ", procedimento realizado por dermatologista")}" loading="lazy" />
+          </figure>
+        </div>
+      </div>
+    </section>
 
-          <div class="t-block">
-            <h2 class="t-block__title">Resultados esperados</h2>
-            <div class="t-prose">
+    <!-- ================== RESULTADOS + CASO (warm) ================== -->
+    <section class="section section--areia tsec" aria-labelledby="result-title">
+      <div class="container">
+        <header class="ts-head ts-head--center">
+          <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Resultados</p>
+          <h2 id="result-title" class="ts-title">Resultados <span class="hl hl--italic">esperados</span></h2>
+        </header>
+        <div class="t-prose t-prose--center">
 ${P(t.resultados)}
+        </div>
+${caseHTML}
+${ctaRow("Quero esse cuidado", true)}
+      </div>
+    </section>
+
+    <!-- ================== CUIDADOS + MÉDICO ================== -->
+    <section class="section section--branco tsec" data-fio="left" aria-labelledby="cuidados-title">
+      <div class="container">
+        <div class="grid-12 tsplit tsplit--top">
+          <div class="col-7 tsplit__copy">
+            <header class="ts-head ts-head--left">
+              <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Pós-procedimento</p>
+              <h2 id="cuidados-title" class="ts-title">Cuidados</h2>
+            </header>
+            <div class="info-card">
+              <div class="t-prose">
+${P(t.cuidados, "                ")}
+              </div>
             </div>
           </div>
-
-${casoHTML}
-
-          <div class="t-block">
-            <h2 class="t-block__title">Cuidados</h2>
-            <div class="t-prose">
-${P(t.cuidados)}
-            </div>
-          </div>
-
-          <div class="t-block">
-            <h2 class="t-block__title">Perguntas frequentes</h2>
-            <div class="faq" data-accordion>
-${faqHTML}
-            </div>
-          </div>
-
-          <div class="author">
+          <aside class="col-5 author author--stacked" aria-label="Responsável médico">
             <img class="author__avatar" src="../../imagens/sobre.jpg" alt="Dr. Márcio Teixeira" loading="lazy" />
             <div>
               <p class="author__role">Revisão médica</p>
               <p class="author__name">Dr. Márcio Teixeira</p>
-              <p class="author__meta">Dermatologista · CREMERS 20214 · RQE 10858 | 12078 · Membro titular da Sociedade Brasileira de Dermatologia. <a href="../../sobre.html">Conheça o Dr. Márcio</a>.</p>
+              <p class="author__meta">Dermatologista · CREMERS 20214 · RQE 10858 | 12078 · Membro titular da Sociedade Brasileira de Dermatologia.</p>
+              <a class="btn btn--ghost author__cta" href="../../sobre.html">Conheça o Dr. Márcio</a>
             </div>
-          </div>
+          </aside>
+        </div>
+      </div>
+    </section>
 
-          <div class="t-block">
-            <h2 class="t-block__title">Veja também</h2>
-            <div class="related">
+    <!-- ============================ FAQ ============================ -->
+    <section class="section section--neve tsec" data-fio="right" aria-labelledby="faq-title">
+      <div class="container ts-narrow">
+        <header class="ts-head ts-head--center">
+          <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Dúvidas frequentes</p>
+          <h2 id="faq-title" class="ts-title">Perguntas <span class="hl hl--italic">frequentes</span></h2>
+        </header>
+        <div class="faq" data-accordion>
+${faqHTML}
+        </div>
+${t.related.length ? `        <div class="ts-related">
+          <p class="ts-related__label">Veja também</p>
+          <div class="related">
 ${relatedHTML}
-            </div>
           </div>
-
-          <p class="med-disclaimer">${esc(DISCLAIMER)}</p>
-        </article>
+        </div>` : ""}
+        <p class="med-disclaimer">${esc(DISCLAIMER)}</p>
       </div>
     </section>
 
@@ -587,15 +701,14 @@ for (const t of treatments) {
     report.push(`SKIP (no slug): ${t.name}`);
     continue;
   }
-  if (!IMG[t.slug]) {
-    report.push(`WARN no image mapped for ${t.slug}`);
-  }
+  const art = scanArt(t.slug);
+  if (!art.count) report.push(`WARN no images found for ${t.slug} (folder: ${art.folder})`);
   const dir = join(ROOT, "tratamentos", t.slug);
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, "index.html"), render(t), "utf8");
   count++;
   report.push(
-    `OK  ${t.eixo}  ${t.slug}  (faq:${t.faq.length} steps:${t.steps.length} indic:${t.indic.length} rel:${t.related.length})`
+    `OK  ${t.eixo}  ${t.slug}  (photos:${art.photos.length} faq:${t.faq.length} steps:${t.steps.length} indic:${t.indic.length} rel:${t.related.length})`
   );
 }
 console.log(report.join("\n"));

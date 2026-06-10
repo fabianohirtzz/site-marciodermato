@@ -12,42 +12,48 @@ Two craft reflexes carried into every snippet below:
 
 | # | Component | Section | Defining trait |
 |---|---|---|---|
-| 1 | Top nav (clean / glass bar) | Header | Transparent over hero, solid white + soft teal shadow when scrolled; logo swaps |
-| 2 | Button system | Global | Teal pill primary (glow), ghost outline, WhatsApp variant |
+| 1 | Top nav (floating glass island) | Header | A floating pill over the hero; dual-logo swap + sliding indicator; condenses to a frosted-white capsule when scrolled |
+| 2 | Button system | Global | Teal pill primary (glow), ghost outline, on-deep variants |
 | 3 | Eyebrow + section header | Every section | Caps teal eyebrow with rule → serif title with one `.hl` word → Poppins lede |
-| 4 | Video hero | Hero | Full-bleed muted video, deep-teal scrim, Cormorant title, two CTAs, scroll cue |
+| 4 | Video hero | Hero | Full-bleed muted video, deep-teal scrim, heritage rails, scroll cue, pause control |
 | 5 | Differentials grid | Diferenciais | 5 cards, soft-teal icon tile, title, copy |
 | 6 | Método 4D axis card + 4-axis layout | Método 4D | Numbered 01–04, serif eixo title, description |
 | 7 | Treatment card + grid | Tratamentos | Image, title, "Eixo N ·" label, `data-eixo` for filtering |
 | 8 | Doctor / About block | Sobre | Portrait frame, bio, credential chips, serif signature quote |
 | 9 | Clinic gallery ("Nosso Espaço") | Sobre / Contato | Rounded ambiente frames + lightbox trigger |
-| 10 | Stats row | Anywhere | Serif number in `--marca-deep` + Poppins caps key |
-| 11 | Testimonial card | Depoimentos | Quote, patient name, teal stars (Google tone) |
+| 10 | Stats row | Anywhere | Serif number in `--marca-deep` + Poppins caps key (removed from Home) |
+| 11 | Reviews carousel (Avaliações) | Avaliações | Google-toned cards, gold stars, initials avatars, rating header, arrows |
 | 12 | FAQ accordion item | FAQ | Question button + answer panel, teal +/− indicator |
 | 13 | Appointment CTA band | Pre-footer | The one deep-teal full-color band |
 | 14 | Contact form + info rows | Contato | Labeled fields, teal focus ring, contact rows |
 | 15 | Footer | Footer | Logo, nav, contact, social, credentials line |
-| 16 | WhatsApp floating button | Global | Fixed teal circle → wa.me |
+| 16 | WhatsApp floating button | Global | Fixed WhatsApp-green button, pill label, CSS pulse rings, unread pip |
+| 17 | Before/After drag comparator | Resultados | Two-image slider you drag to reveal the depois; `--pos` clip |
+| 18 | Antes e Depois case carousel | Casos | Horizontal rail of cards; hover/tap swaps antes→depois; `--off` stagger |
+| 19 | Fio de cabelo motif | Global (opt-in) | The brand-mark hair strand drawn in a section's free lateral margin via `data-fio` |
 
 ---
 
-## 1. Top nav — clean / glass bar
+## 1. Top nav — floating glass island
 
-**Purpose.** The fixed header. It starts **transparent over the video hero** (the `logo-header-branco.png` and white links read against the deep-teal scrim), then becomes a **solid white bar with a soft teal shadow** once the user scrolls past the hero, swapping to `logo-header-colorido.png` and teal-ink links. This is the premium-clinical equivalent of the dark "glass nav" in other systems: here it is **bright and calm**, never glass-on-dark.
+**Purpose.** The fixed header is a **floating glass "island" pill**, not a full-width bar. Over the video hero it reads as a frosted, translucent capsule (`logo-header-branco.png` + white links against the deep-teal scrim, backdrop blur); once the user scrolls past 60px it condenses into a **frosted-white floating capsule** with a soft teal shadow, swapping to `logo-header-colorido.png` and teal-ink links. Premium-clinical, bright and calm — never glass-on-dark.
 
-**When to use.** Every page. The transparent-over-hero state only applies on pages that open with the video hero (Início); on inner pages (`Tratamentos`, `Sobre`, `Contato`), start in the solid state by adding `is-solid` on load.
+**When to use.** Every page. The translucent-over-hero state only applies on pages that open with the video hero (Início). On inner pages (`Tratamentos`, `Sobre`, `Contato`, etc.) start in the solid state by adding the `nav--solid` class on the `.nav` element at load (the JS scroll-toggle is skipped when `nav--solid` is present).
+
+> **Where this lives.** Markup in `index.html`; all styles in `assets/css/main.css` (`.nav` block, ~lines 317–486); behavior in `assets/js/main.js` — the `is-solid` scroll toggle (~line 85) and the `navIndicator()` IIFE (~line 103). The drawer/scrim logic is in the same JS file (~line 144).
 
 ### Anatomy
 
 ```html
 <header class="nav" data-nav>
   <div class="nav__inner">
-    <a class="nav__brand" href="index.html" aria-label="Dr. Márcio Teixeira, início">
-      <img class="nav__logo nav__logo--light" src="logo/logo-header-branco.png" alt="Dr. Márcio Teixeira" width="190" height="52" />
-      <img class="nav__logo nav__logo--solid" src="logo/logo-header-colorido.png" alt="Dr. Márcio Teixeira" width="190" height="52" />
+    <a class="nav__brand" href="index.html" aria-label="Dr. Márcio Teixeira, página inicial">
+      <img class="nav__logo nav__logo--light" src="logo/logo-header-branco.png" alt="Dr. Márcio Teixeira" />
+      <img class="nav__logo nav__logo--solid" src="logo/logo-header-colorido.png" alt="Dr. Márcio Teixeira" />
     </a>
 
     <nav class="nav__links" aria-label="Navegação principal">
+      <span class="nav__indicator" aria-hidden="true"></span>
       <a class="nav__link" href="index.html" aria-current="page">Início</a>
       <a class="nav__link" href="tratamentos.html">Tratamentos</a>
       <a class="nav__link" href="metodo-4d.html">Método 4D</a>
@@ -56,85 +62,107 @@ Two craft reflexes carried into every snippet below:
       <a class="nav__link" href="contato.html">Contato</a>
     </nav>
 
-    <a class="btn btn--primary nav__cta" href="https://wa.me/5551999704848?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20consulta." target="_blank" rel="noopener">
-      Agende sua consulta
-    </a>
+    <a class="btn btn--primary nav__cta" href="https://wa.me/5551999704848?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20consulta." target="_blank" rel="noopener">Agende sua consulta</a>
 
-    <button class="nav__burger" data-burger type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-drawer">
+    <button class="nav__burger" data-drawer-open type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="drawer">
       <span></span><span></span><span></span>
     </button>
   </div>
-
-  <div class="nav-drawer" id="nav-drawer" data-drawer aria-hidden="true">
-    <a class="nav-drawer__link" href="index.html">Início</a>
-    <a class="nav-drawer__link" href="tratamentos.html">Tratamentos</a>
-    <a class="nav-drawer__link" href="metodo-4d.html">Método 4D</a>
-    <a class="nav-drawer__link" href="tricologia.html">Tricologia</a>
-    <a class="nav-drawer__link" href="sobre.html">Sobre</a>
-    <a class="nav-drawer__link" href="contato.html">Contato</a>
-    <a class="btn btn--primary nav-drawer__cta" href="https://wa.me/5551999704848" target="_blank" rel="noopener">Agende sua consulta</a>
-  </div>
 </header>
+
+<!-- the drawer + scrim are siblings of <header>, not children -->
+<div class="nav-scrim" data-drawer-scrim></div>
+<aside class="drawer" id="drawer" data-drawer aria-hidden="true">
+  <button class="drawer__close" data-drawer-close type="button" aria-label="Fechar menu">&times;</button>
+  <a class="drawer__link" href="index.html" aria-current="page">Início</a>
+  <a class="drawer__link" href="tratamentos.html">Tratamentos</a>
+  <!-- … restante dos links … -->
+  <a class="btn btn--primary drawer__cta" href="https://wa.me/5551999704848?text=…" target="_blank" rel="noopener">Agende sua consulta</a>
+</aside>
 ```
 
 ### Critical CSS
 
 ```css
+/* the .nav wrapper is click-through; only the pill catches clicks */
 .nav {
-  position: fixed; inset: 0 0 auto 0; z-index: 100;
-  transition: background .35s var(--ease-soft), box-shadow .35s var(--ease-soft), padding .35s var(--ease-soft);
-  background: transparent;
+  position: fixed; inset: 0 0 auto 0; z-index: var(--z-nav);
+  padding: clamp(14px, 2vw, 22px) clamp(14px, 4vw, 30px) 0;
+  pointer-events: none;             /* clicks pass through the gaps beside the pill */
+  animation: nav-drop 0.85s var(--ease-glide) both;
 }
+/* the glass island */
 .nav__inner {
-  max-width: 1240px; margin-inline: auto;
-  display: flex; align-items: center; gap: 24px;
-  padding: 22px clamp(20px, 5vw, 56px);
-  transition: padding .35s var(--ease-soft);
+  pointer-events: auto;
+  max-width: 1200px; margin-inline: auto;
+  display: flex; align-items: center; gap: 20px;
+  padding: 11px 12px 11px 26px;
+  border-radius: var(--r-pill);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(16px) saturate(1.3);
+  box-shadow: 0 18px 50px rgba(3,64,63,0.22);
+  transition: background .4s var(--ease-glide), box-shadow .4s var(--ease-glide),
+    border-color .4s var(--ease-glide), padding .35s var(--ease-glide);
 }
 
 /* logo cross-swap: white mark over hero, colored mark when solid */
-.nav__logo { height: 46px; width: auto; transition: height .35s var(--ease-soft); display: block; }
+.nav__logo { height: 42px; width: auto; transition: height .35s var(--ease-glide); }
 .nav__logo--solid { display: none; }
 
-/* default (over hero): white links */
-.nav__links { display: flex; gap: 4px; margin-inline: auto; }
+/* links rail + the sliding indicator pill (positioned via JS-set CSS vars) */
+.nav__links { position: relative; display: flex; gap: 2px; margin-inline: auto; }
+.nav__indicator {
+  position: absolute; top: 0; bottom: 0; left: 0;
+  width: var(--ind-w, 0); transform: translateX(var(--ind-x, 0));
+  border-radius: var(--r-pill);
+  background: rgba(255,255,255,0.16);
+  opacity: var(--ind-o, 0); pointer-events: none; z-index: 0;
+  transition: transform .42s var(--ease-glide), width .42s var(--ease-glide),
+    opacity .3s var(--ease-soft), background .4s var(--ease-glide);
+}
 .nav__link {
+  position: relative; z-index: 1;       /* sits above the indicator */
   padding: 9px 16px; border-radius: var(--r-pill);
   font: 500 15px/1 var(--font-body); letter-spacing: 0.01em;
   color: rgba(255,255,255,0.92);
-  transition: background .2s var(--ease-soft), color .2s var(--ease-soft);
+  transition: color .25s var(--ease-soft);
 }
-.nav__link:hover, .nav__link:focus-visible { background: rgba(255,255,255,0.14); color: #fff; }
-.nav__link[aria-current="page"] { color: #fff; }
+.nav__link:hover, .nav__link:focus-visible, .nav__link[aria-current="page"] { color: #fff; }
+.nav__cta { flex: none; min-height: 46px; padding: 13px 24px; }
 
-/* SCROLLED / inner-page solid state */
-.nav.is-solid {
-  background: var(--branco);
-  box-shadow: 0 10px 34px rgba(5,127,127,0.10), 0 2px 8px rgba(22,48,47,0.05);
+/* SCROLLED / inner-page solid state — the pill condenses into a frosted-white capsule */
+.nav.is-solid .nav__inner, .nav--solid .nav__inner {
+  max-width: 1090px;                    /* micro-shrink as you scroll */
+  background: rgba(255,255,255,0.9);
+  border-color: rgba(5,127,127,0.12);
+  box-shadow: 0 16px 42px rgba(5,127,127,0.16), 0 3px 10px rgba(22,48,47,0.06);
+  padding-block: 9px;
 }
-.nav.is-solid .nav__inner { padding-block: 14px; }
-.nav.is-solid .nav__logo { height: 40px; }
-.nav.is-solid .nav__logo--light { display: none; }
-.nav.is-solid .nav__logo--solid { display: block; }
-.nav.is-solid .nav__link { color: var(--marca-ink); }
-.nav.is-solid .nav__link:hover, .nav.is-solid .nav__link:focus-visible { background: var(--marca-soft); color: var(--marca-deep); }
-.nav.is-solid .nav__link[aria-current="page"] { color: var(--marca-deep); background: var(--marca-soft); }
+.nav.is-solid .nav__logo, .nav--solid .nav__logo { height: 38px; }
+.nav.is-solid .nav__indicator, .nav--solid .nav__indicator { background: var(--marca-soft); }
+.nav.is-solid .nav__logo--light, .nav--solid .nav__logo--light { display: none; }
+.nav.is-solid .nav__logo--solid, .nav--solid .nav__logo--solid { display: block; }
+.nav.is-solid .nav__link, .nav--solid .nav__link { color: var(--marca-ink); }
+.nav.is-solid .nav__link:hover, .nav.is-solid .nav__link[aria-current="page"] { color: var(--marca-deep); }
+.nav.is-solid .nav__burger span, .nav--solid .nav__burger span { background: var(--marca-deep); }
 
 .nav__burger { display: none; flex-direction: column; gap: 5px; width: 44px; height: 44px; align-items: center; justify-content: center; background: none; border: 0; cursor: pointer; }
 .nav__burger span { width: 24px; height: 2px; border-radius: 2px; background: #fff; transition: background .3s var(--ease-soft); }
-.nav.is-solid .nav__burger span { background: var(--marca-deep); }
 
-@media (max-width: 920px) {
+@media (max-width: 980px) {
   .nav__links, .nav__cta { display: none; }
-  .nav__burger { display: flex; }
+  .nav__burger { display: flex; margin-left: auto; }
+  .nav__inner { padding: 8px 8px 8px 20px; gap: 12px; }
 }
 ```
 
 ### Craft notes
-- The state flip is driven by a single `IntersectionObserver` on a sentinel just below the hero (or a `scrollY > 60` check). JS toggles `.is-solid` on `[data-nav]` — see INTERACTIONS § Scrolled nav. Never darken; the solid state is **white with a soft teal shadow**, not a dark bar.
-- Two logo `<img>`s with a `display` swap is more robust than one `<img>` with a runtime `src` change (no flash). Keep both at the same intrinsic size to avoid layout shift.
-- The CTA in the bar is the **primary** button (§2) — teal pill, white text. Inner pages set `is-solid` immediately so links never render white on white.
-- Touch targets ≥ 44px; the burger is a full 44×44 hit area. Focus rings: `outline: 3px solid var(--marca); outline-offset: 3px`.
+- **It is an island, not a bar.** The `.nav` wrapper is `pointer-events: none` so clicks fall through the gaps either side of the pill; only `.nav__inner` re-enables pointer events. The pill enters with a one-shot `nav-drop` animation. Never make it a full-bleed slab.
+- **Scroll state.** `assets/js/main.js` toggles `.is-solid` on `[data-nav]` when `scrollY > 60` (~line 92), but **only** when `.nav--solid` is absent — inner pages hard-set `nav--solid` so links never render white-on-white. The solid state condenses the capsule (`max-width` 1200→1090px) and frosts it white; it never darkens.
+- **Sliding indicator.** `.nav__indicator` is a single pill that glides under the hovered/focused link and rests under the current page. `navIndicator()` (~line 103) writes `--ind-x` / `--ind-w` / `--ind-o` from each link's `offsetLeft` / `offsetWidth` on `mouseenter`/`focus`, and snaps back to the `[aria-current="page"]` link on `mouseleave`/`focusout`. It re-measures on `resize` and after fonts settle. Over the hero the indicator is `rgba(255,255,255,0.16)`; in the solid state it is `--marca-soft`.
+- **Dual logo swap.** Two `<img>`s toggled by `display` (light over hero, solid when scrolled) — no runtime `src` swap, so no flash. Keep both at the same intrinsic height to avoid layout shift.
+- **Drawer.** The burger (`data-drawer-open`) opens `.drawer` (a right-side `<aside>`) over a `.nav-scrim`; both gain `.is-open`. The drawer and scrim are **siblings of `<header>`**, not nested inside it. Esc, scrim click, and any drawer link close it; body scroll locks while open. Touch targets ≥ 44px. Focus rings: `outline: 3px solid var(--marca); outline-offset: 3px`.
 
 ---
 
@@ -296,44 +324,58 @@ Two craft reflexes carried into every snippet below:
 
 ## 4. Video hero
 
-**Purpose.** The first impression on Início: a full-bleed muted background video of the clinic, a **deep-teal scrim** for legibility, a confident Cormorant title with one highlighted phrase, a supporting Poppins line, two CTAs, and a scroll cue. Calm and cinematic without being a flashy med-spa.
+**Purpose.** The first impression on Início: a full-bleed muted background video of the clinic, a **deep-teal scrim** for legibility, a confident Cormorant title with one highlighted phrase, a supporting Poppins line, two CTAs, a scroll cue, and **lateral "heritage rails"** that lateralize the brand's time/heritage signals. Calm and cinematic without being a flashy med-spa.
 
 **When to use.** Home only. Inner pages use the lighter page-header pattern (eyebrow + title on `--neve`), not the video.
+
+> **Where this lives.** Markup in `index.html` (`<section class="hero" id="hero">`); styles in `assets/css/main.css` (`.hero` block, ~lines 618–760); behavior in `assets/js/main.js` — autoplay + pause control (~line 171) and the soft parallax on `.hero__media.parallax` (~line 212). **There is no count-up stats block in the hero** — the lateral heritage rails replaced it.
 
 ### Anatomy
 
 ```html
-<section class="hero" aria-label="Apresentação Dr. Márcio Teixeira">
-  <div class="hero__media" aria-hidden="true">
-    <video class="hero__video" data-hero-video
-           autoplay muted loop playsinline preload="metadata"
-           poster="imagens/hero-poster.jpg">
+<section class="hero" id="hero" aria-label="Apresentação Dr. Márcio Teixeira">
+  <div class="hero__media parallax" aria-hidden="true">
+    <video class="hero__video" id="hero-video" muted loop playsinline autoplay preload="auto" disablepictureinpicture>
       <source src="video-hero/video-hero.mp4" type="video/mp4" />
     </video>
     <div class="hero__scrim"></div>
   </div>
 
+  <!-- lateral heritage rails: rotated 90°, pinned to each edge -->
+  <div class="hero__rail hero__rail--left" aria-hidden="true">
+    <span class="hero__rail-bar"></span>
+    <span>+30 anos de excelência</span>
+  </div>
+  <div class="hero__rail hero__rail--right" aria-hidden="true">
+    <span>Desde 1993</span>
+    <span class="hero__rail-bar"></span>
+  </div>
+
   <div class="hero__inner">
-    <p class="hero__eyebrow">Dermatologia, estética e tricologia · Porto Alegre</p>
-    <h1 class="hero__title">
-      Seu dermatologista de confiança, com <span class="hl-light">resultados naturais</span>
-    </h1>
-    <p class="hero__lede">
-      Cuidado personalizado e excelência desde 1993, com quem entende profundamente de pele.
-    </p>
-    <div class="hero__actions">
-      <a class="btn btn--primary" href="https://wa.me/5551999704848" target="_blank" rel="noopener">Agende sua consulta</a>
-      <a class="btn btn--ghost-on-deep" href="metodo-4d.html">Conheça o Método 4D</a>
+    <div class="hero__copy">
+      <p class="hero__eyebrow">Dermatologia, estética e tricologia · Porto Alegre</p>
+      <h1 class="hero__title">
+        Dermatologia de excelência para a saúde e <span class="hl-light">beleza da sua pele</span>
+      </h1>
+      <p class="hero__lede">
+        Dr. Márcio Teixeira: cuidado personalizado e resultados naturais com quem entende profundamente de pele, com excelência desde 1993.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="https://wa.me/5551999704848?text=…" target="_blank" rel="noopener">Agende sua consulta</a>
+        <a class="btn btn--ghost-on-deep" href="metodo-4d.html">Conheça o Método 4D</a>
+      </div>
     </div>
   </div>
 
   <a class="hero__cue" href="#diferenciais" aria-label="Rolar para saber mais">
-    <span class="hero__cue-label">Saiba mais</span>
+    <span>Saiba mais</span>
     <span class="hero__cue-line" aria-hidden="true"></span>
   </a>
 
+  <!-- pause control: bottom-LEFT (the WhatsApp float owns bottom-right); two SVGs cross-faded by .is-paused -->
   <button class="hero__pause" data-hero-pause type="button" aria-label="Pausar vídeo">
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+    <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+    <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
   </button>
 </section>
 ```
@@ -341,8 +383,8 @@ Two craft reflexes carried into every snippet below:
 ### Critical CSS
 
 ```css
-.hero { position: relative; min-height: 100svh; display: grid; align-items: center; overflow: hidden; isolation: isolate; }
-.hero__media { position: absolute; inset: 0; z-index: -1; }
+.hero { --rail-gutter: 30px; --hero-px: clamp(64px, 5vw, 76px); }
+.hero__media { position: absolute; inset: 0; z-index: -1; }   /* .parallax is nudged in JS */
 .hero__video { width: 100%; height: 100%; object-fit: cover; }
 
 /* deep-teal scrim — legibility without killing the footage */
@@ -353,58 +395,66 @@ Two craft reflexes carried into every snippet below:
     radial-gradient(120% 90% at 18% 70%, rgba(3,64,63,0.45), transparent 60%);
 }
 
+/* lateral heritage rails — rotated caps text in the free margins */
+.hero__rail {
+  position: absolute; top: 50%; transform-origin: center;
+  display: inline-flex; align-items: center; gap: 14px;
+  font: 500 11px/1 var(--font-body); letter-spacing: 0.34em; text-transform: uppercase;
+  color: rgba(255,255,255,0.82); white-space: nowrap; z-index: 2;
+  text-shadow: 0 1px 12px rgba(3,64,63,0.55);
+}
+.hero__rail--left  { left: var(--rail-gutter);  transform: translate(-50%, -50%) rotate(-90deg); }
+.hero__rail--right { right: var(--rail-gutter); transform: translate(50%, -50%) rotate(-90deg); }
+.hero__rail-bar { width: 30px; height: 1px; background: var(--marca-bright); opacity: 0.85; }
+
 .hero__inner {
-  max-width: 1240px; width: 100%; margin-inline: auto;
-  padding: 0 clamp(20px, 5vw, 56px); padding-top: var(--nav-h, 96px);
-  position: relative; z-index: 1; max-inline-size: 980px;
+  max-width: var(--container-wide); width: 100%; margin-inline: auto;
+  padding: calc(var(--nav-h) + 40px) var(--hero-px) 80px;  /* --hero-px reserves the rail strip */
+  position: relative; z-index: 1;
 }
-.hero__eyebrow {
-  font: 600 13px/1 var(--font-body); letter-spacing: 0.18em; text-transform: uppercase;
-  color: rgba(255,255,255,0.85); margin: 0 0 22px;
-}
+.hero__copy { max-inline-size: 940px; }
 .hero__title {
-  margin: 0; max-width: 16ch;
+  margin: 0; max-width: 17ch;
   font-family: var(--font-display); font-weight: 600;
-  font-size: clamp(40px, 6vw, 84px); line-height: 1.05; letter-spacing: 0.005em;
-  color: #fff;
+  font-size: clamp(40px, 6vw, 84px); line-height: 1.05; letter-spacing: 0.005em; color: #fff;
 }
-.hl-light { color: #fff; font-style: italic; font-weight: 500; }   /* teal-bright glyph would fail on video; italic-white reads premium */
-.hero__lede {
-  margin: 24px 0 0; max-width: 52ch;
-  font: 300 clamp(17px, 1.6vw, 21px)/1.6 var(--font-body);
-  color: rgba(255,255,255,0.90);
-}
-.hero__actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 38px; }
+.hl-light { color: #fff; font-style: italic; font-weight: 500; }   /* teal glyph fails on video; italic-white reads premium */
 
 .hero__cue {
-  position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%);
+  position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%);
   display: inline-flex; flex-direction: column; align-items: center; gap: 10px;
   font: 600 11px/1 var(--font-body); letter-spacing: 0.18em; text-transform: uppercase;
-  color: rgba(255,255,255,0.8); text-decoration: none; z-index: 2;
+  color: rgba(255,255,255,0.8); z-index: 2;
 }
 .hero__cue-line { width: 1.5px; height: 40px; background: linear-gradient(rgba(255,255,255,0.8), transparent); animation: cue-drift 2.6s var(--ease-calm) infinite; }
 @keyframes cue-drift { 0%,100% { transform: translateY(0); opacity: .55; } 50% { transform: translateY(6px); opacity: 1; } }
 
+/* pause control — bottom-LEFT, opposite the WhatsApp float */
 .hero__pause {
-  position: absolute; right: clamp(16px, 4vw, 40px); bottom: 28px; z-index: 2;
+  position: absolute; left: clamp(16px, 4vw, 40px); bottom: 24px; z-index: 2;
   width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
   background: rgba(255,255,255,0.14); color: #fff; border: 1px solid rgba(255,255,255,0.3);
   cursor: pointer; backdrop-filter: blur(6px);
 }
 .hero__pause svg { width: 18px; height: 18px; }
+.hero__pause .icon-play { display: none; }                       /* paused → show play, hide pause */
+.hero__pause.is-paused .icon-pause { display: none; }
+.hero__pause.is-paused .icon-play  { display: block; }
 
-@media (prefers-reduced-motion: reduce) {
-  .hero__video { display: none; }        /* poster stays via background on .hero__media, or show poster image */
-  .hero__cue-line { animation: none; }
+@media (prefers-reduced-motion: reduce) { .hero__cue-line { animation: none; } }
+@media (max-width: 600px) {
+  .hero__rail { display: none; }                                 /* rails clip off-canvas; reclaim padding */
+  .hero { --hero-px: clamp(20px, 5vw, 28px); }
+  .hero__cue { display: none; }                                  /* collides with stacked CTAs; redundant on touch */
 }
 ```
 
 ### Craft notes
-- The video is **muted, looped, playsinline, with a poster** and a real **pause control** — never force unstoppable motion. Under `prefers-reduced-motion`, suppress the video and rely on the poster (set the poster as a `background-image` on `.hero__media` so it remains when the `<video>` hides).
-- The highlighted phrase uses **italic white** (`.hl-light`), not teal: `--marca` and especially `--marca-bright` would fail contrast over footage. Teal lives in the buttons and the scrim, not the hero text color.
-- Two CTAs only: the teal **primary** (AGENDE SUA CONSULTA) plus a **ghost-on-deep** outline (CONHEÇA O MÉTODO 4D). Never three.
-- The scrim is **deep teal**, tying the hero to the brand instead of a generic black overlay. Keep the bottom stop heaviest so the CTAs and cue read.
-- Title ≤ ~16ch so it wraps to two or three composed lines; never a single cramped line of giant serif.
+- **Heritage rails, not stats.** `.hero__rail--left` ("+30 anos de excelência") and `.hero__rail--right` ("Desde 1993") are rotated `-90°` and pinned to the gutters, each paired with a thin `--marca-bright` `.hero__rail-bar`. They lateralize the brand's time/heritage in the dead margin instead of a center count-up block. They are `aria-hidden` decoration and hide below 600px. **Do not reintroduce a hero count-up stats row** — it was removed.
+- **Video.** Muted, looped, `playsinline`, `autoplay` with a real **pause control**. `assets/js/main.js` forces `video.muted` (iOS inline-autoplay quirk), calls `play()` and falls back to the paused state if the browser blocks it, retrying on `canplay`. Under `prefers-reduced-motion` it removes `autoplay`, pauses, and shows the play glyph. The pause button cross-fades `.icon-pause` / `.icon-play` via the `.is-paused` class and updates its `aria-label`.
+- **Parallax.** `.hero__media.parallax` is nudged a few px (`translate3d`, factor 0.06) on scroll while the hero is in view; skipped under reduced motion.
+- The highlighted phrase uses **italic white** (`.hl-light`), not teal — `--marca`/`--marca-bright` would fail contrast over footage. Teal lives in the buttons, the scrim, and the rail bars.
+- Two CTAs only: the teal **primary** plus a **ghost-on-deep** outline. The scrim is **deep teal**, not generic black. Title ≤ ~17ch so it wraps to a few composed lines.
 
 ---
 
@@ -834,7 +884,9 @@ Two craft reflexes carried into every snippet below:
 
 **Purpose.** A calm proof band of three or four numbers: a **Cormorant numeral in `--marca-deep`** over a **Poppins uppercase key** in `--tinta-muted`. Numbers count up once on reveal.
 
-**When to use.** Below the hero or inside the Sobre block. The brand's confirmed figures: **30 anos**, **4 eixos**, **+20 tratamentos** (extend with "desde 1993" or "congressos" only with confirmed copy).
+> **Status.** The standalone "Números" section was **removed from the Home** (it sits commented out in `index.html`, between the Avaliações and CTA-band sections) — the hero now carries the brand's heritage signals via the lateral rails (§4) instead. This pattern remains a valid building block for **inner pages** (e.g. inside the Sobre block). The count-up driver (`countUp()`, `.stat__num[data-count]`) still lives in `assets/js/main.js` (~line 232) for any page that opts back in.
+
+**When to use.** Inside the Sobre block or an inner-page proof strip — **not** the Home hero. The brand's confirmed figures: **30 anos**, **4 eixos**, **+20 tratamentos** (extend with "desde 1993" or "congressos" only with confirmed copy).
 
 ### Anatomy
 
@@ -889,54 +941,124 @@ Two craft reflexes carried into every snippet below:
 
 ---
 
-## 11. Testimonial card
+## 11. Reviews carousel (Avaliações)
 
-**Purpose.** Patient words in a Google-reviews tone: a teal star row, the quote at a comfortable reading size, and a simple attribution. Quiet social proof, not loud.
+**Purpose.** Real Google reviews in a calm, honest carousel: a header with the multicolor Google "G", the gold star row, and a "4,9 · 216 avaliações" score line; a horizontally scrolling track of review cards, each with gold stars, the patient's words, and an **initials avatar** in a per-card tint; prev/next arrows; and a "Ver todas no Google" CTA. Quiet social proof, sourced from the real account — not loud, not invented.
 
-**When to use.** A "Depoimentos" section. Keep three visible; if more, a calm manual carousel (no autoplay, or slow autoplay that pauses on hover and respects reduced motion).
+**When to use.** The Avaliações section on Home (`#avaliacoes`). It carries `data-fio="left"` (the hair motif, §19). The card text is real Google copy; the avatar tints rotate through a small palette per card.
+
+> **Where this lives.** Markup in `index.html` (`<section class="reviews" id="avaliacoes">`); styles in `assets/css/main.css` (`.reviews` / `.review-card` block, ~lines 1612–1745); the manual carousel behavior is the `reviews()` IIFE in `assets/js/main.js` (~line 370), which mirrors the `casos()` carousel — arrow clicks `scrollBy` one card, and the arrows enable/disable at the ends.
 
 ### Anatomy
 
 ```html
-<article class="quote reveal" style="--i:0">
-  <div class="quote__stars" aria-label="5 de 5 estrelas">
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.7 1.4 6.8L12 17.8 5.9 21.3l1.4-6.8L2.2 9.7l6.9-.7z"/></svg>
-    <!-- repeat ×5 -->
+<section class="section section--branco reviews" id="avaliacoes" aria-labelledby="avaliacoes-title" data-fio="left">
+  <div class="container reviews__top">
+    <header class="reviews__head reveal">
+      <div class="reviews__intro">
+        <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Avaliações</p>
+        <h2 id="avaliacoes-title" class="section__title">Quem é cuidado <span class="hl hl--italic">recomenda</span></h2>
+        <p class="section__lede">Histórias reais de pacientes, registradas no Google.</p>
+
+        <a class="reviews__rating" href="https://g.page/r/CSvT6zxc3wPiEBM/review" target="_blank" rel="noopener"
+           aria-label="4,9 de 5 estrelas em 216 avaliações no Google. Avaliar no Google.">
+          <span class="reviews__rating-g" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><!-- multicolor Google G: #4285F4 #34A853 #FBBC05 #EA4335 --></svg>
+          </span>
+          <span class="reviews__rating-meta">
+            <span class="reviews__rating-stars" aria-hidden="true"><!-- 5 gold star SVGs --></span>
+            <span class="reviews__rating-score"><strong>4,9</strong> · 216 avaliações no Google</span>
+          </span>
+        </a>
+      </div>
+      <div class="reviews__nav" role="group" aria-label="Navegar pelas avaliações">
+        <button class="reviews__arrow" type="button" data-reviews-prev aria-label="Ver avaliação anterior" disabled><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" …/></svg></button>
+        <button class="reviews__arrow" type="button" data-reviews-next aria-label="Ver próxima avaliação"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" …/></svg></button>
+      </div>
+    </header>
   </div>
-  <p class="quote__text">
-    Atendimento humano e cuidadoso do começo ao fim. O Dr. Márcio explica tudo com calma e os resultados ficaram muito naturais.
-  </p>
-  <footer class="quote__by">
-    <span class="quote__avatar" aria-hidden="true">M</span>
-    <span class="quote__name">Mariana L. <span class="quote__src">via Google</span></span>
-  </footer>
-</article>
+
+  <div class="reviews__viewport reveal">
+    <ul class="reviews__track" data-reviews-track tabindex="0" role="list" aria-label="Avaliações de pacientes no Google">
+      <li class="review-item">
+        <article class="review-card">
+          <div class="review-card__stars" aria-label="5 de 5 estrelas"><!-- 5 gold star SVGs --></div>
+          <p class="review-card__text">Excelente dermatologista e profissional exemplar…</p>
+          <footer class="review-card__by">
+            <!-- initials avatar tinted per card via --av-bg / --av-ink -->
+            <span class="review-card__avatar" style="--av-bg:#e8f4f4;--av-ink:#055f5f" aria-hidden="true">JM</span>
+            <span class="review-card__id">
+              <span class="review-card__name">Juliana Meyer</span>
+              <span class="review-card__src">Avaliação no Google</span>
+            </span>
+          </footer>
+        </article>
+      </li>
+      <!-- … one .review-item per review … -->
+    </ul>
+  </div>
+
+  <div class="container reviews__more reveal">
+    <a class="btn btn--ghost" href="https://g.page/r/CSvT6zxc3wPiEBM/review" target="_blank" rel="noopener">Ver todas no Google</a>
+  </div>
+</section>
 ```
 
 ### Critical CSS
 
 ```css
-.quote {
-  background: var(--branco); border-radius: var(--r-lg); padding: 34px 32px;
-  display: flex; flex-direction: column; gap: 18px;
+.reviews__rating { display: inline-flex; align-items: center; gap: 12px; /* … */ }
+.reviews__rating-g svg { width: 24px; height: 24px; }                 /* the multicolor Google G */
+.reviews__rating-stars { display: inline-flex; gap: 2px; color: #fbbc05; }   /* Google gold */
+.reviews__rating-score { font: 500 13px/1 var(--font-body); color: var(--tinta-muted); }
+.reviews__rating-score strong { color: var(--tinta); font-weight: 700; font-size: 14.5px; }
+
+/* the track bleeds full-width but pads to the boxed container via --edge */
+.reviews__track {
+  --per: 3;                                  /* cards in view (2 ≤1080px, 1.12 on phones) */
+  --gap: clamp(16px, 1.6vw, 26px);
+  --edge: calc(max(0px, (100vw - var(--container)) / 2) + var(--gutter));
+  display: flex; align-items: stretch; gap: var(--gap);
+  padding: 18px var(--edge) 26px;
+  overflow-x: auto; scroll-snap-type: x proximity; scroll-padding-inline: var(--edge);
+  scrollbar-width: none;
+}
+.reviews__track::-webkit-scrollbar { display: none; }
+.review-item {
+  flex: 0 0 calc((100vw - 2 * var(--edge) - (var(--per) - 1) * var(--gap)) / var(--per));
+  scroll-snap-align: start; display: flex;
+}
+.review-card {
+  display: flex; flex-direction: column; gap: 16px;
+  width: 100%; min-height: 300px;
+  background: var(--branco); border-radius: var(--r-lg); padding: 32px 30px;
   box-shadow: 0 14px 38px rgba(5,127,127,0.08), 0 4px 12px rgba(22,48,47,0.05);
+  transition: transform .28s var(--ease-calm), box-shadow .28s var(--ease-soft);
 }
-.quote__stars { display: inline-flex; gap: 3px; color: var(--marca); }
-.quote__stars svg { width: 19px; height: 19px; }
-.quote__text { margin: 0; font: 400 17px/1.7 var(--font-body); color: var(--tinta); }
-.quote__by { display: flex; align-items: center; gap: 12px; margin-top: auto; }
-.quote__avatar {
-  width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; flex: none;
-  background: var(--marca-soft); color: var(--marca-ink); font: 600 16px/1 var(--font-body);
+.review-card:hover { transform: translateY(-6px); box-shadow: 0 30px 66px rgba(5,127,127,0.16), 0 8px 20px rgba(22,48,47,0.08); }
+.review-card__stars { display: inline-flex; gap: 3px; color: #fbbc05; }     /* gold, not teal */
+.review-card__stars svg { width: 19px; height: 19px; }
+.review-card__text {
+  margin: 0; font: 400 16px/1.72 var(--font-body); color: var(--tinta);
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 7; overflow: hidden;  /* clamp long reviews */
 }
-.quote__name { font: 600 14.5px/1.3 var(--font-body); color: var(--tinta); }
-.quote__src { display: block; font: 500 12.5px/1 var(--font-body); color: var(--tinta-soft); margin-top: 2px; }
+.review-card__by { display: flex; align-items: center; gap: 13px; margin-top: auto; }
+.review-card__avatar {
+  width: 46px; height: 46px; border-radius: 50%; flex: none; display: grid; place-items: center;
+  background: var(--av-bg, var(--marca-soft)); color: var(--av-ink, var(--marca-ink));   /* per-card tint */
+  font: 600 15px/1 var(--font-body); letter-spacing: 0.03em;
+}
+.review-card__name { font: 600 15px/1.25 var(--font-body); color: var(--tinta); }
+.review-card__src  { font: 500 12px/1 var(--font-body); color: var(--tinta-soft); }
+
+.reviews__arrow:disabled { opacity: .4; cursor: default; }
 ```
 
 ### Craft notes
-- Stars are filled in `--marca` (full teal is fine on a star glyph, not body text). Keep five; the `aria-label` carries the rating for screen readers.
-- Avatars are a **teal-soft initial circle** — never stock faces (privacy + trust). The "via Google" tag sets the honest review tone without a loud badge.
-- Quote text stays ≥ 17px, line-height 1.7. No travessões in patient copy — clean it on intake.
+- **Stars are Google gold (`#fbbc05`), not teal** — both in the header rating and on every card. This is the one sanctioned non-teal accent on the page, because the reviews are genuinely Google's; pairing them with the multicolor "G" keeps the source honest.
+- **Avatars are initials, never stock faces** (privacy + trust). Each card sets its own `--av-bg` / `--av-ink` inline so the row of circles alternates through soft teals and warm sands; the avatar falls back to `--marca-soft` / `--marca-ink` if unset. The `review-card__src` reads "Avaliação no Google".
+- **Honest copy.** Card text is verbatim from real Google reviews and is line-clamped (`-webkit-line-clamp: 7`, loosened on phones) so cards stay even without truncating mid-thought visibly. The header score is **4,9 · 216 avaliações** — confirm before changing; the brand never inflates.
+- **Carousel mechanics** mirror `casos()`: a full-bleed `.reviews__track` that pads to the boxed `--edge`, snap-scrolls, and shows `--per` cards (3 → 2 → 1.12 down the breakpoints). Arrows `scrollBy` exactly one card+gap and disable at each end. The track is keyboard-scrollable (`tabindex="0"`). The "Ver todas no Google" ghost CTA and the rating link both point at the real `g.page` review URL.
 
 ---
 
@@ -1274,16 +1396,23 @@ Two craft reflexes carried into every snippet below:
 
 ## 16. WhatsApp floating button
 
-**Purpose.** A persistent teal circle bottom-right linking straight to WhatsApp (`wa.me/5551999704848`) — the clinic's primary contact channel, always one tap away.
+**Purpose.** A persistent floating WhatsApp button bottom-right linking straight to `wa.me/5551999704848` — the clinic's primary contact channel, always one tap away. It is composed of a hover-reveal **pill label**, a round **WhatsApp-green button**, **CSS pulse rings**, and an unread-style **pip badge**, so it reads as a live, inviting channel without strobing.
 
-**When to use.** Every page, fixed. A single gentle pulse ring signals it without strobing; disabled under reduced motion.
+**When to use.** Every page, fixed bottom-right. The hero's pause control sits bottom-**left** so the two never overlap. All motion is disabled under reduced motion.
+
+> **Where this lives.** Markup at the end of `index.html` (`<a class="wpp">`); styles in `assets/css/main.css` (`.wpp` block, ~lines 490–615). **It is 100% CSS** — the rings, breathe, icon wiggle, entrance, and pip are CSS keyframes, **not** a Lottie/JS animation (an early commit message mentioned "Lottie pulse"; the shipped build is pure CSS).
 
 ### Anatomy
 
 ```html
 <a class="wpp" href="https://wa.me/5551999704848?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20consulta."
    target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
-  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163A11.867 11.867 0 0 1 .14 11.86C.14 5.32 5.46.001 12 .001S23.86 5.32 23.86 11.86 18.54 23.72 12 23.72a11.82 11.82 0 0 1-5.66-1.44L.057 24zM6.6 20.13c1.65.98 3.22 1.57 5.4 1.57 5.44 0 9.86-4.42 9.86-9.84S17.44 2.02 12 2.02 2.14 6.44 2.14 11.86c0 2.29.67 4 1.79 5.78l-.99 3.62 3.66-1.13z"/></svg>
+  <span class="wpp__label">Agende pelo WhatsApp</span>
+  <span class="wpp__btn">
+    <span class="wpp__rings" aria-hidden="true"></span>
+    <svg class="wpp__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163A11.867 11.867 0 0 1 .14 11.86C.14 5.32 5.46.001 12 .001S23.86 5.32 23.86 11.86 18.54 23.72 12 23.72a11.82 11.82 0 0 1-5.66-1.44L.057 24z…"/></svg>
+    <span class="wpp__pip" aria-hidden="true">1</span>
+  </span>
 </a>
 ```
 
@@ -1291,30 +1420,296 @@ Two craft reflexes carried into every snippet below:
 
 ```css
 .wpp {
-  position: fixed; right: 20px; bottom: 20px; z-index: 90;
-  width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center;
-  background: var(--marca); color: #fff; text-decoration: none;
-  box-shadow: 0 12px 30px rgba(5,127,127,0.30);
-  transition: transform .25s var(--ease-calm), background .25s var(--ease-soft), box-shadow .25s var(--ease-soft);
+  position: fixed; right: clamp(16px, 3vw, 28px); bottom: clamp(16px, 3vw, 28px);
+  z-index: var(--z-float);
+  display: flex; align-items: center; justify-content: flex-end; text-decoration: none;
+  animation: wpp-in 0.8s var(--ease-calm) 0.7s both;        /* gentle entrance */
 }
-.wpp svg { width: 32px; height: 32px; position: relative; z-index: 1; }
-.wpp::before {
-  content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--marca); z-index: 0;
+
+/* hover-reveal pill label (slides out to the left of the button) */
+.wpp__label {
+  max-width: 0; padding: 0; margin-right: 0; overflow: hidden; white-space: nowrap;
+  font: 600 0.9rem/1 var(--font-body); color: var(--marca-deep); background: #fff;
+  border-radius: 999px; box-shadow: 0 12px 30px rgba(5,127,127,0.16);
+  opacity: 0; transform: translateX(10px);
+  transition: max-width .46s var(--ease-calm), opacity .32s var(--ease-soft),
+    transform .46s var(--ease-calm), padding .46s var(--ease-calm), margin .46s var(--ease-calm);
+}
+.wpp:hover .wpp__label, .wpp:focus-visible .wpp__label {
+  max-width: 260px; opacity: 1; transform: translateX(0); padding: 12px 18px; margin-right: 14px;
+}
+
+/* the round button — WhatsApp green, with a slow "breathe" */
+.wpp__btn {
+  position: relative; width: 60px; height: 60px; border-radius: 50%;
+  display: grid; place-items: center; flex: none;
+  background: linear-gradient(150deg, #2ce86c 0%, #25d366 45%, #12b34f 100%);
+  color: #fff;
+  box-shadow: 0 14px 34px rgba(18,179,79,0.42), inset 0 1px 0 rgba(255,255,255,0.32);
+  animation: wpp-breathe 3.8s var(--ease-calm) infinite;
+  transition: transform .26s var(--ease-calm), box-shadow .26s var(--ease-soft);
+}
+.wpp__icon { width: 30px; height: 30px; animation: wpp-wiggle 5s var(--ease-calm) 2.2s infinite; }
+
+/* radar ripple rings — pure CSS pseudo-elements, staggered */
+.wpp__rings { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; }
+.wpp__rings::before, .wpp__rings::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  border: 2px solid rgba(37,211,102,0.55);
   animation: wpp-ring 3s var(--ease-soft) infinite;
 }
-@keyframes wpp-ring { 0% { transform: scale(1); opacity: .5; } 70%, 100% { transform: scale(1.7); opacity: 0; } }
-.wpp:hover { transform: translateY(-3px) scale(1.06); background: var(--marca-deep); box-shadow: 0 16px 40px rgba(5,127,127,0.38); }
-.wpp:hover::before { animation-play-state: paused; opacity: 0; }
-.wpp:focus-visible { outline: 3px solid var(--marca); outline-offset: 3px; }
+.wpp__rings::after { animation-delay: 1.5s; }
+@keyframes wpp-ring { 0% { transform: scale(1); opacity: .7; } 100% { transform: scale(1.85); opacity: 0; } }
 
-@media (max-width: 560px) { .wpp { width: 54px; height: 54px; right: 16px; bottom: 16px; } }
-@media (prefers-reduced-motion: reduce) { .wpp::before { animation: none; opacity: 0; } }
+/* unread-style pip */
+.wpp__pip {
+  position: absolute; top: -3px; right: -3px; min-width: 20px; height: 20px; padding: 0 5px;
+  border-radius: 999px; display: grid; place-items: center;
+  font: 700 11px/1 var(--font-body); color: #fff; background: #ec4d4d; border: 2px solid #fff;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+  animation: wpp-pip 0.5s var(--ease-calm) 1.6s both;
+}
+.wpp:hover .wpp__btn, .wpp:focus-visible .wpp__btn { transform: translateY(-3px) scale(1.05); }
+
+@media (prefers-reduced-motion: reduce) {
+  .wpp, .wpp__btn, .wpp__icon, .wpp__pip { animation: none; }
+  .wpp__rings::before, .wpp__rings::after { animation: none; opacity: 0; }
+}
 ```
 
 ### Craft notes
-- The float is **teal** (`--marca`), not WhatsApp green, so it reads as *Dr. Márcio*, not a generic badge. The pulse ring is slow (3s) and gentle, paused on hover, removed under reduced motion.
-- Shadow is the teal CTA glow. On mobile it shrinks to 54px so it never covers footer links or the contact rows.
-- The `?text=` pre-fills a calm, on-brand opening message. Always `target="_blank"` + `rel="noopener"`, with a real `aria-label`.
+- **This float is WhatsApp green, not teal** — a deliberate exception to the one-teal rule. Because it represents the WhatsApp channel itself (with its logomark, ring color, and pip), the green reads correctly as "message us on WhatsApp"; the rest of the page stays teal. Do not recolor it to `--marca`.
+- **The pulse is CSS, not Lottie.** Two staggered ring pseudo-elements (`::before` 0s, `::after` 1.5s delay) ripple outward; the button "breathes" its shadow; the icon does an occasional subtle wiggle. All four animations, the entrance, and the pip are CSS keyframes and all stop under `prefers-reduced-motion`.
+- **The pip is a soft notification badge** (`#ec4d4d`, white ring) reading "1", animating in once after load — an invitation, not an alarm. Keep it a single small badge.
+- The **label only appears on hover/focus**, sliding out as a white pill in `--marca-deep` — so the resting state is just the clean circle. The `?text=` pre-fills a calm opening message. Always `target="_blank"` + `rel="noopener"`, with a real `aria-label`.
+
+---
+
+## 17. Before / after drag comparator
+
+**Purpose.** The "Resultados reais" proof: a two-image slider you **drag to reveal** the before/after. A copy column sits beside it; the comparator itself stacks the "depois" full and clips the "antes" to a draggable width, with a divider, a round handle, and an invisible range for keyboard/SR users.
+
+**When to use.** The Resultados section on Home (`#resultados`, carries `data-fio="left"`). One comparator per section, paired with the §3 header copy and a consent note.
+
+> **Where this lives.** Markup in `index.html` (`.compare` → `.ba[data-ba]`); styles in `assets/css/main.css` (~lines 880–987); behavior in `assets/js/main.js` (~line 277), which drives `--pos` from both the range input and press-and-drag anywhere on the image.
+
+### Anatomy
+
+```html
+<div class="compare">
+  <div class="compare__copy reveal">
+    … eyebrow + section title + lede (§3) …
+    <p class="compare__note">Resultado real de paciente da clínica. Imagens exibidas com consentimento.</p>
+  </div>
+
+  <!-- the slider. --pos (0–100%) is the single source of truth -->
+  <div class="ba reveal" data-ba style="--pos:50%">
+    <img class="ba__img ba__img--after"  src="assets/img/home-depois.jpg" alt="Pele após o tratamento, com mais uniformidade e viço" />
+    <img class="ba__img ba__img--before" src="assets/img/home-antes.jpg"  alt="Pele antes do tratamento" />
+    <span class="ba__label ba__label--before">Antes</span>
+    <span class="ba__label ba__label--after">Depois</span>
+    <div class="ba__divider" aria-hidden="true">
+      <span class="ba__handle"><svg viewBox="0 0 24 24" …><path d="M9 7 4 12l5 5M15 7l5 5-5 5"/></svg></span>
+    </div>
+    <input class="ba__range" type="range" min="0" max="100" value="50" step="0.1" aria-label="Comparar antes e depois" />
+  </div>
+</div>
+```
+
+### Critical CSS
+
+```css
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
+.compare__note { margin: 22px 0 0; font: 500 13.5px/1.6 var(--font-body); color: var(--tinta-soft); }
+
+.ba {
+  position: relative; width: 100%; max-width: 520px; margin-inline: auto;
+  aspect-ratio: 4 / 5; border-radius: var(--r-lg); overflow: hidden;
+  user-select: none; cursor: ew-resize; touch-action: pan-y;   /* horizontal drags slide; vertical still scrolls */
+  box-shadow: 0 22px 56px rgba(5,127,127,0.16), 0 6px 16px rgba(22,48,47,0.08);
+  --pos: 50%;
+}
+.ba__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 18%; pointer-events: none; }
+/* the "before" is clipped to --pos; the "after" shows underneath in the revealed band */
+.ba__img--before { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.ba__img--after  { object-position: center 9%; }               /* nudge so features line up with --before */
+
+.ba__label { position: absolute; top: 16px; z-index: 3; padding: 6px 14px; border-radius: var(--r-pill);
+  font: 600 11px/1 var(--font-body); letter-spacing: 0.14em; text-transform: uppercase;
+  color: #fff; background: rgba(4,77,77,0.6); backdrop-filter: blur(4px); pointer-events: none; }
+.ba__label--before { left: 16px; } .ba__label--after { right: 16px; }
+
+.ba__divider { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; margin-left: -1px;
+  background: rgba(255,255,255,0.92); box-shadow: 0 0 0 1px rgba(4,77,77,0.12); z-index: 3; pointer-events: none; }
+.ba__handle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center;
+  background: #fff; color: var(--marca-ink); box-shadow: 0 6px 18px rgba(4,77,77,0.28); }
+
+/* invisible range = the keyboard/SR control; pointer drag is handled on .ba itself */
+.ba__range { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; z-index: 4;
+  opacity: 0; cursor: ew-resize; pointer-events: none; appearance: none; background: transparent; }
+.ba__range:focus-visible { outline: 3px solid var(--marca); outline-offset: 4px; }
+```
+
+### Craft notes
+- **`--pos` is the whole mechanism.** A single `--pos` (0–100%) custom prop, set on `.ba`, simultaneously drives the `.ba__img--before` clip (`inset(0 calc(100% - var(--pos)) 0 0)`) and the `left` of `.ba__divider`. Move `--pos`, the reveal and the divider track together. The handle is centered on the divider.
+- **Dual input for a reason.** The `<input type="range">` is the accessible control (keyboard, screen readers) but is `pointer-events: none` and `opacity: 0`; the JS adds press-and-drag on the **whole image** (Pointer Events, with capture) so users can grab anywhere, not just a thumb. Both paths write `--pos` and keep the range's `value` in sync. `touch-action: pan-y` keeps vertical page scroll working on touch.
+- The two `.ba__label`s ("Antes" left, "Depois" right) are frosted deep-teal pills; the divider/handle are white with a teal-tinted shadow. Always pair with a **consent note** (`.compare__note`) — real-patient imagery, shown with consent. Real `alt` on both images.
+
+---
+
+## 18. Antes e Depois — case carousel
+
+**Purpose.** A horizontal carousel of before/after cases: each card shows the "antes" and **reveals the "depois" on hover (or tap on touch)**, with a state tag that flips Antes→Depois and a category chip. Cards carry a small vertical `--off` stagger so the rail reads organic, not gridded.
+
+**When to use.** The Casos section on Home (`#casos`, `section--casos`). The track scroll-snaps and is driven by prev/next arrows; on touch, tapping a card toggles its reveal persistently.
+
+> **Where this lives.** Markup in `index.html` (`.casos` → `.casos__track` → `.caso-item`); styles in `assets/css/main.css` (~lines 1428–1606); behavior in the `casos()` IIFE in `assets/js/main.js` (~line 317) — arrow `scrollBy`, end-state arrow disabling, and tap-to-toggle `.is-revealed`.
+
+### Anatomy
+
+```html
+<section class="section section--casos" id="casos" aria-labelledby="casos-title">
+  <div class="container casos__top">
+    <header class="casos__head reveal">
+      <div class="casos__intro">
+        … eyebrow "Antes e Depois" + title + lede (§3) …
+        <p class="section__lede casos__hint">Passe o cursor sobre a foto, ou toque nela, para revelar o depois.</p>
+      </div>
+      <div class="casos__nav" role="group" aria-label="Navegar pelos resultados">
+        <button class="casos__arrow" type="button" data-casos-prev aria-label="Ver caso anterior" disabled><svg …/></button>
+        <button class="casos__arrow" type="button" data-casos-next aria-label="Ver próximo caso"><svg …/></button>
+      </div>
+    </header>
+  </div>
+
+  <div class="casos__viewport reveal">
+    <ul class="casos__track" data-casos-track tabindex="0" role="list" aria-label="Casos de antes e depois">
+      <li class="caso-item">
+        <!-- --off staggers this card's vertical offset (× --casos-off-step) -->
+        <article class="caso" style="--off:2.6">
+          <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Tratamento Capilar: ver o depois">
+            <span class="caso__media">
+              <img class="caso__img caso__img--antes"  src="imagens/casos/capilar-01-antes.jpg"  alt="Antes do tratamento de Tratamento Capilar"  loading="lazy" width="560" height="896" />
+              <img class="caso__img caso__img--depois" src="imagens/casos/capilar-01-depois.jpg" alt="Depois do tratamento de Tratamento Capilar" loading="lazy" width="560" height="896" />
+            </span>
+            <span class="caso__meta">
+              <span class="caso__tag" aria-hidden="true">
+                <span class="caso__tag-state caso__tag-state--antes">Antes</span>
+                <span class="caso__tag-state caso__tag-state--depois">Depois</span>
+              </span>
+              <span class="caso__cat">Tratamento Capilar</span>
+            </span>
+          </button>
+        </article>
+      </li>
+      <!-- … one .caso-item per case (categories repeat: Tratamento Capilar, Preenchimento Labial, Laser CO₂, Liftera) … -->
+    </ul>
+  </div>
+</section>
+```
+
+### Critical CSS
+
+```css
+.casos { --casos-off-step: clamp(8px, 1.4vw, 18px); }            /* the unit each --off multiplies */
+.casos__track {
+  --per: 6; --gap: clamp(14px, 1.3vw, 22px);                     /* cards in view: 6 → 5 → 4 → 3 → 2.2 */
+  display: flex; align-items: flex-start; gap: var(--gap);
+  padding: 18px var(--gutter) 26px;
+  overflow-x: auto; scroll-snap-type: x proximity; scroll-padding-inline: var(--gutter);
+  scrollbar-width: none;
+}
+.casos__track::-webkit-scrollbar { display: none; }
+.caso-item { flex: 0 0 calc((100vw - 2 * var(--gutter) - (var(--per) - 1) * var(--gap)) / var(--per)); scroll-snap-align: start; }
+.caso { margin-top: calc(var(--off, 0) * var(--casos-off-step)); }   /* the organic stagger */
+
+.caso__toggle { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; text-align: left; }
+.caso__media {
+  position: relative; aspect-ratio: 5 / 8; border-radius: var(--r-lg); overflow: hidden; background: var(--nevoa);
+  box-shadow: 0 16px 40px rgba(5,127,127,0.12), 0 4px 12px rgba(22,48,47,0.06);
+  transition: transform .4s var(--ease-calm), box-shadow .4s var(--ease-soft);
+}
+.caso__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  transition: opacity .55s var(--ease-glide), transform .8s var(--ease-calm); }
+.caso__img--depois { opacity: 0; transform: scale(1.04); }
+
+/* reveal "depois" on hover / keyboard focus / tap-toggled .is-revealed */
+.caso__toggle:hover .caso__img--depois,
+.caso__toggle:focus-visible .caso__img--depois,
+.caso.is-revealed .caso__img--depois { opacity: 1; transform: none; }
+.caso__toggle:hover .caso__img--antes,
+.caso.is-revealed .caso__img--antes { opacity: 0; }
+.caso__toggle:hover .caso__media,
+.caso__toggle:focus-visible .caso__media { transform: translateY(-6px); box-shadow: 0 30px 64px rgba(5,127,127,0.2), 0 8px 20px rgba(22,48,47,0.08); }
+
+/* state tag: two stacked labels cross-fade in place */
+.caso__tag { display: inline-grid; padding: 6px 13px; border-radius: var(--r-pill);
+  background: rgba(255,255,255,0.88); backdrop-filter: blur(6px); box-shadow: 0 6px 18px rgba(5,127,127,0.14);
+  font: 600 11px/1 var(--font-body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--marca-ink); }
+.caso__tag-state { grid-area: 1 / 1; transition: opacity .4s var(--ease-glide); }   /* overlap so they swap */
+.caso__tag-state--depois { opacity: 0; color: var(--marca-deep); }
+.caso__toggle:hover .caso__tag-state--antes,  .caso.is-revealed .caso__tag-state--antes  { opacity: 0; }
+.caso__toggle:hover .caso__tag-state--depois, .caso.is-revealed .caso__tag-state--depois { opacity: 1; }
+.caso__cat { padding: 6px 12px; border-radius: var(--r-pill); background: rgba(4,77,77,0.42); backdrop-filter: blur(6px);
+  font: 600 11px/1.2 var(--font-body); /* … white caps category chip … */ }
+
+@media (prefers-reduced-motion: reduce) {
+  .caso__img { transition: opacity 0.001ms; } .caso__img--depois { transform: none; }
+}
+```
+
+### Craft notes
+- **Reveal works three ways.** Hover and keyboard focus reveal the "depois" while held; a **tap** (the whole card is a `<button class="caso__toggle">`) toggles `.is-revealed` persistently for touch devices, syncing `aria-pressed`. The two `.caso__img`s cross-fade (the depois also un-scales from `1.04`), and the `.caso__tag` swaps Antes→Depois via two overlapped `.caso__tag-state` labels.
+- **`--off` is the organic stagger.** Each `.caso` reads `--off` (e.g. `2.6`, `0`, `4.4`, …) and offsets its top margin by `--off × --casos-off-step`, so the rail of portrait cards sits at varied heights instead of a flat row. Keep values small and varied; it is decoration, not a grid.
+- **Full-bleed snap rail.** `.casos__track` is a flex rail padded to `--gutter`, scroll-snaps, hides its scrollbar, and shows `--per` cards (6 down to 2.2 across breakpoints). Arrows `scrollBy` one card+gap and disable at the ends; the track is keyboard-scrollable (`tabindex="0"`). Cards are `5 / 8` portrait with the brand `--r-lg` radius and teal-tinted shadow. Every image is `loading="lazy"` with real `alt`.
+
+---
+
+## 19. Fio de cabelo motif
+
+**Purpose.** The brand's signature **background motif**: a single sinuous hair strand — the curve from the brand mark — drawn in the **free lateral margin** of a section, drawing itself as the section scrolls through the viewport. It is the quiet thread that ties the pages to the trichology/dermatology identity without ever crowding the content.
+
+**When to use.** Opt a section in with a `data-fio` attribute. Sides **alternate** down the page by authoring choice (`left` / `right`), always landing in the empty gutter beside the boxed `.container`, never over text. Currently used on Resultados (`left`), Método (`right`), Dr. Márcio (`right`), and Avaliações (`left`).
+
+> **Where this lives.** Opt-in via `data-fio="left|right"` on a `<section>`; the SVG is generated at runtime by the `fioMotif()` IIFE in `assets/js/main.js` (~line 433). Styling hooks (`.fio-sec`, `.fio-sec__main`, `.fio-sec__sheen`) are in `assets/css/main.css` (~lines 795–820). It depends on the section being a positioned, `overflow: clip` container (the standard `.section`).
+
+### Anatomy
+
+```html
+<!-- author-side opt-in: just add data-fio. JS appends the <svg.fio-sec> as the last child. -->
+<section class="section section--branco" id="resultados" data-fio="left">
+  <div class="container"> … </div>
+  <!-- main.js injects here:
+  <svg class="fio-sec" aria-hidden="true" preserveAspectRatio="none" viewBox="0 0 W H">
+    <path class="fio-sec__main"  pathLength="1" fill="none" />   stroke: url(#fio-grad) on light, #dff3ef on deep
+    <path class="fio-sec__sheen" pathLength="1" fill="none" />   a travelling highlight segment
+  </svg>
+  -->
+</section>
+```
+
+### Critical CSS
+
+```css
+/* one strand per section, in the free lateral margin, behind the content */
+.fio-sec { position: absolute; inset: 0; width: 100%; height: 100%; z-index: var(--z-base); pointer-events: none; }
+.fio-sec__main  { stroke-width: 1.3px; opacity: 0.5; stroke-linecap: round; stroke-linejoin: round; }
+.fio-sec__sheen { stroke-width: 2.4px; opacity: 0; stroke-linecap: round; filter: url(#fio-soft); }  /* soft blur */
+@media (prefers-reduced-motion: reduce) { .fio-sec__sheen { opacity: 0 !important; } }
+```
+
+```js
+// shared <defs> injected once into <body>: the teal gradient + the sheen blur
+// <linearGradient id="fio-grad"> #19b3a6 → #057f7f → #044d4d (top→bottom)
+// <filter id="fio-soft"> feGaussianBlur stdDeviation="2"
+```
+
+### Craft notes
+- **Opting in is one attribute.** Add `data-fio="left"` or `data-fio="right"` to any `.section`. `fioMotif()` measures the gutter between the viewport edge and the `.container` on the chosen side, draws a vertical wavy path centered in that gutter (amplitude clamped to the gutter, with a touch of "micro life" so it reads as a hair, not a sine wave), and appends it as the section's last child so it sits at `--z-base`, **behind the content but above the background**. Because `.section` is `overflow: clip`, the strand touches and vanishes exactly at the section divide.
+- **Alternate the sides** down the page (left, right, right, left, …) so the motif breathes across the layout. The strand only renders when there is real free margin: `fioMotif()` hides it when the viewport is `< 1080px` or the gutter is `< 26px` (so it never collides with text on narrow screens).
+- **Color is context-aware.** On light sections the main stroke is the teal gradient `url(#fio-grad)` with a `#1ec7b6` sheen; on deep sections (`section--deep`) it flips to a pale `#dff3ef` strand with an `#f1fffb` sheen so it stays legible on the dark band.
+- **Scroll-driven, motion-safe.** The path uses `pathLength="1"`; `strokeDashoffset` tracks the section's progress through the viewport so the strand **draws itself** as you scroll, while a short `.fio-sec__sheen` segment travels along it (fading at the ends). Under `prefers-reduced-motion`, the strand renders fully drawn and the sheen is suppressed.
 
 ---
 
@@ -1324,11 +1719,13 @@ When adding a new section, pick the closest pattern before inventing:
 
 | Pattern | Used by | When to pick |
 |---|---|---|
-| **Header + auto-fit card grid** | Diferenciais, Tratamentos, Depoimentos | A set of peer items reads as a calm grid |
+| **Header + auto-fit card grid** | Diferenciais, Tratamentos | A set of peer items reads as a calm grid |
 | **Numbered axis cards** | Método 4D | Anything that explains the four eixos — keep it identical everywhere |
-| **Two-column split (image + copy)** | Sobre, Método 4D feature | A section pairs real photography/art with text |
+| **Two-column split (image + copy)** | Sobre, Método 4D feature, Resultados comparator | A section pairs real photography/art (or the §17 slider) with text |
+| **Full-bleed snap rail + arrows** | Casos, Avaliações | A set of items reads as a browsable carousel rather than a static grid |
 | **Masonry frames + lightbox** | Nosso Espaço gallery | Showing the real clinic / a set of photos |
 | **Single deep-teal band** | Appointment CTA, (footer stays light) | The one conversion moment — used **once** per page |
 | **Form + info rows** | Contato | The page asks for an action and needs the real contact data |
+| **Lateral background motif** | Sections via `data-fio` | A quiet brand thread in the free gutter — opt in, alternate sides |
 
-Two standing rules across all of them: **one teal, used with discipline** (text teal is always `--marca-ink` or `--marca-deep`, never `--marca-bright`), and **one dark band per page** (the §13 CTA). When you feel the urge to add a second saturated hue or a second dark section, add whitespace instead.
+Two standing rules across all of them: **one teal, used with discipline** (text teal is always `--marca-ink` or `--marca-deep`, never `--marca-bright`), and **one dark band per page** (the §13 CTA). The two sanctioned exceptions to "one teal" are the **Google-gold review stars** (§11) and the **WhatsApp-green float** (§16) — both earn their hue because they represent an external channel. When you feel the urge to add a *third* saturated hue or a second dark section, add whitespace instead.
