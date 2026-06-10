@@ -2306,3 +2306,72 @@ a.treat-card:hover .treat-card__more svg { transform: translateX(4px); }
 @media (prefers-reduced-motion: reduce) {
   .ts-link:hover svg { transform: none; }
 }
+
+/* ================================================================== */
+/* Tricologia — hero square media + contained composite frames        */
+/* ================================================================== */
+/* antes/depois composites are wide (antes | depois). A normal cover   */
+/* frame would crop one half, so these variants show the whole image.  */
+.treat-hero__media--square { aspect-ratio: 1 / 1; }
+.media-frame--contain {
+  aspect-ratio: 1 / 1;
+  background: #1f2e2d; /* deep neutral that matches the studio backdrops */
+}
+.media-frame--contain img { object-fit: contain; }
+@media (max-width: 880px) {
+  /* keep composites whole when the split stacks (override the cover rule) */
+  .tsplit .media-frame--contain { aspect-ratio: 1 / 1; max-height: none; }
+}
+@media (max-width: 860px) {
+  .treat-hero__media--square { aspect-ratio: 1 / 1; max-height: none; }
+}
+
+/* ================================================================== */
+/* Tricologia — "Resultados reais" antes/depois carousel              */
+/* ================================================================== */
+/* Reuses the .casos viewport + arrow JS (data-casos-*), but each card */
+/* shows a full pre-composed antes/depois image instead of a portrait  */
+/* cross-fade pair.                                                     */
+.casos__track--results { scroll-snap-type: x proximity; }
+.result-item {
+  flex: 0 0 clamp(266px, 40vw, 440px);
+  scroll-snap-align: start;
+}
+.result { margin: 0; }
+.result__frame {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: #1f2e2d;
+  box-shadow: 0 16px 40px rgba(5, 127, 127, 0.12), 0 4px 12px rgba(22, 48, 47, 0.06);
+  transition: transform 0.4s var(--ease-calm), box-shadow 0.4s var(--ease-soft);
+}
+.result__frame img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.result:hover .result__frame {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 64px rgba(5, 127, 127, 0.2), 0 8px 20px rgba(22, 48, 47, 0.08);
+}
+.result__cap {
+  display: flex; align-items: center; gap: 10px;
+  margin: 14px 2px 0;
+  font: 500 14px/1.4 var(--font-body);
+  color: var(--tinta-soft);
+}
+.result__tag {
+  flex: none;
+  padding: 5px 11px;
+  border-radius: var(--r-pill);
+  background: var(--marca);
+  color: #fff;
+  font: 600 10.5px/1 var(--font-body);
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+@media (max-width: 760px) { .result-item { flex-basis: clamp(244px, 80vw, 360px); } }
+@media (prefers-reduced-motion: reduce) { .result:hover .result__frame { transform: none; } }
