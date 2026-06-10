@@ -448,7 +448,7 @@ function render(t) {
         </div>`;
 
   const beneHTML = t.indic.length
-    ? `        <div class="bene-grid">
+    ? `        <div class="bene-grid" data-count="${t.indic.length}">
 ${t.indic
   .map(
     (i, n) =>

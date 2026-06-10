@@ -2223,9 +2223,16 @@ a.treat-card:hover .treat-card__more svg { transform: translateX(4px); }
 .bene-grid {
   display: grid;
   gap: clamp(14px, 1.6vw, 18px);
-  grid-template-columns: repeat(auto-fit, minmax(248px, 1fr));
+  /* default: keep every card on a single row (3 cards => 1 row) */
+  grid-template-columns: repeat(3, 1fr);
   margin-top: clamp(6px, 1.6vw, 14px);
 }
+/* 1-2 cards: only as many columns as there are cards */
+.bene-grid[data-count="1"] { grid-template-columns: minmax(248px, 0.5fr); }
+.bene-grid[data-count="2"] { grid-template-columns: repeat(2, 1fr); }
+/* 4 cards: all four side by side on one row */
+.bene-grid[data-count="4"] { grid-template-columns: repeat(4, 1fr); }
+/* 5 cards => 3 + 2, 6 cards => 3 + 3 (inherit the 3-col default) */
 .bene-card {
   display: flex;
   gap: 14px;
@@ -2283,10 +2290,18 @@ a.treat-card:hover .treat-card__more svg { transform: translateX(4px); }
   .tsplit .media-frame { order: -1; aspect-ratio: 16 / 10; max-height: 380px; }
   .tsplit--top .media-frame { order: 0; }
   .ts-head--left { max-width: none; }
+  /* benefit cards reflow to 2 columns on tablet, whatever the card count */
+  .bene-grid,
+  .bene-grid[data-count="4"] { grid-template-columns: repeat(2, 1fr); }
+  .bene-grid[data-count="1"] { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
   .ts-cta .btn { width: 100%; }
   .treat-trust { gap: 14px 22px; }
+  /* single column on phones */
+  .bene-grid,
+  .bene-grid[data-count="2"],
+  .bene-grid[data-count="4"] { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
   .ts-link:hover svg { transform: none; }
