@@ -1,0 +1,40 @@
+[
+  {
+    "id": 1,
+    "slug": "protecao-solar-todo-dia",
+    "title": "Proteção solar todo dia: por que importa",
+    "date": "2026-06-10T12:00:00+00:00",
+    "modified": "2026-06-10T12:00:00+00:00",
+    "category_name": "Cuidados com a Pele",
+    "category_color": "#057f7f",
+    "cover_image": "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=1200",
+    "excerpt": "O filtro solar é o passo mais importante de qualquer rotina de cuidados com a pele.",
+    "content": "<h2>Por que usar todo dia</h2><p>A radiação ultravioleta atinge a pele mesmo em dias nublados. O uso diário de protetor solar previne manchas, flacidez e câncer de pele.</p><p>Reaplique a cada três horas de exposição.</p>",
+    "meta_description": "Entenda por que o protetor solar diário é essencial para a saúde e a beleza da pele.",
+    "seo_title": "Proteção solar todo dia · Dr. Márcio Teixeira",
+    "og_image": "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=1200",
+    "focus_keyword": "proteção solar",
+    "tags": ["proteção solar", "rotina"],
+    "likes": 4,
+    "status": "published"
+  },
+  {
+    "id": 2,
+    "slug": "queda-de-cabelo-quando-procurar",
+    "title": "Queda de cabelo: quando procurar um especialista",
+    "date": "2026-06-08T12:00:00+00:00",
+    "modified": "2026-06-08T12:00:00+00:00",
+    "category_name": "Saúde Capilar",
+    "category_color": "#a87a4e",
+    "cover_image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=1200",
+    "excerpt": "Perder fios é normal até certo ponto. Saiba quando a queda merece avaliação.",
+    "content": "<h2>O que é normal</h2><p>Perder de 50 a 100 fios por dia faz parte do ciclo capilar. Acima disso, ou com afinamento visível, vale investigar.</p>",
+    "meta_description": "Queda de cabelo: quando é normal e quando procurar um dermatologista em Porto Alegre.",
+    "seo_title": "Queda de cabelo: quando procurar ajuda · Dr. Márcio Teixeira",
+    "og_image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=1200",
+    "focus_keyword": "queda de cabelo",
+    "tags": ["tricologia", "queda de cabelo"],
+    "likes": 1,
+    "status": "published"
+  }
+]
