@@ -278,6 +278,7 @@ function navHTML() {
     ["../../metodo-4d.html", "Método 4D"],
     ["../../tricologia.html", "Tricologia"],
     ["../../sobre.html", "Sobre"],
+    ["../../blog.html", "Blog"],
     ["../../contato.html", "Contato"],
   ];
   const navLinks = links
@@ -328,6 +329,7 @@ function footerHTML() {
             <a href="../../metodo-4d.html">Método 4D</a>
             <a href="../../tricologia.html">Tricologia</a>
             <a href="../../sobre.html">Sobre</a>
+            <a href="../../blog.html">Blog</a>
             <a href="../../contato.html">Contato</a>
           </div>
         </nav>
