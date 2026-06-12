@@ -2,6 +2,11 @@
   "name": "site-marciodermato",
   "private": true,
   "description": "Site Dr. Marcio Teixeira - Dermatologia",
+  "scripts": {
+    "test": "node --test tools/blog/test/*.test.mjs",
+    "build:blog": "node tools/build-blog.mjs",
+    "build:treatments": "node tools/build-treatments.mjs"
+  },
   "dependencies": {
     "sharp": "^0.34.5"
   }
