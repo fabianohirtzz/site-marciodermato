@@ -211,7 +211,8 @@ ${navHTML('../../', 'blog')}
   <main id="conteudo">
     <article class="post">
       <header class="post-hero">
-        <div class="container post-hero__inner">
+        <div class="container">
+         <div class="post-hero__inner">
           <nav class="crumbs" aria-label="Você está em">
             <a href="../../index.html">Início</a>
             <span class="crumbs__sep" aria-hidden="true">/</span>
@@ -222,6 +223,7 @@ ${navHTML('../../', 'blog')}
           <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> ${esc(post.category?.name || 'Blog')}</p>
           <h1 class="post-hero__title">${esc(post.title)}</h1>
           <p class="post-hero__meta">${esc(post.dateLabel)} · ${mins} min de leitura</p>
+         </div>
         </div>
       </header>
 
