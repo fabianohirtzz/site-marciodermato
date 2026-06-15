@@ -25,6 +25,58 @@ function relatedCard(p) {
           </article>`;
 }
 
+/* CTAs inseridos no meio do artigo — padrão em todo post do blog. */
+function ctaConsulta(post) {
+  const wa = waLink(`Olá, li o artigo "${post.title}" e gostaria de agendar uma avaliação para descobrir o tratamento ideal para o meu caso.`);
+  return '<aside class="article-cta article-cta--consulta">'
+    + '<div class="article-cta__body">'
+    + '<p class="article-cta__eyebrow">Avaliação personalizada</p>'
+    + '<h3 class="article-cta__title">Quer saber qual tratamento é ideal para você?</h3>'
+    + '<p class="article-cta__text">O Dr. Márcio avalia o seu caso com o Método 4D e monta um plano sob medida, com resultados naturais.</p>'
+    + '</div>'
+    + `<a class="btn btn--primary article-cta__btn" href="${attr(wa)}" target="_blank" rel="noopener">Agende sua consulta</a>`
+    + '</aside>';
+}
+
+function ctaEbook() {
+  return '<aside class="article-cta article-cta--ebook">'
+    + '<div class="article-cta__body">'
+    + '<p class="article-cta__eyebrow">E-book gratuito</p>'
+    + '<h3 class="article-cta__title">Entenda o Método 4D em profundidade</h3>'
+    + '<p class="article-cta__text">Baixe o e-book gratuito e descubra como avaliamos a pele em quatro dimensões para chegar a resultados naturais.</p>'
+    + '</div>'
+    + '<a class="btn btn--ghost article-cta__btn" href="../../ebook/Ebook-Metodo-4D.pdf" target="_blank" rel="noopener" download>Baixar o e-book</a>'
+    + '</aside>';
+}
+
+// Insere os CTAs entre seções (antes de um <h2>), espaçados ~1/3 e ~2/3 do artigo.
+function injectCtas(body, post) {
+  const idxs = [];
+  const re = /<h2/gi;
+  let m;
+  while ((m = re.exec(body))) idxs.push(m.index);
+
+  // candidatos = limites de seção, exceto o 1º título e o último
+  const candidates = idxs.slice(1, -1);
+  if (!candidates.length) return body; // artigo curto: fica só com o CTA do rodapé
+
+  const blocks = [];
+  if (candidates.length >= 3) {
+    blocks.push({ at: candidates[Math.floor(candidates.length / 3)], html: ctaConsulta(post) });
+    blocks.push({ at: candidates[Math.floor((candidates.length * 2) / 3)], html: ctaEbook() });
+  } else {
+    blocks.push({ at: candidates[Math.floor(candidates.length / 2)], html: ctaConsulta(post) });
+  }
+
+  // dedupe de posições + inserção de trás para frente (não desloca índices)
+  const seen = new Set();
+  blocks
+    .filter(b => (seen.has(b.at) ? false : seen.add(b.at)))
+    .sort((a, b) => b.at - a.at)
+    .forEach(b => { body = body.slice(0, b.at) + b.html + body.slice(b.at); });
+  return body;
+}
+
 function relatedSection(related) {
   if (!related || !related.length) return '';
   return `
@@ -47,7 +99,7 @@ export function renderPostPage(post, related = []) {
   const url = `${SITE}/blog/${post.slug}/`;
   const ogImg = post.ogImage || post.coverImage || `${SITE}/logo/logo-header-colorido.png`;
   const mins = readingTime(post.content);
-  const body = sanitizeContent(post.content);
+  const body = injectCtas(sanitizeContent(post.content), post);
   const ctaCta = waLink(`Olá, li o artigo "${post.title}" e gostaria de agendar uma avaliação.`);
 
   const ld = {
