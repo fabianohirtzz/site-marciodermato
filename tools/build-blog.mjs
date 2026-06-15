@@ -19,6 +19,16 @@ function relatedFor(post, all) {
   return [...same, ...fill].slice(0, 3);
 }
 
+// Lista única de categorias (1ª cor encontrada) para o widget da sidebar.
+function categoriesOf(all) {
+  const seen = new Map();
+  for (const p of all) {
+    const name = p.category?.name;
+    if (name && !seen.has(name)) seen.set(name, { name, color: p.category.color || '#057f7f' });
+  }
+  return [...seen.values()];
+}
+
 async function injectBetween(path, startMarker, endMarker, inner) {
   let html = await readFile(path, 'utf8');
   const re = new RegExp(`${startMarker}[\\s\\S]*?${endMarker}`);
@@ -37,8 +47,9 @@ async function main() {
   console.log('blog.html:', posts.length, 'posts,', new Set(posts.map(p => p.category.name)).size, 'categorias.');
 
   // 2. Páginas de artigo.
+  const categories = categoriesOf(posts);
   for (const post of posts) {
-    const html = renderPostPage(post, relatedFor(post, posts));
+    const html = renderPostPage(post, relatedFor(post, posts), { categories, recent: posts });
     await mkdir(new URL(`blog/${post.slug}/`, ROOT), { recursive: true });
     await writeFile(new URL(`blog/${post.slug}/index.html`, ROOT), html);
     console.log('  ok blog/' + post.slug + '/index.html');

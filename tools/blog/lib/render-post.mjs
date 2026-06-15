@@ -77,6 +77,65 @@ function injectCtas(body, post) {
   return body;
 }
 
+/* ---- Sidebar (Categorias · Tags · Posts recentes) — espelha o HD360 ---- */
+function sideCategories(categories, post) {
+  if (!categories || !categories.length) return '';
+  const current = post.category?.name || '';
+  const items = categories.map((c) => {
+    const isCur = c.name === current;
+    return `<li${isCur ? ' class="is-current"' : ''}>`
+      + `<a href="../../blog.html?cat=${encodeURIComponent(c.name)}">`
+      + `<span class="side-dot" style="--chip:${esc(c.color || '#057f7f')}" aria-hidden="true"></span>`
+      + `${esc(c.name)}</a></li>`;
+  }).join('\n          ');
+  return `<section class="side-card">
+          <h4 class="side-card__title">Categorias</h4>
+          <ul class="side-cats">
+          ${items}
+          </ul>
+        </section>`;
+}
+
+function sideTags(post) {
+  const tags = post.tags || [];
+  if (!tags.length) return '';
+  const spans = tags
+    .map((t) => `<span class="side-tag">#${esc(t)}</span>`).join('\n          ');
+  return `<section class="side-card">
+          <h4 class="side-card__title">Tags</h4>
+          <div class="side-tags">
+          ${spans}
+          </div>
+        </section>`;
+}
+
+function sideRecent(recent, post) {
+  const list = (recent || []).filter((p) => p.slug !== post.slug).slice(0, 5);
+  if (!list.length) return '';
+  const items = list.map((p) => {
+    const thumb = p.coverImage
+      ? `<img src="${esc(p.coverImage)}" alt="${attr(p.title)}" loading="lazy" />` : '';
+    const thumbClass = p.coverImage ? 'side-recent__thumb' : 'side-recent__thumb side-recent__thumb--empty';
+    return `<li><a href="../${esc(p.slug)}/">`
+      + `<span class="${thumbClass}">${thumb}</span>`
+      + `<span class="side-recent__t">${esc(p.title)}</span></a></li>`;
+  }).join('\n          ');
+  return `<section class="side-card">
+          <h4 class="side-card__title">Posts recentes</h4>
+          <ul class="side-recent">
+          ${items}
+          </ul>
+        </section>`;
+}
+
+function sidebar(post, opts) {
+  return [
+    sideCategories(opts.categories, post),
+    sideTags(post),
+    sideRecent(opts.recent, post),
+  ].filter(Boolean).join('\n        ');
+}
+
 function relatedSection(related) {
   if (!related || !related.length) return '';
   return `
@@ -93,7 +152,7 @@ function relatedSection(related) {
     </section>`;
 }
 
-export function renderPostPage(post, related = []) {
+export function renderPostPage(post, related = [], opts = {}) {
   const title = post.seoTitle || `${post.title} · Blog · Dr. Márcio Teixeira`;
   const desc = post.metaDescription || post.excerpt || '';
   const url = `${SITE}/blog/${post.slug}/`;
@@ -166,24 +225,29 @@ ${navHTML('../../', 'blog')}
         </div>
       </header>
 
-      ${post.coverImage ? `<figure class="post-cover"><img src="${esc(post.coverImage)}" alt="${attr(post.title)}" /></figure>` : ''}
+      <div class="container post-layout">
+        <div class="post-main">
+          ${post.coverImage ? `<figure class="post-cover"><img src="${esc(post.coverImage)}" alt="${attr(post.title)}" /></figure>` : ''}
+          <div class="t-prose post-prose">
+            ${body}
+          </div>
 
-      <div class="container post-body">
-        <div class="t-prose post-prose">
-          ${body}
+          <div class="like" data-like="${esc(post.slug)}">
+            <button class="like__btn" type="button" aria-pressed="false" aria-label="Curtir este artigo">
+              <svg class="like__heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.3C.4 8.4 2 5 5.2 5c2 0 3.3 1.1 4.1 2.3.4.6.7.6 1.4.6h2.6c.7 0 1 0 1.4-.6C16.5 6.1 17.8 5 19.8 5 23 5 24.6 8.4 22 11.7 19.5 16.4 12 21 12 21z" /></svg>
+              <span class="like__count">${Number(post.likes) || 0}</span>
+            </button>
+            <span class="like__hint">Gostou? Deixe seu coração.</span>
+          </div>
+
+          <div class="post-cta">
+            <a class="btn btn--primary" href="${attr(ctaCta)}" target="_blank" rel="noopener">Agende sua consulta</a>
+          </div>
         </div>
 
-        <div class="like" data-like="${esc(post.slug)}">
-          <button class="like__btn" type="button" aria-pressed="false" aria-label="Curtir este artigo">
-            <svg class="like__heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.3C.4 8.4 2 5 5.2 5c2 0 3.3 1.1 4.1 2.3.4.6.7.6 1.4.6h2.6c.7 0 1 0 1.4-.6C16.5 6.1 17.8 5 19.8 5 23 5 24.6 8.4 22 11.7 19.5 16.4 12 21 12 21z" /></svg>
-            <span class="like__count">${Number(post.likes) || 0}</span>
-          </button>
-          <span class="like__hint">Gostou? Deixe seu coração.</span>
-        </div>
-
-        <div class="post-cta">
-          <a class="btn btn--primary" href="${attr(ctaCta)}" target="_blank" rel="noopener">Agende sua consulta</a>
-        </div>
+        <aside class="post-side">
+        ${sidebar(post, opts)}
+        </aside>
       </div>
     </article>
     ${relatedSection(related)}
