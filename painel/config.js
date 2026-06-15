@@ -7,7 +7,9 @@ export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 export const POSTS_TABLE = 'mt_posts';
 export const SITE_META_TABLE = 'mt_site_meta';
 export const STORAGE_BUCKET = 'marcio-blog-images';
-export const PUBLISH_FN = 'publish-marcio';
+// Slug REAL da Edge Function no Supabase (o Dashboard gerou 'clever-endpoint'
+// ao criar; o nome de exibição é 'publish-marcio', mas a URL usa o slug).
+export const PUBLISH_FN = 'clever-endpoint';
 
 // Cor padrão sugerida ao criar uma categoria nova (teal da marca).
 export const DEFAULT_CATEGORY_COLOR = '#057f7f';
