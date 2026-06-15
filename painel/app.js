@@ -4,6 +4,7 @@ import { renderLogin } from './screens/login.js';
 import { renderList } from './screens/list.js';
 import { renderEditor } from './screens/editor.js';
 import { publishUiState, fetchSiteMeta, requestPublish } from './lib/publish.js';
+import { nextView } from './lib/auth-view.js';
 import { toast } from './lib/ui.js';
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -95,7 +96,11 @@ async function route() {
   }
 }
 
+// Tela atualmente montada — guarda contra re-render em eventos benignos do Supabase.
+let view = null;
+
 function showLogin() {
+  view = 'login';
   appRoot.hidden = true;
   loginRoot.hidden = false;
   renderLogin(loginRoot, {
@@ -107,16 +112,23 @@ function showLogin() {
 }
 
 function showApp() {
+  view = 'app';
   loginRoot.hidden = true;
   appRoot.hidden = false;
   route();
 }
 
-window.addEventListener('hashchange', () => { if (!appRoot.hidden) route(); });
+// Só troca de tela em transições reais entre logado/deslogado. Um TOKEN_REFRESHED
+// ou SIGNED_IN disparado ao reabrir a aba mantém a tela (e o formulário) intactos.
+function applySession(hasSession) {
+  const next = nextView(view, hasSession);
+  if (next === 'app') showApp();
+  else if (next === 'login') showLogin();
+}
 
-supabase.auth.onAuthStateChange((_event, session) => {
-  if (session) showApp(); else showLogin();
-});
+window.addEventListener('hashchange', () => { if (view === 'app') route(); });
+
+supabase.auth.onAuthStateChange((_event, session) => applySession(!!session));
 
 const { data } = await supabase.auth.getSession();
-if (data.session) showApp(); else showLogin();
+applySession(!!data.session);
