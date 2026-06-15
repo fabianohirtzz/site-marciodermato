@@ -108,7 +108,7 @@ export async function renderEditor(work, { supabase, id }) {
       const url = await uploadImage(supabase, file);
       const range = quill.getSelection(true);
       quill.insertEmbed(range.index, 'image', url, 'user');
-    } catch { toast('Falha no upload da imagem.', 'err'); }
+    } catch (e) { console.error('[upload imagem]', e); toast(`Falha no upload da imagem: ${e?.message || e}`, 'err'); }
   }));
 
   const $ = sel => work.querySelector(sel);
@@ -182,7 +182,7 @@ export async function renderEditor(work, { supabase, id }) {
   function chooseCover() {
     pickImage(async (file) => {
       try { coverImage = await uploadImage(supabase, file); renderCover(); }
-      catch { toast('Falha no upload da capa.', 'err'); }
+      catch (e) { console.error('[upload capa]', e); toast(`Falha no upload da capa: ${e?.message || e}`, 'err'); }
     });
   }
 
