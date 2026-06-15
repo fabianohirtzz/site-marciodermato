@@ -71,8 +71,8 @@ body{ font-family:var(--font-body); color:var(--tinta); background:var(--app-bg)
 .btn:hover{ transform:translateY(-1px); }
 .btn:active{ transform:translateY(0); }
 .btn:focus-visible{ outline:3px solid var(--lilas); outline-offset:2px; }
-.btn--primary{ --c-bg:var(--lilas); --c-fg:#fff; --c-bd:transparent; box-shadow:0 8px 20px rgba(143,100,200,.28); }
-.btn--primary:hover{ box-shadow:0 12px 26px rgba(143,100,200,.36); }
+.btn--primary{ --c-bg:var(--lilas); --c-fg:#fff; --c-bd:transparent; box-shadow:0 8px 20px rgba(5,127,127,.28); }
+.btn--primary:hover{ box-shadow:0 12px 26px rgba(5,127,127,.36); }
 .btn--ghost{ --c-bg:var(--lilas-soft); --c-fg:var(--lilas-ink); --c-bd:transparent; }
 .btn--quiet{ --c-bg:transparent; --c-fg:var(--tinta-muted); --c-bd:var(--linha-forte); }
 .btn--danger{ --c-bg:var(--surface); --c-fg:var(--rosa-ink); --c-bd:rgba(251,60,99,.35); }
