@@ -3,7 +3,9 @@
   "private": true,
   "description": "Site Dr. Marcio Teixeira - Dermatologia",
   "scripts": {
-    "test": "node --test tools/blog/test/*.test.mjs",
+    "test": "node --test tools/blog/test/*.test.mjs painel/test/*.test.js",
+    "test:blog": "node --test tools/blog/test/*.test.mjs",
+    "test:painel": "node --test painel/test/*.test.js",
     "build:blog": "node tools/build-blog.mjs",
     "build:treatments": "node tools/build-treatments.mjs"
   },
