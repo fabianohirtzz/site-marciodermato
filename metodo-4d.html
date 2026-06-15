@@ -51,12 +51,167 @@
   </aside>
 
   <main>
+    <!-- ===================== HERO / PLACA ===================== -->
     <section class="page-head" id="conteudo" aria-labelledby="page-title">
       <div class="container page-head__inner">
         <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Método 4D · exclusivo do Dr. Márcio</p>
         <h1 id="page-title" class="section__title">O segredo é a <span class="hl hl--italic">avaliação correta</span>, para o tratamento correto</h1>
-        <p class="section__lede">Uma abordagem inovadora que avalia a pele em toda a sua complexidade, dividindo problemas e tratamentos em quatro eixos principais e complementares.</p>
-        <span class="page-head__soon">Conteúdo em breve</span>
+        <p class="page-head__lede">Uma abordagem inovadora que avalia a pele em toda a sua complexidade, dividindo problemas e tratamentos em quatro eixos principais e complementares.</p>
+        <div class="page-head__actions">
+          <a class="btn btn--primary" href="https://wa.me/5551999704848?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20consulta." target="_blank" rel="noopener">Agende sua consulta</a>
+          <a class="btn btn--ghost" href="ebook/Ebook-Metodo-4D.pdf" download>Baixar e-book do Método 4D</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== INTRODUÇÃO ===================== -->
+    <section class="section section--branco" id="metodo-intro" aria-labelledby="intro-title" data-fio="left">
+      <div class="container">
+        <div class="grid-12">
+          <div class="col-6 metodo-intro__body reveal">
+            <header class="head section__head section__head--left">
+              <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> A ideia por trás do método</p>
+              <h2 id="intro-title" class="section__title">Uma leitura completa da <span class="hl hl--italic">sua pele</span></h2>
+            </header>
+            <p>Cada pele é única e raramente apresenta uma só questão. Por isso o Método 4D, criado pelo Dr. Márcio Teixeira, observa o rosto em quatro eixos que se complementam, em vez de tratar um sintoma isolado.</p>
+            <p>Com esse mapa em mãos, o plano de tratamento é montado sob medida: o cuidado certo, na ordem certa, para resultados naturais e duradouros.</p>
+          </div>
+          <figure class="col-6 metodo-intro__media reveal">
+            <img src="imagens/metodo4d-sobre.jpg" alt="Avaliação dermatológica da pele na Clínica Dr. Márcio Teixeira" loading="lazy" />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== OS 4 EIXOS (SWITCHER) ===================== -->
+    <section class="section section--neve" id="eixos" aria-labelledby="eixos-title" data-fio="right">
+      <div class="container">
+        <header class="section__head">
+          <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Os 4 eixos</p>
+          <h2 id="eixos-title" class="section__title">Quatro dimensões, <span class="hl hl--italic">um plano só seu</span></h2>
+          <p class="section__lede">Veja o que cada eixo avalia. Selecione um eixo para conhecer os detalhes.</p>
+        </header>
+
+        <div class="axes-switch" data-axes-switch>
+          <div class="axes-switch__tabs" role="tablist" aria-label="Os quatro eixos do Método 4D">
+            <button class="axes-switch__tab" type="button" role="tab" id="eixo1-tab" aria-controls="eixo1-panel" aria-selected="true" style="--c: var(--eixo-1)">
+              <span class="axes-switch__tab-num">01</span>
+              <span class="axes-switch__tab-name">A Superfície da Pele</span>
+            </button>
+            <button class="axes-switch__tab" type="button" role="tab" id="eixo2-tab" aria-controls="eixo2-panel" aria-selected="false" tabindex="-1" style="--c: var(--eixo-2)">
+              <span class="axes-switch__tab-num">02</span>
+              <span class="axes-switch__tab-name">Linhas de Expressão</span>
+            </button>
+            <button class="axes-switch__tab" type="button" role="tab" id="eixo3-tab" aria-controls="eixo3-panel" aria-selected="false" tabindex="-1" style="--c: var(--eixo-3)">
+              <span class="axes-switch__tab-num">03</span>
+              <span class="axes-switch__tab-name">Volume da Face</span>
+            </button>
+            <button class="axes-switch__tab" type="button" role="tab" id="eixo4-tab" aria-controls="eixo4-panel" aria-selected="false" tabindex="-1" style="--c: var(--eixo-4)">
+              <span class="axes-switch__tab-num">04</span>
+              <span class="axes-switch__tab-name">Flacidez</span>
+            </button>
+          </div>
+
+          <div class="axes-switch__stage">
+            <section class="axis-panel is-active" role="tabpanel" id="eixo1-panel" aria-labelledby="eixo1-tab" tabindex="0">
+              <figure class="axis-panel__media">
+                <img src="imagens/superficie-da-pele/superficie-da-pele.png" alt="Eixo 1, a superfície da pele" loading="lazy" />
+              </figure>
+              <div class="axis-panel__body">
+                <span class="axis-panel__num" style="--c: var(--eixo-1)">01</span>
+                <h3 class="axis-panel__title">A Superfície da Pele</h3>
+                <p class="axis-panel__lede">Avalia a superfície da pele, com foco nas alterações de coloração, textura, luminosidade e uniformidade.</p>
+                <ul class="axis-panel__list">
+                  <li>Tipo de pele</li>
+                  <li>Textura e poros dilatados</li>
+                  <li>Manchas</li>
+                  <li>Perda de luminosidade</li>
+                  <li>Sensibilidade</li>
+                </ul>
+              </div>
+            </section>
+
+            <section class="axis-panel" role="tabpanel" id="eixo2-panel" aria-labelledby="eixo2-tab" tabindex="0">
+              <figure class="axis-panel__media">
+                <img src="imagens/linhas%20de%20express%C3%A3o/linhas-de-expressao.png" alt="Eixo 2, linhas de expressão" loading="lazy" />
+              </figure>
+              <div class="axis-panel__body">
+                <span class="axis-panel__num" style="--c: var(--eixo-2)">02</span>
+                <h3 class="axis-panel__title">Linhas de Expressão</h3>
+                <p class="axis-panel__lede">Trata as rugas formadas pelo tempo e pela expressão, tanto as dinâmicas quanto as estáticas.</p>
+                <ul class="axis-panel__list">
+                  <li>Linhas dinâmicas</li>
+                  <li>Linhas estáticas</li>
+                  <li>Sulcos</li>
+                  <li>Expressões marcadas</li>
+                </ul>
+              </div>
+            </section>
+
+            <section class="axis-panel" role="tabpanel" id="eixo3-panel" aria-labelledby="eixo3-tab" tabindex="0">
+              <figure class="axis-panel__media">
+                <img src="imagens/volumes-da-face/volumes-da-face.png" alt="Eixo 3, alterações do volume da face" loading="lazy" />
+              </figure>
+              <div class="axis-panel__body">
+                <span class="axis-panel__num" style="--c: var(--eixo-3)">03</span>
+                <h3 class="axis-panel__title">Alterações do Volume da Face</h3>
+                <p class="axis-panel__lede">Repõe ou reduz volume para devolver contornos harmoniosos e respeitar as proporções do rosto.</p>
+                <ul class="axis-panel__list">
+                  <li>Perda de volume</li>
+                  <li>Excesso ou deslocamento</li>
+                  <li>Desproporções</li>
+                  <li>Perda de definição</li>
+                </ul>
+              </div>
+            </section>
+
+            <section class="axis-panel" role="tabpanel" id="eixo4-panel" aria-labelledby="eixo4-tab" tabindex="0">
+              <figure class="axis-panel__media">
+                <img src="imagens/flacidez/flacidez.png" alt="Eixo 4, flacidez" loading="lazy" />
+              </figure>
+              <div class="axis-panel__body">
+                <span class="axis-panel__num" style="--c: var(--eixo-4)">04</span>
+                <h3 class="axis-panel__title">Flacidez</h3>
+                <p class="axis-panel__lede">Aborda a perda de firmeza e sustentação da pele e dos músculos, com tratamentos que reerguem os contornos.</p>
+                <ul class="axis-panel__list">
+                  <li>Flacidez cutânea</li>
+                  <li>Flacidez muscular</li>
+                  <li>Jowls (bigode chinês e papada)</li>
+                  <li>Excesso de pele</li>
+                </ul>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== E-BOOK ===================== -->
+    <section class="section section--areia" id="ebook" aria-labelledby="ebook-title">
+      <div class="container">
+        <div class="ebook reveal">
+          <span class="ebook__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2z"/><path d="M12 6.5v13"/></svg>
+          </span>
+          <div class="ebook__copy">
+            <h2 id="ebook-title" class="ebook__title">Entenda o Método 4D em profundidade</h2>
+            <p class="ebook__text">Baixe o e-book gratuito e descubra como avaliamos a sua pele em quatro eixos para chegar a resultados naturais.</p>
+          </div>
+          <a class="btn btn--primary" href="ebook/Ebook-Metodo-4D.pdf" download>Baixar e-book</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CTA ===================== -->
+    <section class="section section--deep cta-band" id="agende" aria-labelledby="cta-title">
+      <div class="container">
+        <img class="cta-band__logo reveal" src="logo/logo-header-branco.png" alt="Dr. Márcio Teixeira" loading="lazy" />
+        <h2 id="cta-title" class="section__title reveal">Quer saber qual eixo a <span class="hl--italic">sua pele</span> pede primeiro?</h2>
+        <p class="cta-band__lede reveal">Na consulta, o Dr. Márcio avalia os quatro eixos e monta um plano personalizado para você.</p>
+        <div class="cta-band__actions reveal">
+          <a class="btn btn--on-deep" href="https://wa.me/5551999704848?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20consulta." target="_blank" rel="noopener">Agende sua consulta</a>
+          <a class="btn btn--ghost-on-deep" href="ebook/Ebook-Metodo-4D.pdf" download>Baixar e-book</a>
+        </div>
       </div>
     </section>
   </main>

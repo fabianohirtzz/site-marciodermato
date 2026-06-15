@@ -601,3 +601,136 @@
     });
   });
 })();
+
+/* =====================================================================
+   Páginas internas — Método 4D (switcher de eixos), Sobre (lightbox),
+   Contato (formulário → WhatsApp). Self-contained; cada bloco protege-se
+   pelos próprios elementos, então roda sem erro em qualquer página.
+   ===================================================================== */
+(function () {
+  "use strict";
+
+  /* --- Método 4D: switcher de eixos (tabs acessíveis) ---------------- */
+  document.querySelectorAll("[data-axes-switch]").forEach((root) => {
+    const tabs = Array.from(root.querySelectorAll(".axes-switch__tab"));
+    const panels = Array.from(root.querySelectorAll(".axis-panel"));
+    if (!tabs.length || tabs.length !== panels.length) return;
+
+    const activate = (i, focus) => {
+      tabs.forEach((t, j) => {
+        const on = j === i;
+        t.setAttribute("aria-selected", String(on));
+        t.tabIndex = on ? 0 : -1;
+        panels[j].classList.toggle("is-active", on);
+      });
+      if (focus) tabs[i].focus();
+    };
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener("click", () => activate(i));
+      tab.addEventListener("keydown", (e) => {
+        let ni = null;
+        if (e.key === "ArrowRight" || e.key === "ArrowDown") ni = (i + 1) % tabs.length;
+        else if (e.key === "ArrowLeft" || e.key === "ArrowUp") ni = (i - 1 + tabs.length) % tabs.length;
+        else if (e.key === "Home") ni = 0;
+        else if (e.key === "End") ni = tabs.length - 1;
+        if (ni !== null) {
+          e.preventDefault();
+          activate(ni, true);
+        }
+      });
+    });
+  });
+
+  /* --- Sobre: lightbox da galeria "Nosso Espaço" --------------------- */
+  (function lightbox() {
+    const group = document.querySelector("[data-lightbox-group]");
+    const box = document.querySelector("[data-lightbox]");
+    if (!group || !box) return;
+    const items = Array.from(group.querySelectorAll("a[data-lightbox-item]"));
+    if (!items.length) return;
+
+    const imgEl = box.querySelector(".lightbox__img");
+    const capEl = box.querySelector(".lightbox__cap");
+    const btnClose = box.querySelector("[data-lightbox-close]");
+    const btnPrev = box.querySelector("[data-lightbox-prev]");
+    const btnNext = box.querySelector("[data-lightbox-next]");
+    const controls = [btnPrev, btnNext, btnClose].filter(Boolean);
+    let idx = 0;
+    let lastFocus = null;
+
+    const show = (i) => {
+      idx = (i + items.length) % items.length;
+      const a = items[idx];
+      const img = a.querySelector("img");
+      imgEl.src = a.getAttribute("href");
+      imgEl.alt = img ? img.alt : "";
+      capEl.textContent = img ? img.alt : "";
+    };
+    const open = (i) => {
+      lastFocus = document.activeElement;
+      show(i);
+      box.classList.add("is-open");
+      box.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      btnClose.focus();
+    };
+    const close = () => {
+      box.classList.remove("is-open");
+      box.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    };
+
+    items.forEach((a, i) =>
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        open(i);
+      })
+    );
+    btnClose.addEventListener("click", close);
+    btnPrev && btnPrev.addEventListener("click", () => show(idx - 1));
+    btnNext && btnNext.addEventListener("click", () => show(idx + 1));
+    box.addEventListener("click", (e) => {
+      if (e.target === box) close();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (!box.classList.contains("is-open")) return;
+      if (e.key === "Escape") close();
+      else if (e.key === "ArrowLeft") show(idx - 1);
+      else if (e.key === "ArrowRight") show(idx + 1);
+      else if (e.key === "Tab") {
+        /* simple focus trap among the overlay controls */
+        e.preventDefault();
+        const pos = controls.indexOf(document.activeElement);
+        const nextPos = e.shiftKey
+          ? (pos - 1 + controls.length) % controls.length
+          : (pos + 1) % controls.length;
+        controls[nextPos < 0 ? 0 : nextPos].focus();
+      }
+    });
+  })();
+
+  /* --- Contato: formulário compõe a mensagem e abre o WhatsApp ------- */
+  (function contactForm() {
+    const form = document.querySelector("[data-wa-form]");
+    if (!form) return;
+    const phone = form.getAttribute("data-wa-phone") || "5551999704848";
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (typeof form.reportValidity === "function" && !form.reportValidity()) return;
+      const data = new FormData(form);
+      const val = (k) => (data.get(k) || "").toString().trim();
+      const nome = val("nome");
+      const email = val("email");
+      const tel = val("telefone");
+      const msg = val("mensagem");
+      let text = "Olá! Vim pelo site e gostaria de mais informações.";
+      if (nome) text += "\n\nNome: " + nome;
+      if (email) text += "\nE-mail: " + email;
+      if (tel) text += "\nTelefone: " + tel;
+      if (msg) text += "\n\nMensagem: " + msg;
+      window.open("https://wa.me/" + phone + "?text=" + encodeURIComponent(text), "_blank", "noopener");
+    });
+  })();
+})();
