@@ -2366,7 +2366,8 @@ a.treat-card:hover .treat-card__more svg { transform: translateX(4px); }
   font: 500 14px/1.4 var(--font-body);
   color: var(--tinta-soft);
 }
-.result__tag {
+.result__tag,
+.sessoes__tag {
   flex: none;
   padding: 5px 11px;
   border-radius: var(--r-pill);
@@ -2377,6 +2378,48 @@ a.treat-card:hover .treat-card__more svg { transform: translateX(4px); }
 }
 @media (max-width: 760px) { .result-item { flex-basis: clamp(244px, 80vw, 360px); } }
 @media (prefers-reduced-motion: reduce) { .result:hover .result__frame { transform: none; } }
+
+/* ================================================================== */
+/* Tricologia — evolução por sessões (faixas horizontais rotuladas)   */
+/* ================================================================== */
+.sessoes {
+  display: grid;
+  /* minmax(0,1fr): keeps the track from inheriting the image's min-content
+     width, so the frame can scroll internally instead of widening the page */
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(22px, 2.8vw, 34px);
+  margin-top: clamp(28px, 3.6vw, 46px);
+}
+.sessoes__item { margin: 0; min-width: 0; }
+.sessoes__scroll {
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--neve);
+  box-shadow: 0 22px 56px rgba(5, 127, 127, 0.12), 0 6px 16px rgba(22, 48, 47, 0.06);
+}
+.sessoes__scroll:focus-visible { outline: 2px solid var(--marca); outline-offset: 3px; }
+.sessoes__img { display: block; width: 100%; height: auto; }
+.sessoes__cap {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 10px;
+  margin: 14px 2px 0;
+  font: 500 14px/1.5 var(--font-body);
+  color: var(--tinta-soft);
+}
+.sessoes__hint { display: none; }
+
+/* the strips hold 4 panels side by side: below ~760px they would shrink   */
+/* past legibility, so the frame scrolls and the image keeps a floor width */
+@media (max-width: 760px) {
+  .sessoes__scroll { overflow-x: auto; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
+  .sessoes__img { width: 640px; max-width: none; }
+  .sessoes__hint {
+    display: block;
+    margin: 16px 0 0;
+    text-align: center;
+    font: 500 13px/1.5 var(--font-body);
+    color: var(--tinta-soft);
+  }
+}
 
 /* ===================== BLOG ===================== */
 .blog-hero .ts-lede { max-width: 56ch; margin-inline: auto; }
