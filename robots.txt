@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Área administrativa — não indexar.
+Disallow: /painel/
+
+Sitemap: https://marciodermato.com.br/sitemap.xml

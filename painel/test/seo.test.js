@@ -12,7 +12,7 @@ test('serp usa o domínio e o sufixo da marca', () => {
   const full = serp({ title: 'Proteção Solar', slug: 'protecao-solar',
     seoTitle: 'Proteção Solar · Dr. Márcio', metaDescription: 'Resumo SEO.' });
   assert.equal(full.title, 'Proteção Solar · Dr. Márcio');
-  assert.equal(full.url, 'drmarcioteixeira.com.br › blog › protecao-solar');
+  assert.equal(full.url, 'marciodermato.com.br › blog › protecao-solar');
 
   const fallback = serp({ title: 'Acne', slug: 'acne', excerpt: 'Texto.' });
   assert.equal(fallback.title, 'Acne · Dr. Márcio Teixeira');

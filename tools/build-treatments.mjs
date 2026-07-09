@@ -17,10 +17,11 @@
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { TRACKING_HEAD, TRACKING_BODY } from "./lib/tracking.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const COPY = readFileSync(join(ROOT, "COPY-TRATAMENTOS.md"), "utf8");
-const SITE = "https://drmarcioteixeira.com.br";
+const SITE = "https://marciodermato.com.br";
 
 /* --- slug → image folder (names in /imagens are irregular) ----------- */
 const FOLDER = {
@@ -406,9 +407,9 @@ function jsonLD(t, ogImg) {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Início", item: "https://drmarcioteixeira.com.br/" },
-      { "@type": "ListItem", position: 2, name: "Tratamentos", item: "https://drmarcioteixeira.com.br/tratamentos.html" },
-      { "@type": "ListItem", position: 3, name: t.name, item: `https://drmarcioteixeira.com.br/tratamentos/${t.slug}/` },
+      { "@type": "ListItem", position: 1, name: "Início", item: "https://marciodermato.com.br/" },
+      { "@type": "ListItem", position: 2, name: "Tratamentos", item: "https://marciodermato.com.br/tratamentos.html" },
+      { "@type": "ListItem", position: 3, name: t.name, item: `https://marciodermato.com.br/tratamentos/${t.slug}/` },
     ],
   };
   return [pageLD, faqLD, crumbLD]
@@ -501,7 +502,7 @@ ${t.casoNotes.map((n) => `          <figcaption class="case__note">${inline(n)}<
   <meta name="description" content="${attr(t.description)}" />
   <meta name="theme-color" content="#057f7f" />
   <meta name="keywords" content="${attr(t.keyphrase)}" />
-  <link rel="canonical" href="https://drmarcioteixeira.com.br/tratamentos/${t.slug}/" />
+  <link rel="canonical" href="https://marciodermato.com.br/tratamentos/${t.slug}/" />
   <meta property="og:type" content="article" />
   <meta property="og:title" content="${attr(t.title)}" />
   <meta property="og:description" content="${attr(t.description)}" />
@@ -512,8 +513,10 @@ ${t.casoNotes.map((n) => `          <figcaption class="case__note">${inline(n)}<
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../../assets/css/main.css" />
 ${jsonLD(t, ogImg)}
+${TRACKING_HEAD}
 </head>
 <body class="is-loading">
+${TRACKING_BODY}
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
 ${navHTML()}

@@ -24,19 +24,75 @@ jobs:
         with:
           node-version: '20'
 
+      # Sem as credenciais do Supabase, build-blog.mjs cai no seed.json de
+      # exemplo — e o deploy FTP publicaria posts placeholder no site real.
+      # Falhar aqui é sempre melhor do que publicar lixo.
+      - name: Conferir credenciais antes de publicar
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
+        run: |
+          faltando=""
+          for v in SUPABASE_URL SUPABASE_SERVICE_KEY FTP_SERVER FTP_USERNAME FTP_PASSWORD FTP_SERVER_DIR; do
+            [ -z "${!v}" ] && faltando="$faltando $v"
+          done
+          if [ -n "$faltando" ]; then
+            echo "::error::Secrets faltando:$faltando"
+            exit 1
+          fi
+          echo "Todos os secrets presentes."
+
       - name: Build do blog lendo do Supabase
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
         run: node tools/build-blog.mjs
 
+      - name: Regerar sitemap com os posts novos
+        run: node tools/build-sitemap.mjs
+
       - name: Commit do HTML gerado
         run: |
           git config user.name "Marcio Dermato Bot"
-          git config user.email "bot@drmarcioteixeira.com.br"
+          git config user.email "bot@marciodermato.com.br"
           git add -A
           git diff --cached --quiet || git commit -m "chore(blog): rebuild automatico do site [skip ci]"
           git push
+
+      # O site mora na Erehost, não no GitHub Pages. Sem este passo o HTML
+      # gerado acima fica só no repositório e nunca chega no ar.
+      - name: Deploy para a Erehost via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          protocol: ftps
+          local-dir: ./
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.claude/**
+            docs/**
+            tools/**
+            scripts/**
+            supabase/**
+            fotos/**
+            ambiente/**
+            antes-depois/**
+            preview-*.html
+            README.md
+            COPY-TRATAMENTOS.md
+            SITE 2025.docx
+            package.json
+            package-lock.json
+            **/*.wpress
 
       - name: Marcar site como publicado
         if: success()

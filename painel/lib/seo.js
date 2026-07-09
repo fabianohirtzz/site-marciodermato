@@ -12,7 +12,7 @@ export function metaState(text, { min = 120, max = 160 } = {}) {
 export function serp({ title = '', slug = '', seoTitle = '', metaDescription = '', excerpt = '' } = {}) {
   return {
     title: seoTitle.trim() || `${title} · Dr. Márcio Teixeira`,
-    url: `drmarcioteixeira.com.br › blog › ${slug}`,
+    url: `marciodermato.com.br › blog › ${slug}`,
     desc: (metaDescription.trim() || excerpt.trim()).slice(0, 160),
   };
 }

@@ -1,8 +1,9 @@
 import { navHTML, footerHTML, waLink } from './chrome.mjs';
 import { sanitizeContent } from './sanitize-html.mjs';
 import { readingTime } from './reading-time.mjs';
+import { TRACKING_HEAD, TRACKING_BODY } from '../../lib/tracking.mjs';
 
-const SITE = 'https://drmarcioteixeira.com.br';
+const SITE = 'https://marciodermato.com.br';
 const attr = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 function esc(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -202,8 +203,10 @@ export function renderPostPage(post, related = [], opts = {}) {
   <link rel="stylesheet" href="../../assets/css/main.css" />
   <script type="application/ld+json">${JSON.stringify(ld)}</script>
   <script type="application/ld+json">${JSON.stringify(crumbLd)}</script>
+${TRACKING_HEAD}
 </head>
 <body class="is-loading">
+${TRACKING_BODY}
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
 ${navHTML('../../', 'blog')}

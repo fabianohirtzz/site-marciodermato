@@ -1,0 +1,84 @@
+# =====================================================================
+# marciodermato.com.br — Apache / cPanel (Erehost)
+# Sobe para a raiz do site (public_html).
+# =====================================================================
+
+Options -Indexes
+DirectoryIndex index.html
+
+# ---------------------------------------------------------------------
+# 1. Canonicalização: HTTPS e sem www.
+#    Precisa vir antes dos redirects de conteúdo.
+# ---------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://marciodermato.com.br%{REQUEST_URI} [L,R=301]
+
+  RewriteCond %{HTTP_HOST} ^www\.marciodermato\.com\.br$ [NC]
+  RewriteRule ^ https://marciodermato.com.br%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ---------------------------------------------------------------------
+# 2. Redirects das URLs do site WordPress antigo.
+#    ATENÇÃO: /blog/ e /tratamentos/ eram PÁGINAS no WordPress, mas são
+#    DIRETÓRIOS no site novo (/blog/<slug>/, /tratamentos/<slug>/).
+#    Por isso o casamento é exato ($) — um redirect de prefixo quebraria
+#    todos os posts e todas as páginas de tratamento.
+# ---------------------------------------------------------------------
+<IfModule mod_alias.c>
+  RedirectMatch 301 ^/blog/?$              /blog.html
+  RedirectMatch 301 ^/tratamentos/?$       /tratamentos.html
+  RedirectMatch 301 ^/metodo-4d/?$         /metodo-4d.html
+  RedirectMatch 301 ^/contato/?$           /contato.html
+  RedirectMatch 301 ^/sobre/?$             /sobre.html
+
+  # Restos do WordPress sem equivalente no site novo.
+  RedirectMatch 301 ^/hello-world/?$            /
+  RedirectMatch 301 ^/category/uncategorized/?$ /blog.html
+  RedirectMatch 301 ^/author/.*$                /
+</IfModule>
+
+# ---------------------------------------------------------------------
+# 3. Compressão.
+# ---------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ---------------------------------------------------------------------
+# 4. Cache. HTML curto (o blog republica); estáticos longos.
+# ---------------------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault                        "access plus 1 month"
+  ExpiresByType text/html               "access plus 10 minutes"
+  ExpiresByType text/css                "access plus 1 year"
+  ExpiresByType application/javascript  "access plus 1 year"
+  ExpiresByType image/jpeg              "access plus 1 year"
+  ExpiresByType image/png               "access plus 1 year"
+  ExpiresByType image/webp              "access plus 1 year"
+  ExpiresByType image/svg+xml           "access plus 1 year"
+  ExpiresByType video/mp4               "access plus 1 year"
+  ExpiresByType application/pdf         "access plus 1 month"
+  ExpiresByType text/xml                "access plus 1 day"
+</IfModule>
+
+# ---------------------------------------------------------------------
+# 5. MIME types que hospedagem compartilhada às vezes não serve certo.
+# ---------------------------------------------------------------------
+<IfModule mod_mime.c>
+  AddType image/webp   .webp
+  AddType video/mp4    .mp4
+  AddType font/woff2   .woff2
+</IfModule>
+
+# ---------------------------------------------------------------------
+# 6. Não servir arquivos de projeto, caso algum escape para o servidor.
+# ---------------------------------------------------------------------
+<FilesMatch "(^\.|\.(md|mjs|json|sql|docx|wpress|yml)$)">
+  Require all denied
+</FilesMatch>
