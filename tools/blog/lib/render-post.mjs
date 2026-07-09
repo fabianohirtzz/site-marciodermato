@@ -1,4 +1,4 @@
-import { navHTML, footerHTML, waLink } from './chrome.mjs';
+import { navHTML, footerHTML, CTA } from './chrome.mjs';
 import { sanitizeContent } from './sanitize-html.mjs';
 import { readingTime } from './reading-time.mjs';
 import { TRACKING_HEAD, TRACKING_BODY } from '../../lib/tracking.mjs';
@@ -28,7 +28,7 @@ function relatedCard(p) {
 
 /* CTAs inseridos no meio do artigo — padrão em todo post do blog. */
 function ctaConsulta(post) {
-  const wa = waLink(`Olá, li o artigo "${post.title}" e gostaria de agendar uma avaliação para descobrir o tratamento ideal para o meu caso.`);
+  const wa = CTA;
   return '<aside class="article-cta article-cta--consulta">'
     + '<div class="article-cta__body">'
     + '<p class="article-cta__eyebrow">Avaliação personalizada</p>'
@@ -160,7 +160,7 @@ export function renderPostPage(post, related = [], opts = {}) {
   const ogImg = post.ogImage || post.coverImage || `${SITE}/logo/logo-header-colorido.png`;
   const mins = readingTime(post.content);
   const body = injectCtas(sanitizeContent(post.content), post);
-  const ctaCta = waLink(`Olá, li o artigo "${post.title}" e gostaria de agendar uma avaliação.`);
+  const ctaCta = CTA;
 
   const ld = {
     '@context': 'https://schema.org', '@type': 'Article',

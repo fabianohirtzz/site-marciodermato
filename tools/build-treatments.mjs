@@ -113,7 +113,10 @@ const inline = (s) => {
 const attr = (s) =>
   s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-const waLink = (msg) => `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+/* Todo CTA vai para o formulário rastreado (MeuTrack), que ao final
+   encaminha o lead para o WhatsApp. O wa.me direto fica apenas no telefone
+   escrito e no ícone de redes do rodapé. */
+const CTA = "https://meutrack-ingest.carlosabsj-ti.workers.dev/f/ng_MXvkuBh";
 
 /* split a chunk of text into paragraphs on blank lines */
 const paras = (text) =>
@@ -288,7 +291,7 @@ function navHTML() {
   const drawerLinks = links
     .map(([h, l, cur]) => `    <a class="drawer__link" href="${h}"${cur ? ' aria-current="page"' : ""}>${l}</a>`)
     .join("\n");
-  const cta = waLink("Olá, gostaria de agendar uma consulta.");
+  const cta = CTA;
   return `  <header class="nav nav--solid" data-nav>
     <div class="nav__inner">
       <a class="nav__brand" href="../../index.html" aria-label="Dr. Márcio Teixeira, página inicial">
@@ -367,7 +370,7 @@ function footerHTML() {
     </div>
   </footer>
 
-  <a class="wpp" href="${attr(waLink("Olá, gostaria de agendar uma consulta."))}" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+  <a class="wpp" href="${CTA}" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
     <span class="wpp__label">Agende pelo WhatsApp</span>
     <span class="wpp__btn">
       <span class="wpp__rings" aria-hidden="true"></span>
@@ -437,8 +440,8 @@ function render(t) {
   const eixoLabel = t.eyebrow || `Eixo ${t.eixo} · ${eixoNames[t.eixo]}`;
   const eixoShort = `Eixo ${t.eixo} · ${eixoNames[t.eixo].replace(/^(A |Alterações do )/, "")}`;
 
-  const heroCta = waLink(t.ctxMsg);
-  const dudaCta = waLink(`Olá, tenho dúvidas sobre ${t.name}. Pode me ajudar?`);
+  const heroCta = CTA;
+  const dudaCta = CTA;
 
   const P = (arr, ind = "          ") => arr.map((p) => `${ind}<p>${inline(p)}</p>`).join("\n");
 
@@ -683,7 +686,7 @@ ${relatedHTML}
         <p class="cta-band__lede">${inline(t.closing)}</p>
         <div class="cta-band__actions">
           <a class="btn btn--on-deep" href="${attr(heroCta)}" target="_blank" rel="noopener">Agende sua consulta</a>
-          <a class="btn btn--ghost-on-deep" href="${attr(waLink("Olá, gostaria de falar com a secretaria."))}" target="_blank" rel="noopener">${WPP_ICON.replace('class="wpp__icon"', 'class="btn__icon"')} Fale no WhatsApp</a>
+          <a class="btn btn--ghost-on-deep" href="${CTA}" target="_blank" rel="noopener">${WPP_ICON.replace('class="wpp__icon"', 'class="btn__icon"')} Fale no WhatsApp</a>
         </div>
       </div>
     </section>

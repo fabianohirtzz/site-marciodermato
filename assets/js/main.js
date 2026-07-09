@@ -604,7 +604,7 @@
 
 /* =====================================================================
    Páginas internas — Método 4D (switcher de eixos), Sobre (lightbox),
-   Contato (formulário → WhatsApp). Self-contained; cada bloco protege-se
+   CTAs rastreados (MeuTrack). Self-contained; cada bloco protege-se
    pelos próprios elementos, então roda sem erro em qualquer página.
    ===================================================================== */
 (function () {
@@ -711,26 +711,31 @@
     });
   })();
 
-  /* --- Contato: formulário compõe a mensagem e abre o WhatsApp ------- */
-  (function contactForm() {
-    const form = document.querySelector("[data-wa-form]");
-    if (!form) return;
-    const phone = form.getAttribute("data-wa-phone") || "5551999704848";
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      if (typeof form.reportValidity === "function" && !form.reportValidity()) return;
-      const data = new FormData(form);
-      const val = (k) => (data.get(k) || "").toString().trim();
-      const nome = val("nome");
-      const email = val("email");
-      const tel = val("telefone");
-      const msg = val("mensagem");
-      let text = "Olá! Vim pelo site e gostaria de mais informações.";
-      if (nome) text += "\n\nNome: " + nome;
-      if (email) text += "\nE-mail: " + email;
-      if (tel) text += "\nTelefone: " + tel;
-      if (msg) text += "\n\nMensagem: " + msg;
-      window.open("https://wa.me/" + phone + "?text=" + encodeURIComponent(text), "_blank", "noopener");
+  /* --- CTAs rastreados: repassa origem e visitante ao formulário ----- */
+  (function trackedCtas() {
+    const BASE = "https://meutrack-ingest.carlosabsj-ti.workers.dev/f/";
+    const links = document.querySelectorAll('a[href^="' + BASE + '"]');
+    if (!links.length) return;
+
+    // O pixel (t.js) grava o visitorId no nosso domínio; o formulário roda em
+    // outra origem e não enxerga esse storage, então mandamos pela querystring.
+    const visitorId = () => {
+      try {
+        return (window.TrackHub && TrackHub.getVisitorId && TrackHub.getVisitorId()) || localStorage.getItem("th_vid") || "";
+      } catch (e) {
+        return "";
+      }
+    };
+
+    links.forEach((a) => {
+      const href = a.getAttribute("href");
+      a.addEventListener("click", () => {
+        const url = new URL(href);
+        url.searchParams.set("ref", location.href);
+        const vid = visitorId();
+        if (vid) url.searchParams.set("vid", vid);
+        a.setAttribute("href", url.toString());
+      });
     });
   })();
 })();
