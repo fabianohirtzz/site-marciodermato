@@ -72,7 +72,12 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          # Pure-FTPd da Erehost com Let's Encrypt para cpbr-sp2.erehost.com.br.
+          # Conectar pelo hostname (e não pelo IP) faz o certificado validar,
+          # então dá para exigir TLS estrito em vez de afrouxar a verificação.
           protocol: ftps
+          security: strict
+          timeout: 60000
           local-dir: ./
           exclude: |
             **/.git*
