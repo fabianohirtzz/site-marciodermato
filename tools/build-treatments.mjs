@@ -686,7 +686,6 @@ ${relatedHTML}
         <p class="cta-band__lede">${inline(t.closing)}</p>
         <div class="cta-band__actions">
           <a class="btn btn--on-deep" href="${attr(heroCta)}" target="_blank" rel="noopener">Agende sua consulta</a>
-          <a class="btn btn--ghost-on-deep" href="${CTA}" target="_blank" rel="noopener">${WPP_ICON.replace('class="wpp__icon"', 'class="btn__icon"')} Fale no WhatsApp</a>
         </div>
       </div>
     </section>
