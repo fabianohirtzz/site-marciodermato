@@ -29,6 +29,7 @@ Always read the relevant reference file before producing code. The SKILL.md only
 | `references/INTERACTIONS.md` | Before wiring behavior. Método 4D axis switcher/tabs, treatment filtering by axis, mobile drawer, contact form, gallery lightbox, scrolled-nav. |
 | `references/LAYOUT.md` | Before laying out a page or section. Section anatomy, grid templates, container scales, the full sitemap (Início, Tratamentos, Método 4D, Tricologia, Sobre, Contato), responsive playbook. |
 | `references/INSPIRATION.md` | When ideating a new feature or unsure how to approach something. Maps creative directions to references for premium clinical / aesthetic-medical / wellness brands. |
+| `references/EMBED-FORM.md` | **Before touching the appointment form on `contato.html`.** It is a cross-origin MeuTrack iframe — our CSS cannot style its interior. Read this before proposing any fix, or you will write selectors that silently do nothing. Contains the exact `--th-*` token values to set in the MeuTrack panel. |
 
 ## The ten commandments of Marcio Dermato craft
 
