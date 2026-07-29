@@ -4,6 +4,10 @@ on:
   repository_dispatch:
     types: [publish-blog]
   workflow_dispatch: {}
+  # A cada 30 min, só para ver se algum post agendado venceu. Quando não há
+  # nada vencido, o job `gate` termina em segundos e o `build` nem começa.
+  schedule:
+    - cron: '0,30 * * * *'
 
 permissions:
   contents: write
@@ -13,7 +17,64 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      build: ${{ steps.check.outputs.build }}
+    steps:
+      - name: Promover posts agendados vencidos
+        id: check
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          EVENTO: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+
+          # Publicação manual (botão "Atualizar site" ou disparo manual):
+          # constrói direto, sem nem tocar no banco.
+          if [ "$EVENTO" != "schedule" ]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+            echo "Evento $EVENTO — build direto."
+            exit 0
+          fi
+
+          # Falhar alto: um agendamento que não vai ao ar por secret ausente
+          # precisa aparecer como erro vermelho, não como execução verde.
+          if [ -z "${SUPABASE_URL:-}" ] || [ -z "${SUPABASE_SERVICE_KEY:-}" ]; then
+            echo "::error::Secrets SUPABASE_URL/SUPABASE_SERVICE_KEY ausentes — agendamentos nao seriam publicados."
+            exit 1
+          fi
+
+          # Um único carimbo de tempo serve para consultar e para promover,
+          # senão um post poderia vencer entre as duas chamadas e escapar.
+          agora=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          filtro="status=eq.scheduled&date=lte.$agora"
+
+          vencidos=$(curl -sS --fail-with-body \
+            "$SUPABASE_URL/rest/v1/mt_posts?$filtro&select=id,slug" \
+            -H "apikey: $SUPABASE_SERVICE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_SERVICE_KEY")
+
+          if [ "$vencidos" = "[]" ]; then
+            echo "build=false" >> "$GITHUB_OUTPUT"
+            echo "Nenhum post agendado venceu ate $agora."
+            exit 0
+          fi
+
+          echo "Promovendo: $vencidos"
+          curl -sS --fail-with-body -X PATCH \
+            "$SUPABASE_URL/rest/v1/mt_posts?$filtro" \
+            -H "apikey: $SUPABASE_SERVICE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{"status":"published"}'
+
+          echo "build=true" >> "$GITHUB_OUTPUT"
+
   build:
+    needs: gate
+    if: needs.gate.outputs.build == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
