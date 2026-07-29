@@ -5,6 +5,9 @@ import { metaState, serp } from '../lib/seo.js';
 import { buildPayload } from '../lib/post-payload.js';
 import { uploadImage } from '../lib/upload.js';
 import { fetchCategories } from '../lib/categories.js';
+import { toLocalInputValue, fromLocalInputValue, resolveStatus } from '../lib/publish-date.js';
+
+const SAVED_MSG = { published: 'Post publicado.', scheduled: 'Post agendado.', draft: 'Rascunho salvo.' };
 
 export async function renderEditor(work, { supabase, id }) {
   let existing = null;
@@ -63,6 +66,11 @@ export async function renderEditor(work, { supabase, id }) {
           <input class="input" id="f-slug" type="text" value="${escapeHtml(existing?.slug || '')}" />
           <p class="field__help">Mudar o endereço muda a URL e pode afetar o SEO.</p>
         </div>
+        <div class="field">
+          <label class="field__label" for="f-date">Data de publicação</label>
+          <input class="input" id="f-date" type="datetime-local" value="${escapeHtml(toLocalInputValue(existing?.date))}" />
+          <p class="field__help" id="date-help"></p>
+        </div>
       </section>
 
       <section class="panel panel--pad">
@@ -113,6 +121,7 @@ export async function renderEditor(work, { supabase, id }) {
 
   const $ = sel => work.querySelector(sel);
   const titleEl = $('#f-title'), slugEl = $('#f-slug'), catEl = $('#f-cat'), catColorEl = $('#f-cat-color');
+  const dateEl = $('#f-date'), dateHelp = $('#date-help'), publishBtn = $('#btn-publish');
   const seoTitleEl = $('#f-seotitle'), metaEl = $('#f-meta'), excerptEl = $('#f-excerpt');
 
   titleEl.addEventListener('input', () => {
@@ -120,6 +129,7 @@ export async function renderEditor(work, { supabase, id }) {
     refreshSerp();
   });
   slugEl.addEventListener('input', () => { slugTouched = true; refreshSerp(); });
+  dateEl.addEventListener('input', refreshPublishBtn);
   seoTitleEl.addEventListener('input', refreshSerp);
   excerptEl.addEventListener('input', refreshSerp);
   metaEl.addEventListener('input', () => { refreshMeta(); refreshSerp(); });
@@ -139,6 +149,15 @@ export async function renderEditor(work, { supabase, id }) {
     $('#serp').innerHTML = `<span class="serp__url">${escapeHtml(s.url)}</span>
       <span class="serp__title">${escapeHtml(s.title)}</span>
       <span class="serp__desc">${escapeHtml(s.desc)}</span>`;
+  }
+  // O rótulo do botão sai da mesma função que decide o status gravado, então
+  // o que está escrito no botão nunca diverge do que vai acontecer.
+  function refreshPublishBtn() {
+    const agendado = resolveStatus('publish', fromLocalInputValue(dateEl.value)) === 'scheduled';
+    publishBtn.textContent = agendado ? 'Agendar' : 'Publicar';
+    dateHelp.textContent = agendado
+      ? 'O post entra no ar sozinho nesse horário (com folga de até 30 minutos).'
+      : 'Data no passado publica o post com essa data (retroativo).';
   }
 
   const chips = $('#chips'), chipInput = $('#chip-input');
@@ -186,7 +205,7 @@ export async function renderEditor(work, { supabase, id }) {
     });
   }
 
-  async function save(status) {
+  async function save(intent) {
     const form = {
       title: titleEl.value.trim(),
       slug: (slugEl.value.trim() || slugify(titleEl.value)),
@@ -200,7 +219,8 @@ export async function renderEditor(work, { supabase, id }) {
       ogImage: existing?.og_image || coverImage,
       focusKeyword: $('#f-kw').value.trim(),
       tags: [...tags],
-      status,
+      date: fromLocalInputValue(dateEl.value),
+      intent,
     };
     if (!form.title) { toast('Dê um título ao post.', 'err'); return; }
     if (!form.slug) { toast('O slug ficou vazio.', 'err'); return; }
@@ -215,15 +235,15 @@ export async function renderEditor(work, { supabase, id }) {
       toast(res.error.code === '23505' ? 'Já existe um post com esse slug.' : 'Não deu para salvar.', 'err');
       return;
     }
-    toast(status === 'published' ? 'Post publicado.' : 'Rascunho salvo.', 'ok');
+    toast(SAVED_MSG[payload.status], 'ok');
     location.hash = '#/posts';
   }
 
   $('#btn-draft').addEventListener('click', () => save('draft'));
-  $('#btn-publish').addEventListener('click', () => save('published'));
+  $('#btn-publish').addEventListener('click', () => save('publish'));
   $('#btn-preview').addEventListener('click', () => openPreview(titleEl.value, quill.root.innerHTML, coverImage));
 
-  refreshMeta(); refreshSerp();
+  refreshMeta(); refreshSerp(); refreshPublishBtn();
 }
 
 function pickImage(back) {
