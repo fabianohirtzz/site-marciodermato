@@ -19,13 +19,14 @@ create table if not exists public.mt_posts (
   focus_keyword    text default '',
   tags             text[] not null default '{}',
   likes            integer not null default 0,
-  status           text not null default 'draft' check (status in ('draft','published')),
+  status           text not null default 'draft' check (status in ('draft','published','scheduled')),
   created_at       timestamptz not null default now(),
   updated_at       timestamptz not null default now()
 );
 
 create index if not exists mt_posts_status_idx on public.mt_posts (status);
 create index if not exists mt_posts_date_idx on public.mt_posts (date desc);
+create index if not exists mt_posts_scheduled_idx on public.mt_posts (date) where status = 'scheduled';
 
 -- updated_at automático
 create or replace function public.mt_touch_updated_at()
