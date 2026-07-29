@@ -164,10 +164,12 @@ export async function renderEditor(work, { supabase, id }) {
   // O rótulo do botão sai da mesma função que decide o status gravado, então
   // o que está escrito no botão nunca diverge do que vai acontecer.
   function refreshPublishBtn() {
-    // Campo limpo vira "agora" no envio (ver save()); repor o valor aqui evita
-    // que o admin veja um campo vazio enquanto o rótulo já assume outra data.
-    if (!dateEl.value) dateEl.value = toLocalInputValue();
-    const agendado = resolveStatus('publish', fromLocalInputValue(dateEl.value)) === 'scheduled';
+    // Um <input type="datetime-local"> devolve '' sempre que o controle está
+    // incompleto (ex.: admin apagou só o segmento da hora para redigitar), não
+    // só quando totalmente vazio — então nunca reescrevemos o campo aqui.
+    // Mesmo fallback do save(), para o rótulo nunca divergir do que é gravado.
+    const iso = fromLocalInputValue(dateEl.value) || new Date().toISOString();
+    const agendado = resolveStatus('publish', iso) === 'scheduled';
     publishBtn.textContent = agendado ? 'Agendar' : 'Publicar';
     dateHelp.textContent = agendado
       ? 'O post entra no ar sozinho nesse horário (com folga de até 30 minutos).'

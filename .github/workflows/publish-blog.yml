@@ -60,10 +60,12 @@ jobs:
             # Nada vencido agora nao significa que o site esta em dia: um build
             # anterior pode ter falhado depois da promocao. So desiste se o
             # flag de pendencia tambem estiver limpo.
-            pendencia=$(curl -sS --fail-with-body \
-              "$SUPABASE_URL/rest/v1/mt_site_meta?id=eq.1&select=pending_build" \
+            # A coluna pending_build ainda pode nao existir no banco (migration
+            # supabase/scheduled-marcio.sql pendente): tolerar o 400 do
+            # PostgREST aqui, o gate so retoma no proximo slot em vez de morrer.
+            pendencia=$(curl -sS "$SUPABASE_URL/rest/v1/mt_site_meta?id=eq.1&select=pending_build" \
               -H "apikey: $SUPABASE_SERVICE_KEY" \
-              -H "Authorization: Bearer $SUPABASE_SERVICE_KEY")
+              -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" || true)
 
             if echo "$pendencia" | grep -q '"pending_build":true'; then
               echo "build=true" >> "$GITHUB_OUTPUT"
@@ -85,13 +87,15 @@ jobs:
             -d '{"status":"published"}'
 
           # Marca a pendencia antes do build rodar: se ele falhar, o proximo
-          # slot do gate ainda sabe que precisa tentar de novo.
+          # slot do gate ainda sabe que precisa tentar de novo. Coluna ainda
+          # pode nao existir (migration pendente) — avisar sem derrubar o job.
           curl -sS --fail-with-body -X PATCH \
             "$SUPABASE_URL/rest/v1/mt_site_meta?id=eq.1" \
             -H "apikey: $SUPABASE_SERVICE_KEY" \
             -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
             -H "Content-Type: application/json" \
-            -d '{"pending_build":true}'
+            -d '{"pending_build":true}' \
+            || echo "::warning::Nao consegui marcar pending_build — rode supabase/scheduled-marcio.sql."
 
           echo "build=true" >> "$GITHUB_OUTPUT"
 

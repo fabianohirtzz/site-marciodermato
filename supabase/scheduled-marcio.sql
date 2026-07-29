@@ -1,6 +1,7 @@
 -- Blog Dr. Márcio — agendamento de posts. Projeto Supabase COMPARTILHADO com o
 -- HD360, por isso o prefixo mt_. Aplicar uma vez no SQL Editor, depois de
--- schema-marcio.sql. Idempotente: pode rodar de novo sem estragar nada.
+-- schema-marcio.sql E de publish-marcio.sql (é quem cria mt_site_meta, alterada
+-- aqui embaixo). Idempotente: pode rodar de novo sem estragar nada.
 
 -- O check original foi criado inline na coluna, então o Postgres o nomeou
 -- mt_posts_status_check. Trocar por um que também aceite 'scheduled'.
