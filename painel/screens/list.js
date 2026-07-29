@@ -18,6 +18,7 @@ export async function renderList(work, { supabase }) {
         <div class="seg" role="tablist" aria-label="Filtrar por status">
           <button class="seg__btn seg__btn--on" data-filter="all" role="tab">Todos</button>
           <button class="seg__btn" data-filter="published" role="tab">Publicados</button>
+          <button class="seg__btn" data-filter="scheduled" role="tab">Agendados</button>
           <button class="seg__btn" data-filter="draft" role="tab">Rascunhos</button>
         </div>
         <a class="btn btn--primary" href="#/editor">Novo post</a>
@@ -113,7 +114,7 @@ export async function renderList(work, { supabase }) {
 }
 
 function badge(status) {
-  return status === 'published'
-    ? '<span class="badge badge--pub"><span class="badge__dot"></span>Publicado</span>'
-    : '<span class="badge badge--draft"><span class="badge__dot"></span>Rascunho</span>';
+  if (status === 'published') return '<span class="badge badge--pub"><span class="badge__dot"></span>Publicado</span>';
+  if (status === 'scheduled') return '<span class="badge badge--sched"><span class="badge__dot"></span>Agendado</span>';
+  return '<span class="badge badge--draft"><span class="badge__dot"></span>Rascunho</span>';
 }

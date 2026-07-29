@@ -17,6 +17,7 @@ html,body{ margin:0; }
   --danger:#d6455d; --danger-ink:#b32d44; --danger-soft:#fbe8eb;
   --ok:#19b3a6; --ok-ink:#0f7f76; --ok-soft:#e2f5f2;
   --warn:#caa24a; --warn-ink:#8a6d28; --warn-soft:#f6efdf;
+  --sched:#5b7fa6; --sched-ink:#3d5f85; --sched-soft:#e9eff6;
   /* Aliases que mapeiam os tokens herdados do HD360 -> paleta da marca.
      (Mantém todas as regras de componente abaixo funcionando, recoloridas.) */
   --lilas:var(--marca); --lilas-ink:var(--marca-ink); --lilas-soft:var(--marca-soft);
@@ -86,6 +87,8 @@ body{ font-family:var(--font-body); color:var(--tinta); background:var(--app-bg)
 .badge--pub .badge__dot{ background:var(--verde); }
 .badge--draft{ background:var(--amarelo-soft); color:var(--tinta); }
 .badge--draft .badge__dot{ background:var(--amarelo); }
+.badge--sched{ background:var(--sched-soft); color:var(--sched-ink); }
+.badge--sched .badge__dot{ background:var(--sched); }
 
 /* ============================================================= 4. Data table + panel */
 .panel{ background:var(--surface); border:1px solid var(--linha); border-radius:var(--r-lg); box-shadow:0 6px 18px rgba(46,42,57,.04); overflow:hidden; }
