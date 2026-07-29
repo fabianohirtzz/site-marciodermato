@@ -5,6 +5,9 @@ create table if not exists public.mt_site_meta (
   id                 integer primary key default 1,
   dirty              boolean not null default true,
   publishing         boolean not null default false,
+  -- Mantém viva a pendência de reconstrução quando um build falha depois de o
+  -- cron já ter promovido agendados vencidos (ver supabase/scheduled-marcio.sql).
+  pending_build      boolean not null default false,
   last_published_at  timestamptz,
   constraint mt_site_meta_single_row check (id = 1)
 );

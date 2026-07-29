@@ -57,6 +57,20 @@ jobs:
             -H "Authorization: Bearer $SUPABASE_SERVICE_KEY")
 
           if [ "$vencidos" = "[]" ]; then
+            # Nada vencido agora nao significa que o site esta em dia: um build
+            # anterior pode ter falhado depois da promocao. So desiste se o
+            # flag de pendencia tambem estiver limpo.
+            pendencia=$(curl -sS --fail-with-body \
+              "$SUPABASE_URL/rest/v1/mt_site_meta?id=eq.1&select=pending_build" \
+              -H "apikey: $SUPABASE_SERVICE_KEY" \
+              -H "Authorization: Bearer $SUPABASE_SERVICE_KEY")
+
+            if echo "$pendencia" | grep -q '"pending_build":true'; then
+              echo "build=true" >> "$GITHUB_OUTPUT"
+              echo "Nenhum post novo venceu, mas ha um build pendente de retentativa."
+              exit 0
+            fi
+
             echo "build=false" >> "$GITHUB_OUTPUT"
             echo "Nenhum post agendado venceu ate $agora."
             exit 0
@@ -69,6 +83,15 @@ jobs:
             -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
             -H "Content-Type: application/json" \
             -d '{"status":"published"}'
+
+          # Marca a pendencia antes do build rodar: se ele falhar, o proximo
+          # slot do gate ainda sabe que precisa tentar de novo.
+          curl -sS --fail-with-body -X PATCH \
+            "$SUPABASE_URL/rest/v1/mt_site_meta?id=eq.1" \
+            -H "apikey: $SUPABASE_SERVICE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{"pending_build":true}'
 
           echo "build=true" >> "$GITHUB_OUTPUT"
 
@@ -170,7 +193,7 @@ jobs:
             -H "apikey: $SUPABASE_SERVICE_KEY" \
             -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
             -H "Content-Type: application/json" \
-            -d "{\"dirty\":false,\"publishing\":false,\"last_published_at\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}"
+            -d "{\"dirty\":false,\"publishing\":false,\"pending_build\":false,\"last_published_at\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}"
 
       - name: Liberar flag de publicação (mesmo se falhar)
         if: always()

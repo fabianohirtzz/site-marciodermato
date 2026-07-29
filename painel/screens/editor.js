@@ -9,6 +9,14 @@ import { toLocalInputValue, fromLocalInputValue, resolveStatus } from '../lib/pu
 
 const SAVED_MSG = { published: 'Post publicado.', scheduled: 'Post agendado.', draft: 'Rascunho salvo.' };
 
+// 23505 = slug duplicado. 23514 = violação de check constraint — hoje só pode
+// ser status 'scheduled' rejeitado porque supabase/scheduled-marcio.sql ainda
+// não rodou no banco; sem esta mensagem o admin só vê um erro genérico.
+const ERROR_MESSAGES = {
+  '23505': 'Já existe um post com esse slug.',
+  '23514': 'O banco ainda não aceita posts agendados. Rode a migration supabase/scheduled-marcio.sql.',
+};
+
 export async function renderEditor(work, { supabase, id }) {
   let existing = null;
   if (id) {
@@ -130,6 +138,9 @@ export async function renderEditor(work, { supabase, id }) {
   });
   slugEl.addEventListener('input', () => { slugTouched = true; refreshSerp(); });
   dateEl.addEventListener('input', refreshPublishBtn);
+  // Safari historicamente só dispara 'change' de forma confiável no seletor
+  // nativo de datetime-local; 'input' sozinho pode deixar o rótulo desatualizado.
+  dateEl.addEventListener('change', refreshPublishBtn);
   seoTitleEl.addEventListener('input', refreshSerp);
   excerptEl.addEventListener('input', refreshSerp);
   metaEl.addEventListener('input', () => { refreshMeta(); refreshSerp(); });
@@ -153,6 +164,9 @@ export async function renderEditor(work, { supabase, id }) {
   // O rótulo do botão sai da mesma função que decide o status gravado, então
   // o que está escrito no botão nunca diverge do que vai acontecer.
   function refreshPublishBtn() {
+    // Campo limpo vira "agora" no envio (ver save()); repor o valor aqui evita
+    // que o admin veja um campo vazio enquanto o rótulo já assume outra data.
+    if (!dateEl.value) dateEl.value = toLocalInputValue();
     const agendado = resolveStatus('publish', fromLocalInputValue(dateEl.value)) === 'scheduled';
     publishBtn.textContent = agendado ? 'Agendar' : 'Publicar';
     dateHelp.textContent = agendado
@@ -219,7 +233,9 @@ export async function renderEditor(work, { supabase, id }) {
       ogImage: existing?.og_image || coverImage,
       focusKeyword: $('#f-kw').value.trim(),
       tags: [...tags],
-      date: fromLocalInputValue(dateEl.value),
+      // Campo limpo cai no agora: sem isso, buildPayload omitiria a chave e um
+      // update preservaria a data futura já gravada, publicando com data errada.
+      date: fromLocalInputValue(dateEl.value) || new Date().toISOString(),
       intent,
     };
     if (!form.title) { toast('Dê um título ao post.', 'err'); return; }
@@ -232,7 +248,8 @@ export async function renderEditor(work, { supabase, id }) {
     else res = await supabase.from(POSTS_TABLE).insert(payload);
 
     if (res.error) {
-      toast(res.error.code === '23505' ? 'Já existe um post com esse slug.' : 'Não deu para salvar.', 'err');
+      const msg = ERROR_MESSAGES[res.error.code] || 'Não deu para salvar.';
+      toast(msg, 'err');
       return;
     }
     toast(SAVED_MSG[payload.status], 'ok');
