@@ -105,7 +105,7 @@ Novo módulo `painel/lib/publish-date.js`, sem dependência de DOM, testável em
 `painel/screens/list.js`:
 
 - Quarta aba no filtro: **Todos / Publicados / Agendados / Rascunhos**.
-- Novo badge `badge--sched` (âmbar) com o texto "Agendado", ao lado dos badges de publicado e rascunho já existentes. Estilo em `painel/styles.css`, seguindo o padrão dos outros dois.
+- Novo badge `badge--sched` com o texto "Agendado", ao lado dos badges de publicado e rascunho já existentes. Estilo em `painel/styles.css`, seguindo o padrão dos outros dois. Cor: **azul-ardósia frio** (tokens novos `--sched`/`--sched-ink`/`--sched-soft`) — âmbar já é Rascunho e verde/teal já é Publicado, então os três estados precisam de famílias distintas.
 - A coluna "Data" já mostra `p.date` formatada e a ordenação já é `date` decrescente — um post agendado aparece naturalmente no topo, com a data futura visível. Nenhuma mudança de query.
 
 ## 7. Cron de publicação
