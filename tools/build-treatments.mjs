@@ -17,7 +17,7 @@
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { TRACKING_HEAD, TRACKING_BODY } from "./lib/tracking.mjs";
+import { TRACKING_HEAD, TRACKING_BODY, TRACKING_FOOT, CTA_ATTRS } from "./lib/tracking.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const COPY = readFileSync(join(ROOT, "COPY-TRATAMENTOS.md"), "utf8");
@@ -113,10 +113,10 @@ const inline = (s) => {
 const attr = (s) =>
   s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-/* Todo CTA vai para o formulário rastreado (MeuTrack), que ao final
-   encaminha o lead para o WhatsApp. O wa.me direto fica apenas no telefone
-   escrito e no ícone de redes do rodapé. */
-const CTA = "https://meutrack-ingest.carlosabsj-ti.workers.dev/f/ng_MXvkuBh";
+/* Todo CTA abre o formulário rastreado (MeuTrack) em popup, sem tirar o
+   visitante do domínio; ao final o formulário encaminha o lead para o
+   WhatsApp. O wa.me direto fica apenas no telefone escrito e no ícone de
+   redes do rodapé. Os atributos vêm de lib/tracking.mjs (fonte única). */
 
 /* split a chunk of text into paragraphs on blank lines */
 const paras = (text) =>
@@ -291,7 +291,6 @@ function navHTML() {
   const drawerLinks = links
     .map(([h, l, cur]) => `    <a class="drawer__link" href="${h}"${cur ? ' aria-current="page"' : ""}>${l}</a>`)
     .join("\n");
-  const cta = CTA;
   return `  <header class="nav nav--solid" data-nav>
     <div class="nav__inner">
       <a class="nav__brand" href="../../index.html" aria-label="Dr. Márcio Teixeira, página inicial">
@@ -302,7 +301,7 @@ function navHTML() {
         <span class="nav__indicator" aria-hidden="true"></span>
 ${navLinks}
       </nav>
-      <a class="btn btn--primary nav__cta" href="${attr(cta)}" target="_blank" rel="noopener">Agende sua consulta</a>
+      <a class="btn btn--primary nav__cta" ${CTA_ATTRS}>Agende sua consulta</a>
       <button class="nav__burger" data-drawer-open type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="drawer">
         <span></span><span></span><span></span>
       </button>
@@ -313,7 +312,7 @@ ${navLinks}
   <aside class="drawer" id="drawer" data-drawer aria-hidden="true">
     <button class="drawer__close" data-drawer-close type="button" aria-label="Fechar menu">&times;</button>
 ${drawerLinks}
-    <a class="btn btn--primary drawer__cta" href="${attr(cta)}" target="_blank" rel="noopener">Agende sua consulta</a>
+    <a class="btn btn--primary drawer__cta" ${CTA_ATTRS}>Agende sua consulta</a>
   </aside>`;
 }
 
@@ -370,7 +369,7 @@ function footerHTML() {
     </div>
   </footer>
 
-  <a class="wpp" href="${CTA}" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+  <a class="wpp" ${CTA_ATTRS} aria-label="Falar no WhatsApp">
     <span class="wpp__label">Agende pelo WhatsApp</span>
     <span class="wpp__btn">
       <span class="wpp__rings" aria-hidden="true"></span>
@@ -379,7 +378,8 @@ function footerHTML() {
     </span>
   </a>
 
-  <script src="../../assets/js/main.js" defer></script>`;
+  <script src="../../assets/js/main.js" defer></script>
+${TRACKING_FOOT}`;
 }
 
 function jsonLD(t, ogImg) {
@@ -440,17 +440,14 @@ function render(t) {
   const eixoLabel = t.eyebrow || `Eixo ${t.eixo} · ${eixoNames[t.eixo]}`;
   const eixoShort = `Eixo ${t.eixo} · ${eixoNames[t.eixo].replace(/^(A |Alterações do )/, "")}`;
 
-  const heroCta = CTA;
-  const dudaCta = CTA;
-
   const P = (arr, ind = "          ") => arr.map((p) => `${ind}<p>${inline(p)}</p>`).join("\n");
 
   const ctaBtn = (label) =>
-    `<a class="btn btn--primary" href="${attr(heroCta)}" target="_blank" rel="noopener">${esc(label || "Agende sua consulta")}</a>`;
+    `<a class="btn btn--primary" ${CTA_ATTRS}>${esc(label || "Agende sua consulta")}</a>`;
   const ctaRow = (label, center) =>
     `        <div class="ts-cta${center ? " ts-cta--center" : ""}">
           ${ctaBtn(label)}
-          <a class="btn btn--ghost" href="${attr(dudaCta)}" target="_blank" rel="noopener">Tirar dúvidas no WhatsApp</a>
+          <a class="btn btn--ghost" ${CTA_ATTRS}>Tirar dúvidas no WhatsApp</a>
         </div>`;
 
   const beneHTML = t.indic.length
@@ -572,7 +569,7 @@ ${navHTML()}
             <div class="t-prose">
 ${P(t.oque)}
             </div>
-            <a class="ts-link" href="${attr(heroCta)}" target="_blank" rel="noopener">Agende sua avaliação ${ARROW}</a>
+            <a class="ts-link" ${CTA_ATTRS}>Agende sua avaliação ${ARROW}</a>
           </div>
         </div>
       </div>
@@ -685,7 +682,7 @@ ${relatedHTML}
         <h2 id="cta-title" class="section__title">Pronto para cuidar da sua pele <span class="hl hl--italic">com quem entende</span>?</h2>
         <p class="cta-band__lede">${inline(t.closing)}</p>
         <div class="cta-band__actions">
-          <a class="btn btn--on-deep" href="${attr(heroCta)}" target="_blank" rel="noopener">Agende sua consulta</a>
+          <a class="btn btn--on-deep" ${CTA_ATTRS}>Agende sua consulta</a>
         </div>
       </div>
     </section>

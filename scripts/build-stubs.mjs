@@ -2,10 +2,11 @@
 // Inner pages share the exact global nav/footer with the home page.
 import { writeFileSync } from "node:fs";
 
-// Todo CTA vai para o formulário rastreado, que ao final leva o lead ao
-// WhatsApp. O wa.me direto só aparece no telefone escrito e no ícone de redes.
+// Todo CTA abre o formulário rastreado em popup (data-th-quiz). Gerador
+// legado, fora do npm scripts — mantido em dia para não reintroduzir o
+// redirect caso alguém o execute.
 const CTA =
-  "https://meutrack-ingest.carlosabsj-ti.workers.dev/f/ng_MXvkuBh";
+  "https://meutrack-ingest.carlosabsj-ti.workers.dev/f/PGW6nIOmTX";
 
 const navLink = (href, label, current) =>
   `<a class="nav__link" href="${href}"${current ? ' aria-current="page"' : ""}>${label}</a>`;
