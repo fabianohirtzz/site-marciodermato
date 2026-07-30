@@ -48,8 +48,9 @@ async function main() {
 
   // 2. Páginas de artigo.
   const categories = categoriesOf(posts);
+  const podcast = JSON.parse(await readFile(new URL('tools/podcast/podcast.json', ROOT), 'utf8'));
   for (const post of posts) {
-    const html = renderPostPage(post, relatedFor(post, posts), { categories, recent: posts });
+    const html = renderPostPage(post, relatedFor(post, posts), { categories, recent: posts, podcast });
     await mkdir(new URL(`blog/${post.slug}/`, ROOT), { recursive: true });
     await writeFile(new URL(`blog/${post.slug}/index.html`, ROOT), html);
     console.log('  ok blog/' + post.slug + '/index.html');

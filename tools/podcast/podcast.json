@@ -1,0 +1,56 @@
+{
+  "canal": "https://www.youtube.com/@%C3%89UmaQuest%C3%A3odePele01",
+  "nome": "É uma Questão de Pele",
+  "apresentadores": "Dr. Márcio Teixeira e a farmacêutica Cristine Prato",
+  "sobre": "Um podcast sobre pele, cabelos e saúde, conduzido pelo Dr. Márcio Teixeira, dermatologista e tricologista, ao lado da farmacêutica Cristine Prato, da Farmatec Farmácia de Manipulação. A proposta é descomplicar o que costuma chegar confuso ao consultório: o que a ciência sustenta, o que é modismo, e o que faz sentido para a sua pele.",
+
+  "episodios": [
+    {
+      "id": "GSCntb2YkYk",
+      "num": 3,
+      "titulo": "Skincare básico: hidratação",
+      "duracao": "37:07",
+      "segundos": 2227,
+      "publicado": "2026-07-13",
+      "capa": "assets/podcast/ep-03.jpg",
+      "descricao": "Hidratar vai muito além de passar um creme. O episódio abre o Eixo 1 do Método 4D pela hidratação: como funciona a barreira cutânea, por que a pele oleosa também precisa ser hidratada, como identificar o seu tipo de pele e quais erros de rotina comprometem o resultado."
+    },
+    {
+      "id": "AMy6F2MdaKg",
+      "num": 2,
+      "titulo": "Skincare e os tipos de pele",
+      "duracao": "50:59",
+      "segundos": 3059,
+      "publicado": "2026-06-30",
+      "capa": "assets/podcast/ep-02.jpg",
+      "descricao": "Em meio a tantas trends, ativos e rotinas das redes sociais, como saber o que realmente faz sentido para a sua pele? A conversa entra na Superfície da Pele, o Eixo 1 do Método 4D, e mostra por que uma rotina de cuidados só funciona quando é montada caso a caso."
+    },
+    {
+      "id": "_FWIWjm4mSI",
+      "num": 1,
+      "titulo": "A estreia: como a pele funciona de verdade",
+      "duracao": "48:32",
+      "segundos": 2911,
+      "publicado": "2026-05-28",
+      "capa": "assets/podcast/ep-01.jpg",
+      "descricao": "O episódio de estreia apresenta a dupla e mergulha na estrutura da pele: a analogia da esponja, o microbioma que protege o organismo, a diferença entre gel, sérum e creme, a barreira fragilizada e a relação entre intestino e pele."
+    }
+  ],
+
+  "shorts": [
+    { "id": "Q5KsiC4d2hU", "arquivo": "short-01", "titulo": "Pele ardendo no inverno? O erro mais comum", "home": true },
+    { "id": "QncQ6paAWdk", "arquivo": "short-02", "titulo": "Como funciona o hidratante: a analogia da parede de tijolos", "home": true },
+    { "id": "rzLmliJ7Cek", "arquivo": "short-03", "titulo": "Pausa para skincare e dupla limpeza: o que funciona", "home": true },
+    { "id": "uStxYJGPiss", "arquivo": "short-04", "titulo": "O segredo para disfarçar rugas", "home": true },
+    { "id": "OYaQ1Pz80uw", "arquivo": "short-05", "titulo": "Como escolher o demaquilante ideal" },
+    { "id": "gcWmwVFBFM4", "arquivo": "short-06", "titulo": "Pele seca envelhece mais?", "home": true },
+    { "id": "M7jy6-znnuk", "arquivo": "short-07", "titulo": "Pele oleosa é só desvantagem? As vantagens que ninguém conta", "home": true },
+    { "id": "wQaAuv9tHwU", "arquivo": "short-08", "titulo": "Qual é o meu tipo de pele? O teste caseiro" },
+    { "id": "d0rz5J5LnQM", "arquivo": "short-09", "titulo": "Tipos de pele, skincare básico e as trends do momento" },
+    { "id": "jBGPos0ly4g", "arquivo": "short-10", "titulo": "A pele como impermeabilizante do corpo", "home": true },
+    { "id": "KcqRbjRDFJA", "arquivo": "short-11", "titulo": "Barreira cutânea: quando a pele arde, repuxa e descama", "home": true },
+    { "id": "cw8o_swkhYI", "arquivo": "short-12", "titulo": "Sua pele é como uma esponja: a metáfora do envelhecimento" },
+    { "id": "w-9LVJyFk-A", "arquivo": "short-13", "titulo": "Por que a pele vai ficando mais seca com os anos" },
+    { "id": "SNSjohQkbnw", "arquivo": "short-14", "titulo": "O início de um novo projeto: a ciência que transforma a pele" }
+  ]
+}

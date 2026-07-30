@@ -8,7 +8,8 @@
     "test:painel": "node --test painel/test/*.test.js",
     "build:blog": "node tools/build-blog.mjs",
     "build:treatments": "node tools/build-treatments.mjs",
-    "build:sitemap": "node tools/build-sitemap.mjs"
+    "build:sitemap": "node tools/build-sitemap.mjs",
+    "build:podcast": "node tools/build-podcast.mjs"
   },
   "dependencies": {
     "sharp": "^0.34.5"
