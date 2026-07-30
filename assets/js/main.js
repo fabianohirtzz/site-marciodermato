@@ -738,4 +738,29 @@
       });
     });
   })();
+
+  /* --- Popup do formulário: veste o overlay do embed.js -------------
+     O embed.js monta o overlay com estilo inline e sem classe; o único
+     identificador estável é o z-index. Marcamos com .th-modal para o CSS
+     assumir a aparência. Toda a lógica (altura, Escape, redirect final)
+     continua sendo do script deles. */
+  (function popupDoFormulario() {
+    const Z_DO_OVERLAY = "2147483000";
+
+    const vestir = (no) => {
+      if (!(no instanceof HTMLElement)) return;
+      if (no.style.zIndex !== Z_DO_OVERLAY || no.dataset.thVestido) return;
+      no.dataset.thVestido = "1";
+      no.classList.add("th-modal");
+      no.setAttribute("role", "dialog");
+      no.setAttribute("aria-modal", "true");
+      no.setAttribute("aria-label", "Agende sua avaliação");
+      const frame = no.querySelector("iframe");
+      if (frame) frame.focus();
+    };
+
+    new MutationObserver((registros) => {
+      for (const reg of registros) reg.addedNodes.forEach(vestir);
+    }).observe(document.body, { childList: true });
+  })();
 })();
