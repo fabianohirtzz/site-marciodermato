@@ -2817,7 +2817,10 @@ a.treat-card:hover .treat-card__more svg { transform: translateX(4px); }
   outline: none;
 }
 
-.th-modal button {
+/* Restrito ao botão de fechar (aria-label="Fechar"): hoje é o único
+   botão do overlay, mas "button" sozinho esmagaria qualquer outro botão
+   que a MeuTrack venha a adicionar ao card do formulário. */
+.th-modal button[aria-label="Fechar"] {
   width: 36px !important;
   height: 36px !important;
   color: var(--branco) !important;
@@ -2826,8 +2829,8 @@ a.treat-card:hover .treat-card__more svg { transform: translateX(4px); }
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.th-modal button:hover,
-.th-modal button:focus-visible {
+.th-modal button[aria-label="Fechar"]:hover,
+.th-modal button[aria-label="Fechar"]:focus-visible {
   background: var(--marca-bright) !important;
   transform: scale(1.06);
 }
@@ -2846,7 +2849,7 @@ a.treat-card:hover .treat-card__more svg { transform: translateX(4px); }
     animation: none !important;
   }
 
-  .th-modal button {
+  .th-modal button[aria-label="Fechar"] {
     transition: none;
   }
 }

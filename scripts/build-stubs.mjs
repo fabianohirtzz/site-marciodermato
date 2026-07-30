@@ -1,6 +1,23 @@
 // Generate the 5 stub pages (nav + slim header + footer, no body content yet).
 // Inner pages share the exact global nav/footer with the home page.
+//
+// GERADOR LEGADO — NÃO RODE ISTO.
+// Este script sobrescreve tratamentos.html, metodo-4d.html, tricologia.html,
+// sobre.html e contato.html com conteúdo de STUB (placeholder "Conteúdo em
+// breve"). Essas 5 páginas hoje têm conteúdo real e publicado; rodar este
+// arquivo APAGA esse conteúdo e o substitui pelo esqueleto antigo. Ele foi
+// usado uma única vez, no início do projeto, para gerar o nav/footer
+// compartilhado antes de as páginas ganharem conteúdo — não faz parte de
+// nenhum fluxo de build atual (não está em npm scripts) e não deve ser
+// executado de novo. Mantido apenas como referência histórica.
 import { writeFileSync } from "node:fs";
+
+throw new Error(
+  "scripts/build-stubs.mjs é um gerador legado que sobrescreve páginas publicadas " +
+    "(tratamentos.html, metodo-4d.html, tricologia.html, sobre.html, contato.html) " +
+    "com conteúdo de stub. Rodá-lo destrói conteúdo real. Não execute este arquivo — " +
+    "ele fica só como referência histórica."
+);
 
 // Todo CTA abre o formulário rastreado em popup (data-th-quiz). Gerador
 // legado, fora do npm scripts — mantido em dia para não reintroduzir o

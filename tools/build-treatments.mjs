@@ -20,7 +20,11 @@ import { dirname, join } from "node:path";
 import { TRACKING_HEAD, TRACKING_BODY, TRACKING_FOOT, CTA_ATTRS } from "./lib/tracking.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const COPY = readFileSync(join(ROOT, "COPY-TRATAMENTOS.md"), "utf8");
+// Normaliza CRLF -> LF ao ler: com core.autocrlf=true no Windows o blob do
+// git é LF, mas em disco o arquivo fica CRLF, e os regexes abaixo (ex.:
+// /^## (\d+)\.(\d+) · (.+)$/) não casam uma linha terminada em \r — o "$"
+// para antes dele, então o match falha e o parser quebra com TypeError.
+const COPY = readFileSync(join(ROOT, "COPY-TRATAMENTOS.md"), "utf8").replace(/\r\n/g, "\n");
 const SITE = "https://marciodermato.com.br";
 
 /* --- slug → image folder (names in /imagens are irregular) ----------- */
