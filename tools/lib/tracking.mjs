@@ -21,3 +21,19 @@ export const TRACKING_BODY = `  <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${GTM_ID}"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->`;
+
+/* --- CTAs em popup ---------------------------------------------------
+   O formulário abre dentro do site (modo modal do embed.js), acionado
+   pelo atributo data-th-quiz. O href continua ali de propósito: o
+   embed.js dá preventDefault() no clique, então o link só dispara se o
+   script não carregar — e aí o visitante cai no formulário como antes. */
+export const FORM_ID = 'PGW6nIOmTX';
+
+export const CTA_HREF = `https://meutrack-ingest.carlosabsj-ti.workers.dev/f/${FORM_ID}`;
+
+/** Atributos completos de um <a> de CTA. Uso: `<a class="btn" ${CTA_ATTRS}>`. */
+export const CTA_ATTRS = `data-th-quiz="${FORM_ID}" href="${CTA_HREF}" target="_blank" rel="noopener"`;
+
+/** Vai imediatamente antes de </body>, depois do main.js. */
+export const TRACKING_FOOT = `  <!-- MeuTrack: popup dos CTAs (data-th-quiz) -->
+  <script async src="https://meutrack-ingest.carlosabsj-ti.workers.dev/embed.js"></script>`;
