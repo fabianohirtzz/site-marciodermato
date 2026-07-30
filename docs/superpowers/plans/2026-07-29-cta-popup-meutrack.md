@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Fazer os 186 CTAs do site abrirem o formulário da MeuTrack como popup dentro do próprio domínio, em vez de redirecionar o visitante para `workers.dev`.
+**Goal:** Fazer os 226 CTAs do site abrirem o formulário da MeuTrack como popup dentro do próprio domínio, em vez de redirecionar o visitante para `workers.dev`.
 
 **Architecture:** O `embed.js` da MeuTrack já tem modo modal nativo: carregado sem `data-form`, ele instala um listener delegado no `document` e abre o formulário em iframe ao clicar em qualquer elemento com `data-th-quiz`. Adicionamos a tag do script em todas as páginas publicadas, marcamos os CTAs com `data-th-quiz` mantendo o `href` como fallback, e vestimos o overlay deles com uma camada de estilo nossa. Nenhuma lógica de tracking é reescrita.
 
@@ -154,7 +154,7 @@ git commit -m "feat(cta): fonte unica do formulario em popup no tracking.mjs"
 
 ---
 
-### Task 2: Migrar os 186 CTAs para o popup
+### Task 2: Migrar os 226 CTAs para o popup
 
 Deliverable único: nenhuma página publicada redireciona mais o visitante para fora do domínio. Geradores e páginas à mão andam juntos porque a guarda de regressão é global — se qualquer um dos dois ficar para trás, o teste falha.
 
@@ -460,7 +460,7 @@ grep -rc 'data-th-quiz="PGW6nIOmTX"' --include=*.html . | grep -v node_modules |
 grep -rn 'ng_MXvkuBh' --include=*.html --include=*.mjs --include=*.js . | grep -v node_modules | grep -v docs/
 ```
 
-Expected: `CTAs em popup: 186` e nenhuma ocorrência de `ng_MXvkuBh`.
+Expected: `CTAs em popup: 226` e nenhuma ocorrência de `ng_MXvkuBh`.
 
 - [ ] **Step 11: Commit**
 
@@ -652,7 +652,7 @@ Levar de volta à agência de tráfego, por escrito:
 
 ## Notas para quem executa
 
-- **Não troque `<a>` por `<button>`.** O `href` é o fallback de quando o `embed.js` não carrega; sem ele, um adblock derruba 186 CTAs de uma vez.
+- **Não troque `<a>` por `<button>`.** O `href` é o fallback de quando o `embed.js` não carrega; sem ele, um adblock derruba 226 CTAs de uma vez.
 - **`trackedCtas()` em `assets/js/main.js:714` fica como está.** O `BASE` dele é o prefixo `.../f/`, que continua válido com o ID novo. Ele alimenta o href do fallback com `ref` e `vid`.
 - **A guarda `window.__thModal`** dentro do `embed.js` é o que permite `contato.html` carregar o script duas vezes (inline + modal) sem abrir dois overlays. Não tente "otimizar" removendo uma das tags.
 - **Se o `embed.js` da MeuTrack mudar o `z-index` do overlay**, a Task 3 para de aplicar o backdrop — o popup continua funcionando, só volta ao visual padrão. O teste `cta-popup.test.mjs` não cobre isso; é uma verificação visual.

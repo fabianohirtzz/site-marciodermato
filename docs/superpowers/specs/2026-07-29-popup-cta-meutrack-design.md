@@ -15,7 +15,7 @@ Motivo do pedido: manter a jornada dentro do domínio anunciado, evitando o redi
 ## 2. Situação atual (o que já existe)
 
 - O pixel `t.js?p=4TqtCgzLsewg` **já está nas páginas publicadas** — a atribuição de UTM/gclid/visitante já funciona.
-- **186 links `<a>`** em 23 páginas apontam para `https://meutrack-ingest.carlosabsj-ti.workers.dev/f/ng_MXvkuBh` com `target="_blank"`.
+- **226 links `<a>`** em 23 páginas apontam para `https://meutrack-ingest.carlosabsj-ti.workers.dev/f/ng_MXvkuBh` com `target="_blank"`.
 - `contato.html:143` já usa o `embed.js` em **modo inline** (`data-form="ng_MXvkuBh"`).
 - `assets/js/main.js:714` tem o bloco `trackedCtas()`, que injeta `visitorId` e UTMs na querystring do href dos CTAs (o formulário roda em outra origem e não enxerga o storage do site).
 - Os CTAs de páginas geradas vêm de três scripts: `tools/build-treatments.mjs:119` (15 páginas de tratamento), `tools/blog/lib/chrome.mjs` (blog) e `scripts/build-stubs.mjs:8` (não está no `package.json`; não é executado no fluxo atual).
@@ -41,7 +41,7 @@ No modo popup, o formulário já vem tematizado na marca: `--th-primary: #3DAAA8
 | Formulário | **Trocar tudo para `PGW6nIOmTX`** — inclusive o embed inline da `contato.html`. O `ng_MXvkuBh` sai do site. |
 | Mecanismo | **Modo modal nativo do `embed.js`** via `data-th-quiz` |
 | Visual | **Backdrop escurecido + blur**, aplicado por uma camada de estilo nossa sobre o overlay deles |
-| Escopo | **Somente os 186 CTAs que hoje apontam para o formulário** |
+| Escopo | **Somente os 226 CTAs que hoje apontam para o formulário** |
 | Fallback | **Manter o `href` atual** em cada CTA |
 
 **Descartado:**
@@ -89,7 +89,7 @@ Como os estilos do `embed.js` são inline, as regras precisam de `!important`. T
 | Alvo | Mudança |
 |---|---|
 | 23 páginas publicadas | tag do `embed.js` antes do `</body>` (fora os `preview-*.html`, que não têm CTA) |
-| 186 links `<a>` | `+ data-th-quiz="PGW6nIOmTX"` e ID novo no `href` |
+| 226 links `<a>` | `+ data-th-quiz="PGW6nIOmTX"` e ID novo no `href` |
 | `contato.html:143` | embed inline passa de `ng_MXvkuBh` → `PGW6nIOmTX` |
 | `assets/js/main.js` | camada de estilo do modal (o `trackedCtas()` não muda: seu `BASE` é o prefixo `/f/`, válido para qualquer ID) |
 | `assets/css/` | regras do `.th-modal` |
