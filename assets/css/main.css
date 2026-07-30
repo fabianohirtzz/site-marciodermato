@@ -42,6 +42,8 @@
   --grad-spa: linear-gradient(180deg, #f4f9f9 0%, #ffffff 100%);
   --grad-deep: linear-gradient(160deg, #057f7f 0%, #03403f 100%);
   --grad-pele: linear-gradient(135deg, #f4f9f9 0%, #efe6dc 100%);
+  /* verde claro da faixa de Resultados, reaproveitado por .section--verde */
+  --grad-verde: linear-gradient(180deg, #ecf6f1 0%, #dcefe7 100%);
 
   /* type */
   --font-display: "Cormorant Garamond", "Georgia", "Times New Roman", serif;
@@ -803,6 +805,8 @@ body.fonts-pending .stats { visibility: hidden; }
 .section--neve { background: var(--neve); }
 .section--nevoa { background: var(--nevoa); }
 .section--areia { background: var(--areia); }
+/* mesmo verde claro da faixa de Resultados, para seções fora dela */
+.section--verde { background: var(--grad-verde); }
 .section--deep { background: var(--grad-deep); color: var(--neve); }
 
 .section__head {
@@ -1438,7 +1442,7 @@ body.fonts-pending .stats { visibility: hidden; }
   position: relative;
   padding-block: clamp(72px, 9vw, 130px);
   /* "verde claro" — light teal-green wash, kept inside the brand family */
-  background: linear-gradient(180deg, #ecf6f1 0%, #dcefe7 100%);
+  background: var(--grad-verde);
   isolation: isolate;
 }
 /* header: intro on the left, arrows on the right (like the reference) */
