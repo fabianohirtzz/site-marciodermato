@@ -636,9 +636,7 @@ Expected: testes passando; nenhuma ocorrência de `ng_MXvkuBh`; a última varred
 
 - [ ] **Step 4: Publicar**
 
-```bash
-git push origin master
-```
+O trabalho acontece no worktree `.claude/worktrees/cta-popup-meutrack` (branch `worktree-cta-popup-meutrack`), porque havia edições paralelas em `index.html`, `tricologia.html`, `main.js` e `main.css` no `master`. A publicação, portanto, é: merge da branch em `master` (resolvendo o conflito com o trabalho de "antes/depois", se ele já tiver sido commitado) e só então `git push origin master`. O merge é conduzido pela skill `superpowers:finishing-a-development-branch` — **não** dar push a partir do worktree.
 
 Depois do deploy, repetir os itens 1, 2 e 6 do Step 1 **no site publicado**, confirmando que o `embed.js` e o iframe do worker carregam a partir do domínio real (o worker pode responder diferente para `localhost` no `ref`).
 
