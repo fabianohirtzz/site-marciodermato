@@ -14,7 +14,7 @@ Motivo do pedido: manter a jornada dentro do domínio anunciado, evitando o redi
 
 ## 2. Situação atual (o que já existe)
 
-- O pixel `t.js?p=4TqtCgzLsewg` **já está em todas as 25 páginas** — a atribuição de UTM/gclid/visitante já funciona.
+- O pixel `t.js?p=4TqtCgzLsewg` **já está nas páginas publicadas** — a atribuição de UTM/gclid/visitante já funciona.
 - **186 links `<a>`** em 23 páginas apontam para `https://meutrack-ingest.carlosabsj-ti.workers.dev/f/ng_MXvkuBh` com `target="_blank"`.
 - `contato.html:143` já usa o `embed.js` em **modo inline** (`data-form="ng_MXvkuBh"`).
 - `assets/js/main.js:714` tem o bloco `trackedCtas()`, que injeta `visitorId` e UTMs na querystring do href dos CTAs (o formulário roda em outra origem e não enxerga o storage do site).
@@ -88,10 +88,10 @@ Como os estilos do `embed.js` são inline, as regras precisam de `!important`. T
 
 | Alvo | Mudança |
 |---|---|
-| 25 páginas HTML | tag do `embed.js` antes do `</body>` |
+| 23 páginas publicadas | tag do `embed.js` antes do `</body>` (fora os `preview-*.html`, que não têm CTA) |
 | 186 links `<a>` | `+ data-th-quiz="PGW6nIOmTX"` e ID novo no `href` |
 | `contato.html:143` | embed inline passa de `ng_MXvkuBh` → `PGW6nIOmTX` |
-| `assets/js/main.js` | ID novo no `trackedCtas()` + camada de estilo do modal |
+| `assets/js/main.js` | camada de estilo do modal (o `trackedCtas()` não muda: seu `BASE` é o prefixo `/f/`, válido para qualquer ID) |
 | `assets/css/` | regras do `.th-modal` |
 | `tools/build-treatments.mjs` | constante `CTA` + tag do embed no template |
 | `tools/blog/lib/chrome.mjs` | mesma mudança no chrome do blog |
