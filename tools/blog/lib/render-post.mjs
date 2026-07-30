@@ -128,9 +128,28 @@ function sideRecent(recent, post) {
         </section>`;
 }
 
+/* Card fixo do podcast: leva o leitor do artigo para o episódio mais recente.
+   O episódio vem de tools/podcast/podcast.json, então basta rodar
+   `npm run build:podcast` e republicar o blog quando sair um novo. */
+function sidePodcast(podcast) {
+  const ep = podcast && podcast.episodios && podcast.episodios[0];
+  if (!ep) return '';
+  return `<section class="side-card side-card--podcast">
+          <h4 class="side-card__title">Ouça o podcast</h4>
+          <a class="side-pod" href="../../podcast.html">
+            <span class="side-pod__cover"><img src="../../${esc(ep.capa)}" alt="" loading="lazy" /></span>
+            <span class="side-pod__body">
+              <span class="side-pod__name">É uma Questão de Pele</span>
+              <span class="side-pod__ep">Episódio ${esc(String(ep.num))}: ${esc(ep.titulo)}</span>
+            </span>
+          </a>
+        </section>`;
+}
+
 function sidebar(post, opts) {
   return [
     sideCategories(opts.categories, post),
+    sidePodcast(opts.podcast),
     sideTags(post),
     sideRecent(opts.recent, post),
   ].filter(Boolean).join('\n        ');

@@ -16,6 +16,7 @@ const ROOT_PAGES = [
   ['metodo-4d.html', '/metodo-4d.html', '0.8'],
   ['sobre.html', '/sobre.html', '0.7'],
   ['contato.html', '/contato.html', '0.7'],
+  ['podcast.html', '/podcast.html', '0.6'],
   ['blog.html', '/blog.html', '0.6'],
 ];
 

@@ -798,6 +798,168 @@
     });
   })();
 
+  /* --- Podcast: trilho de cortes + lightbox do YouTube --------------- */
+  /* Os cortes tocam mudos, a partir de um arquivo local de 12s, só para dar
+     movimento ao trilho. O short completo (com som) abre no lightbox, num
+     iframe do youtube-nocookie criado apenas no clique — quem não assiste
+     não recebe cookie nenhum do YouTube. */
+  (function podcast() {
+    const botoes = Array.prototype.slice.call(document.querySelectorAll("[data-reel] .preel__btn"));
+    const capas = Array.prototype.slice.call(document.querySelectorAll(".pfacade[data-yt]"));
+    if (!botoes.length && !capas.length) return;
+
+    // Este bloco vive em outro IIFE que o do topo do arquivo, então não
+    // alcança o reduceMotion() de lá.
+    const semMovimento = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* 1. play apenas com o card à vista ------------------------------- */
+    if (botoes.length && !semMovimento() && "IntersectionObserver" in window) {
+      // No celular exigimos o card quase inteiro visível: só os que cabem na
+      // tela tocam, em vez de a fila inteira disputar banda e bateria.
+      const estreito = () => window.matchMedia("(max-width: 767px)").matches;
+      const io = new IntersectionObserver(
+        (entradas) => {
+          entradas.forEach((entrada) => {
+            const video = entrada.target.querySelector(".preel__video");
+            if (!video) return;
+            if (entrada.intersectionRatio >= (estreito() ? 0.7 : 0.4)) {
+              const p = video.play();
+              if (p && p.catch) p.catch(function () {});
+              entrada.target.classList.add("is-playing");
+            } else {
+              video.pause();
+              entrada.target.classList.remove("is-playing");
+            }
+          });
+        },
+        { threshold: [0, 0.4, 0.7, 1] }
+      );
+      botoes.forEach((b) => io.observe(b));
+    }
+
+    /* 2. lightbox ----------------------------------------------------- */
+    let caixa = null;
+    let palco = null;
+    let contador = null;
+    let atalho = null;
+    let anterior = null;
+    let proximo = null;
+    let fechar = null;
+    let foco = null;
+    let lista = [];
+    let pos = 0;
+
+    function montar() {
+      caixa = document.createElement("div");
+      caixa.className = "ytbox";
+      caixa.hidden = true;
+      caixa.setAttribute("role", "dialog");
+      caixa.setAttribute("aria-modal", "true");
+      caixa.setAttribute("aria-label", "Vídeo em tela cheia");
+      caixa.innerHTML =
+        '<button class="ytbox__nav ytbox__nav--prev" type="button" aria-label="Vídeo anterior">&#8249;</button>' +
+        '<div class="ytbox__stage"></div>' +
+        '<button class="ytbox__nav ytbox__nav--next" type="button" aria-label="Próximo vídeo">&#8250;</button>' +
+        '<button class="ytbox__close" type="button" aria-label="Fechar o vídeo">&times;</button>' +
+        '<p class="ytbox__meta"><span class="ytbox__count"></span>' +
+        '<a class="ytbox__link" target="_blank" rel="noopener">Ver no YouTube</a></p>';
+      document.body.appendChild(caixa);
+
+      palco = caixa.querySelector(".ytbox__stage");
+      contador = caixa.querySelector(".ytbox__count");
+      atalho = caixa.querySelector(".ytbox__link");
+      anterior = caixa.querySelector(".ytbox__nav--prev");
+      proximo = caixa.querySelector(".ytbox__nav--next");
+      fechar = caixa.querySelector(".ytbox__close");
+
+      anterior.addEventListener("click", () => mover(-1));
+      proximo.addEventListener("click", () => mover(1));
+      fechar.addEventListener("click", sair);
+      caixa.addEventListener("click", (e) => {
+        if (e.target === caixa) sair();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (caixa.hidden) return;
+        if (e.key === "Escape") sair();
+        else if (e.key === "ArrowLeft") mover(-1);
+        else if (e.key === "ArrowRight") mover(1);
+        else if (e.key === "Tab") {
+          const controles = [fechar, anterior, proximo, atalho].filter((c) => c && c.offsetParent !== null);
+          if (!controles.length) return;
+          e.preventDefault();
+          const i = controles.indexOf(document.activeElement);
+          const proxima = e.shiftKey ? (i - 1 + controles.length) % controles.length : (i + 1) % controles.length;
+          controles[proxima < 0 ? 0 : proxima].focus();
+        }
+      });
+    }
+
+    function pintar() {
+      const item = lista[pos];
+      if (!item) return;
+      // O iframe é recriado a cada troca: é o jeito mais simples de garantir
+      // que o vídeo anterior parou de tocar.
+      palco.innerHTML =
+        '<iframe src="https://www.youtube-nocookie.com/embed/' +
+        encodeURIComponent(item.id) +
+        '?autoplay=1&rel=0&modestbranding=1&playsinline=1" title="' +
+        item.titulo.replace(/"/g, "&quot;") +
+        '" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+      atalho.href = "https://www.youtube.com/watch?v=" + item.id;
+      contador.textContent = lista.length > 1 ? pos + 1 + " / " + lista.length : "";
+      const sozinho = lista.length < 2;
+      anterior.classList.toggle("is-off", sozinho);
+      proximo.classList.toggle("is-off", sozinho);
+    }
+
+    function mover(passo) {
+      if (lista.length < 2) return;
+      pos = (pos + passo + lista.length) % lista.length;
+      pintar();
+    }
+
+    function abrir(itens, indice, largo) {
+      if (!caixa) montar();
+      foco = document.activeElement;
+      lista = itens;
+      pos = indice;
+      caixa.classList.toggle("ytbox--wide", !!largo);
+      caixa.hidden = false;
+      document.body.style.overflow = "hidden";
+      pintar();
+      fechar.focus();
+    }
+
+    function sair() {
+      if (!caixa || caixa.hidden) return;
+      palco.innerHTML = "";
+      caixa.hidden = true;
+      document.body.style.overflow = "";
+      if (foco && foco.focus) foco.focus();
+    }
+
+    /* 3. gatilhos ----------------------------------------------------- */
+    const cortes = botoes.map((b) => {
+      const rotulo = b.closest(".preel__item") && b.closest(".preel__item").querySelector(".preel__title");
+      return {
+        id: b.getAttribute("data-yt"),
+        titulo: (rotulo && rotulo.textContent.trim()) || "Corte do podcast",
+      };
+    });
+    botoes.forEach((b, i) => {
+      b.addEventListener("click", () => abrir(cortes, i, false));
+    });
+
+    // Os episódios abrem em 16:9 e sem navegação: cada um é um destino, não
+    // uma sequência para folhear.
+    capas.forEach((c) => {
+      c.addEventListener("click", () => {
+        const titulo = c.getAttribute("aria-label") || "Episódio do podcast";
+        abrir([{ id: c.getAttribute("data-yt"), titulo: titulo }], 0, true);
+      });
+    });
+  })();
+
   /* --- CTAs rastreados: repassa origem e visitante ao formulário ----- */
   (function trackedCtas() {
     const BASE = "https://meutrack-ingest.carlosabsj-ti.workers.dev/f/";
