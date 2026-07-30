@@ -2759,3 +2759,60 @@ a.treat-card:hover .treat-card__more svg { transform: translateX(4px); }
 .map__frame { border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--linha); box-shadow: 0 22px 56px rgba(5, 127, 127, 0.10), 0 6px 16px rgba(22, 48, 47, 0.05); aspect-ratio: 16 / 7; background: var(--neve); }
 .map__frame iframe { width: 100%; height: 100%; border: 0; display: block; }
 @media (max-width: 700px) { .map__frame { aspect-ratio: 4 / 3; } }
+
+/* ===================================================================
+   POPUP DO FORMULÁRIO (MeuTrack)
+   O overlay vem do embed.js com estilos inline — daí o !important. O
+   card branco já vem do formulário em modo popup; aqui cuidamos do
+   fundo, da entrada e do botão de fechar.
+   =================================================================== */
+.th-modal {
+  background: rgba(22, 48, 47, 0.62) !important;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  animation: th-modal-entra 0.18s ease-out both;
+}
+
+/* O overlay recebe foco por programa (tabindex="-1") para anunciar o
+   dialog sem tirar o Escape do embed.js do ar; sem outline aqui, porque
+   o foco visível continua nos elementos acionáveis de dentro do card. */
+.th-modal:focus {
+  outline: none;
+}
+
+/* Restrito ao botão de fechar (aria-label="Fechar"): hoje é o único
+   botão do overlay, mas "button" sozinho esmagaria qualquer outro botão
+   que a MeuTrack venha a adicionar ao card do formulário. */
+.th-modal button[aria-label="Fechar"] {
+  width: 36px !important;
+  height: 36px !important;
+  color: var(--branco) !important;
+  background: var(--marca) !important;
+  box-shadow: 0 4px 14px rgba(4, 77, 77, 0.4) !important;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.th-modal button[aria-label="Fechar"]:hover,
+.th-modal button[aria-label="Fechar"]:focus-visible {
+  background: var(--marca-bright) !important;
+  transform: scale(1.06);
+}
+
+@keyframes th-modal-entra {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .th-modal {
+    animation: none !important;
+  }
+
+  .th-modal button[aria-label="Fechar"] {
+    transition: none;
+  }
+}

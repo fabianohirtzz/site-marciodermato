@@ -1,7 +1,7 @@
-import { navHTML, footerHTML, CTA } from './chrome.mjs';
+import { navHTML, footerHTML, CTA_ATTRS } from './chrome.mjs';
 import { sanitizeContent } from './sanitize-html.mjs';
 import { readingTime } from './reading-time.mjs';
-import { TRACKING_HEAD, TRACKING_BODY } from '../../lib/tracking.mjs';
+import { TRACKING_HEAD, TRACKING_BODY, TRACKING_FOOT } from '../../lib/tracking.mjs';
 
 const SITE = 'https://marciodermato.com.br';
 const attr = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -28,14 +28,13 @@ function relatedCard(p) {
 
 /* CTAs inseridos no meio do artigo — padrão em todo post do blog. */
 function ctaConsulta(post) {
-  const wa = CTA;
   return '<aside class="article-cta article-cta--consulta">'
     + '<div class="article-cta__body">'
     + '<p class="article-cta__eyebrow">Avaliação personalizada</p>'
     + '<h3 class="article-cta__title">Quer saber qual tratamento é ideal para você?</h3>'
     + '<p class="article-cta__text">O Dr. Márcio avalia o seu caso com o Método 4D e monta um plano sob medida, com resultados naturais.</p>'
     + '</div>'
-    + `<a class="btn btn--primary article-cta__btn" href="${attr(wa)}" target="_blank" rel="noopener">Agende sua consulta</a>`
+    + `<a class="btn btn--primary article-cta__btn" ${CTA_ATTRS}>Agende sua consulta</a>`
     + '</aside>';
 }
 
@@ -160,7 +159,6 @@ export function renderPostPage(post, related = [], opts = {}) {
   const ogImg = post.ogImage || post.coverImage || `${SITE}/logo/logo-header-colorido.png`;
   const mins = readingTime(post.content);
   const body = injectCtas(sanitizeContent(post.content), post);
-  const ctaCta = CTA;
 
   const ld = {
     '@context': 'https://schema.org', '@type': 'Article',
@@ -246,7 +244,7 @@ ${navHTML('../../', 'blog')}
           </div>
 
           <div class="post-cta">
-            <a class="btn btn--primary" href="${attr(ctaCta)}" target="_blank" rel="noopener">Agende sua consulta</a>
+            <a class="btn btn--primary" ${CTA_ATTRS}>Agende sua consulta</a>
           </div>
         </div>
 
@@ -261,6 +259,7 @@ ${navHTML('../../', 'blog')}
 ${footerHTML('../../')}
 
   <script src="../../assets/js/main.js" defer></script>
+${TRACKING_FOOT}
   <script type="module" src="../../assets/js/likes.js"></script>
 </body>
 </html>

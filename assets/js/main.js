@@ -2,6 +2,93 @@
    Dr. Márcio Teixeira — main.js
    Calm, accessible behavior. Every effect respects prefers-reduced-motion.
    ===================================================================== */
+
+/* --- Popup do formulário: veste o overlay do embed.js -----------------
+   O embed.js monta o overlay com estilo inline e sem classe; um dos
+   critérios é o z-index (mais um critério estrutural de reserva, ver
+   adiante). Marcamos com .th-modal para o CSS assumir a aparência. Toda
+   a lógica (altura, Escape, redirect final) continua sendo do script
+   deles.
+   Fica na primeira posição do arquivo, antes de qualquer outro bloco:
+   main.js roda como um único <script>, então uma exceção não tratada em
+   qualquer bloco posterior (galeria, hero, drawer) interrompe os
+   statements seguintes do mesmo arquivo — inclusive os IIFEs abaixo. Com
+   este bloco primeiro, o observer do popup já está instalado antes que
+   qualquer outro código tenha chance de lançar. Não depende de nenhum
+   outro bloco do arquivo. ------------------------------------------- */
+(function popupDoFormulario() {
+  "use strict";
+  const Z_DO_OVERLAY = "2147483000";
+
+  // Critério estrutural de reserva: se a MeuTrack mudar o z-index, o
+  // resultado não é "volta ao visual padrão" — como o embed.js define
+  // background:transparent, o card branco fica flutuando sem backdrop
+  // nenhum. Aceitamos também overlay fixo com um iframe do MeuTrack.
+  const pareceOverlay = (no) => {
+    if (no.style.zIndex === Z_DO_OVERLAY) return true;
+    return (
+      no.style.position === "fixed" &&
+      !!no.querySelector('iframe[src*="meutrack-ingest"]')
+    );
+  };
+
+  let focoAnterior = null;
+
+  const vestir = (no) => {
+    if (!(no instanceof HTMLElement)) return;
+    if (no.dataset.thVestido) return;
+    if (no.style.zIndex !== Z_DO_OVERLAY) {
+      if (pareceOverlay(no) && no.parentElement === document.body) {
+        console.warn(
+          "popupDoFormulario: overlay do MeuTrack reconhecido pela estrutura, mas com z-index diferente de " +
+            Z_DO_OVERLAY +
+            " — confira se a heurística ainda cobre o script atual."
+        );
+      } else {
+        return;
+      }
+    }
+    no.dataset.thVestido = "1";
+    no.classList.add("th-modal");
+    no.setAttribute("role", "dialog");
+    no.setAttribute("aria-modal", "true");
+    no.setAttribute("aria-label", "Agende sua avaliação");
+    // Foca o overlay (não o iframe): o leitor de tela anuncia o dialog, o
+    // Tab entra no formulário naturalmente, e o keydown de Escape do
+    // embed.js continua chegando no document pai — focar o iframe
+    // (cross-origin) tirava o Escape do ar, porque o keydown nunca saía
+    // de dentro dele.
+    focoAnterior = document.activeElement;
+    no.setAttribute("tabindex", "-1");
+    no.focus({ preventScroll: true });
+
+    // Fecha ao clicar no backdrop (fora do card branco). O embed.js não
+    // instala esse handler; delega para o botão de fechar existente em
+    // vez de reimplementar a lógica de fechamento deles.
+    no.addEventListener("click", (e) => {
+      if (e.target !== no) return;
+      const fechar = no.querySelector('[aria-label="Fechar"]');
+      if (fechar) fechar.click();
+    });
+  };
+
+  const devolverFoco = (no) => {
+    if (!(no instanceof HTMLElement) || !no.dataset.thVestido) return;
+    const alvo = focoAnterior;
+    focoAnterior = null;
+    if (alvo && alvo.isConnected && typeof alvo.focus === "function") {
+      alvo.focus({ preventScroll: true });
+    }
+  };
+
+  new MutationObserver((registros) => {
+    for (const reg of registros) {
+      reg.addedNodes.forEach(vestir);
+      reg.removedNodes.forEach(devolverFoco);
+    }
+  }).observe(document.body, { childList: true });
+})();
+
 (function () {
   "use strict";
 

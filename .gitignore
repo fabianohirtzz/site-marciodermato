@@ -4,6 +4,10 @@ node_modules/
 # local Claude Code config (machine-specific) — skill stays tracked
 .claude/settings.local.json
 
+# worktrees de feature: copias do repo, nunca versionadas
+.claude/worktrees/
+.superpowers/
+
 # browser-preview artifacts
 .playwright-mcp/
 *-hero.jpeg
