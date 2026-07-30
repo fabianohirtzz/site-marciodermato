@@ -226,7 +226,7 @@ Every standard section follows the same calm template. The order is fixed; piece
   color: var(--neve);
 }
 
-/* Antes e Depois carousel band — a light teal-green wash, still inside the
+/* Casos carousel band — a light teal-green wash, still inside the
    brand family (NOT a deep flood). Its own padding + a slight card-offset step. */
 .section--casos {
   --casos-off-step: clamp(8px, 1.4vw, 18px);
@@ -431,7 +431,7 @@ Five pages, mirroring the live architecture. Global on every page: the glass nav
 | Início | `/` | Início | teal, multi-section |
 | Tratamentos | `/tratamentos/` | Tratamentos | teal, the 4 eixos |
 | Método 4D | `/metodo-4d/` | Método 4D | teal, the 4 eixos deep |
-| Tricologia | `/tricologia/` | Tricologia | **NEW** · teal, capilar (hair) + antes/depois |
+| Tricologia | `/tricologia/` | Tricologia | **NEW** · teal, capilar (hair) + results gallery |
 | Sobre | `/sobre/` | Sobre | teal + one sand-warmed gallery |
 | Contato | `/contato/` | Contato | teal, info + form |
 
@@ -448,10 +448,10 @@ This is the **real, current** order and markup in `index.html`. The old "Número
 | # | id | Section | Ground (modifier) | data-fio | Component | Real content |
 |---|---|---|---|---|---|---|
 | 1 | `#hero` | **Hero** (video) | dark video + teal scrim (`.hero`, `--grad-deep` base) | — | **video hero** | Eyebrow: "Dermatologia, estética e tricologia · Porto Alegre". Título: "Dermatologia de excelência para a saúde e *beleza da sua pele*". Lede: "Dr. Márcio Teixeira: cuidado personalizado e resultados naturais com quem entende profundamente de pele, com excelência desde 1993." CTAs: `Agende sua consulta` (WhatsApp) · `Conheça o Método 4D`. Mídia `video-hero/video-hero.mp4` (muted, loop, playsinline, autoplay). **Lateral heritage rails** (`.hero__rail--left` "+30 anos de excelência" · `.hero__rail--right` "Desde 1993"), a scroll cue (`.hero__cue`), and a **bottom-left** play/pause control (`.hero__pause`, opposite the WhatsApp float). |
-| 2 | `#resultados` | **Resultados** (antes/depois drag comparator) | `--branco` | **left** | **before/after** (`.compare` split + `.ba` drag comparator) | Eyebrow "Resultados reais". Title: "Veja a diferença que o cuidado *certo* faz". Drag the divider to compare `home-antes.jpg` / `home-depois.jpg`. Note: "Resultado real de paciente da clínica. Imagens exibidas com consentimento." |
+| 2 | `#resultados` | **Resultados** (two-image drag comparator) | `--branco` | **left** | **comparator** (`.compare` split + `.ba` drag comparator) | Eyebrow "Resultados reais". Title: "Veja a diferença que o cuidado *certo* faz". Drag the divider to compare `home-a.jpg` / `home-b.jpg`. Note: "Resultado real de paciente da clínica. Imagens exibidas com consentimento." |
 | 3 | `#diferenciais` | **Diferenciais** (5 cards) | `--neve` | — | **differentials** (`.diff-grid`, `.container--diff`) | Eyebrow "Por que Dr. Márcio". Title: "Ciência e empatia a serviço da *sua pele*". Five cards: **Experiência** · **Atendimento Humanizado** · **Método 4D Exclusivo** · **Tecnologia de Ponta** · **Resultados Naturais** (each with a brand-gradient line icon that draws in on reveal). |
 | 4 | `#metodo` | **Método 4D** (4 axes) | `--branco` | **right** | **axis cards** (`.axes-grid`) | Eyebrow "Método 4D". Title: "Avaliação correta, *tratamento correto*". Lede about the four dimensions. Cards **01 A Superfície da Pele** · **02 Linhas de Expressão** · **03 Alterações do Volume da Face** · **04 Flacidez**. CTA: `Conheça o Método 4D` → metodo-4d.html. |
-| 5 | `#casos` | **Antes e Depois / Casos** (full-bleed carousel) | `.section--casos` (light teal-green wash) | — | **casos carousel** (`.casos__viewport` / `.casos__track`, full-bleed) | Eyebrow "Antes e Depois". Title: "Resultados que *falam por si*". Hint: "Passe o cursor sobre a foto, ou toque nela, para revelar o depois." Prev/next arrows; horizontal scroll-snap track of `.caso` cards (hover/tap reveals the depois), each with a category chip (Tratamento Capilar · Preenchimento Labial · Laser CO₂ · Liftera). Cards carry a small `--off` vertical-offset for a staggered rhythm. |
+| 5 | `#casos` | **Casos** (full-bleed carousel) | `.section--casos` (light teal-green wash) | — | **casos carousel** (`.casos__viewport` / `.casos__track`, full-bleed) | Eyebrow "Resultados". Title: "Resultados que *falam por si*". Hint: "Passe o cursor sobre a foto, ou toque nela, para ver o resultado." Prev/next arrows; horizontal scroll-snap track of `.caso` cards (hover/tap cross-fades to the second image), each with a category chip (Tratamento Capilar · Preenchimento Labial · Laser CO₂ · Liftera). Cards carry a small `--off` vertical-offset for a staggered rhythm. |
 | 6 | `#dr-marcio` | **Dr. Márcio teaser** | `--branco` (split) | **right** | **doctor/about block** (`.grid-12`: portrait `.col-5` + copy `.col-7`) | Portrait `imagens/sobre.jpg`. Eyebrow "Dr. Márcio Teixeira". Title: "Cuidar da pele é minha *vocação*". Bio (UFRGS, residência no HCPA, membro titular SBD, criador do Método 4D). Chips: CREMERS 20214 · RQE 10858 · RQE 12078 · SBD Membro titular. Pull-quote "Valorizar sua beleza natural é minha missão." CTA "Conheça o Dr. Márcio" → sobre.html. |
 | 7 | `#tratamentos` | **Tratamentos em destaque** (avatar group) | `--neve` | — | **treatment avatars** (`.treat-avatars` / `.tav`) | Eyebrow "Tratamentos". Title: "Cuidados *sob medida* para a sua pele". Lede: "Uma seleção de tratamentos faciais, organizados pelos quatro eixos do Método 4D." Ten circular avatars (Skinbooster · Laserterapia · LIP · Peelings Químicos · Toxina Botulínica · Ácido Hialurônico · Bioestimuladores · Harmonização Facial · Ultrassom Liftera · Radiofrequência · Fios de Sustentação), each tagged with its eixo (revealed on hover) and linking to tratamentos.html. CTA: "Ver todos os tratamentos". |
 | 8 | `#avaliacoes` | **Avaliações** (Google reviews carousel) | `--branco` (`.reviews`) | **left** | **reviews carousel** (`.reviews__viewport` / `.reviews__track`, boxed full-bleed) | Eyebrow "Avaliações". Title: "Quem é cuidado *recomenda*". Google rating chip (**4,9** · 216 avaliações, real Google "G" mark + gold stars) linking to the Google review page. Prev/next arrows; horizontal scroll-snap track of `.review-card` (real patient quotes from Google, initials avatar + name + "Avaliação no Google"). Footer link "Ver todas no Google". |
@@ -476,7 +476,7 @@ Ground alternation across the home: `branco → neve → branco → casos(teal-g
 | 7 | **CTA band** | `--section--deep` | **appointment CTA** | "Cada pele pede um *plano próprio*. Vamos montar o seu?" Buttons: `AGENDE SUA CONSULTA` · `CONHEÇA O MÉTODO 4D`. |
 | 8 | **Footer** | deep-teal | **footer** | Global. |
 
-> **Resultados (antes/depois) — opcional.** Há material real de antes/depois em `antes-depois/`: `laser-CO2/` (7 img, Eixo 1), `Liftera/` (5 img + 2 vídeos, Eixo 4), `Preenchimento labial/` (11 img + 4 vídeos, Eixo 3). Pode virar uma galeria de resultados por eixo (slider antes/depois + lightbox, ver `INTERACTIONS.md`) ou cards de prova social. Curar, otimizar para web, converter `.mov` → `.mp4`, e confirmar consentimento de imagem dos pacientes.
+> **Resultados — opcional.** Há material fotográfico real de pacientes em `antes-depois/` (pasta-fonte, fora do deploy): `laser-CO2/` (7 img, Eixo 1), `Liftera/` (5 img + 2 vídeos, Eixo 4), `Preenchimento labial/` (11 img + 4 vídeos, Eixo 3). Pode virar uma galeria de resultados por eixo (comparador de duas imagens + lightbox, ver `INTERACTIONS.md`) ou cards de prova social. **Sem rótulos "antes"/"depois"** (ver § Compliance). Curar, otimizar para web, converter `.mov` → `.mp4`, e confirmar consentimento de imagem dos pacientes.
 
 ---
 
@@ -497,7 +497,7 @@ Ground alternation across the home: `branco → neve → branco → casos(teal-g
 
 ### 7.4 Tricologia (NEW page)
 
-The doctor is **Dermatologista & Tricologista** (per the brandbook), so the hair/scalp specialty gets its own page. It did **not** exist on the old site, so the copy below is a recommended scaffold to confirm with the client, not extracted ground truth. Keep it on-brand: same teal + serif + whitespace, same section rhythm. Real before/after material exists in `antes-depois/Cabelos/` (14 images).
+The doctor is **Dermatologista & Tricologista** (per the brandbook), so the hair/scalp specialty gets its own page. It did **not** exist on the old site, so the copy below is a recommended scaffold to confirm with the client, not extracted ground truth. Keep it on-brand: same teal + serif + whitespace, same section rhythm. Real patient photo material exists in `antes-depois/Cabelos/` (source folder, excluded from deploy — 14 images).
 
 | # | Section | Ground | Component | Content (scaffold, confirm with client) |
 |---|---|---|---|---|
@@ -505,7 +505,7 @@ The doctor is **Dermatologista & Tricologista** (per the brandbook), so the hair
 | 2 | **O que é tricologia** | `--neve` | **prose** (`.container--narrow`) | Plain, calm explainer: a tricologia é a área da dermatologia dedicada aos cabelos e ao couro cabeludo. Quando procurar, o que esperar da avaliação. |
 | 3 | **Principais queixas** | `--branco` | **differentials/icon grid** (`.grid--diff`) | Cards: Queda capilar · Calvície (alopecia androgenética) · Alopecia areata · Caspa e dermatite seborreica · Saúde do couro cabeludo · Fios fracos e quebradiços. (Confirmar lista com o cliente; ícones de linha teal.) |
 | 4 | **Tratamentos capilares** | `--neve` | **treatment cards** (`.grid--treat`, `data-eixo="capilar"`) | Cards a definir com o cliente. Exemplos comuns em tricologia: Microagulhamento capilar (MMP) · Mesoterapia / intradermoterapia · Minoxidil e terapias tópicas/orais · Laserterapia capilar · Bioestimulação do couro cabeludo. (Sem arte dedicada ainda em `/imagens`, avaliar produção.) |
-| 5 | **Resultados (antes/depois)** | `--areia` (warm) | **gallery / before-after** (`.grid--gallery` → lightbox) | Eyebrow "Resultados reais". Galeria a partir de `antes-depois/Cabelos/` (14 imagens). Curar os melhores pares, otimizar para web, e confirmar consentimento de imagem dos pacientes. Considerar um slider antes/depois. |
+| 5 | **Resultados reais** | `--areia` (warm) | **gallery** (`.grid--gallery` → lightbox) | Eyebrow "Resultados reais". Galeria a partir de `antes-depois/Cabelos/` (14 imagens). Curar os melhores pares, otimizar para web, e confirmar consentimento de imagem dos pacientes. Rótulo neutro ("Resultado") — nunca "antes"/"depois" (§ Compliance). |
 | 6 | **Appointment CTA band** | `--section--deep` | **appointment CTA** | "Recupere a confiança nos seus cabelos." Button: `AGENDE SUA CONSULTA`. |
 | 7 | **Footer** | deep-teal | **footer** | Global. |
 
@@ -584,7 +584,7 @@ Each bespoke grid reflows on its own breakpoint (see §2 for the CSS):
 
 ### Carousels (Casos + Avaliações)
 Both are horizontal scroll-snap tracks that **break out of the container** (full-bleed), with prev/next arrow controls and a `--per` (cards-in-view) that steps down responsively:
-- **Casos `.casos__track`**: `--per` 6 → 5 (**1200**) → 4 (**980**) → 3 (**760**) → 2.2 (**560**); the track pads to the page `--gutter`. The caso meta (Antes/Depois tag + category) stacks vertically at **560px**.
+- **Casos `.casos__track`**: `--per` 6 → 5 (**1200**) → 4 (**980**) → 3 (**760**) → 2.2 (**560**); the track pads to the page `--gutter`. The caso meta (category chip) sits at the card corner; it clamps to the card width at **560px**.
 - **Avaliações `.reviews__track`**: `--per` 3 → 2 (**1080**) → 1.12 (**680**); the track pads to a computed `--edge` so the cards line up with `.container` (boxed full-bleed, not edge-to-edge). Review text line-clamp loosens (7 → 11 lines) at **680px**.
 
 ### Splits (doctor block — and the planned contact info+form)

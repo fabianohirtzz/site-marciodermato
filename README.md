@@ -45,7 +45,7 @@ O site novo terá **6 páginas**. O site atual tinha 5; a página **Tricologia**
 ### Menu de navegação
 `Início` · `Tratamentos` · `Método 4D` · `Tricologia` · `Sobre` · `Contato`
 
-> **Tricologia (nova página):** o Dr. Márcio é **Dermatologista & Tricologista** (ver brandbook), então a especialidade capilar ganha página própria. Conteúdo a definir com o cliente; já temos material de **antes/depois capilar** em `antes-depois/Cabelos/` (14 imagens). Sugestão de seções: hero, o que é tricologia, principais queixas (queda, calvície, alopecia, saúde do couro cabeludo), tratamentos capilares, antes/depois, CTA de agendamento.
+> **Tricologia (nova página):** o Dr. Márcio é **Dermatologista & Tricologista** (ver brandbook), então a especialidade capilar ganha página própria. Conteúdo a definir com o cliente; já temos material fotográfico capilar em `antes-depois/Cabelos/` (14 imagens). Sugestão de seções: hero, o que é tricologia, principais queixas (queda, calvície, alopecia, saúde do couro cabeludo), tratamentos capilares, resultados reais, CTA de agendamento.
 
 ### CTAs recorrentes (botões)
 - **AGENDE SUA CONSULTA** (principal)
@@ -227,17 +227,17 @@ Botão de envio: **Enviar** · CTAs: **ATENDIMENTO WHATSAPP**, **Agende Sua Cons
 ### `/ambiente` (galeria da clínica)
 - `dermaclin1.jpg` … `dermaclin15.jpg` (15 fotos do espaço físico)
 
-### `/antes-depois` (resultados reais — antes/depois)
+### `/antes-depois` (material-fonte de resultados reais — fora do deploy)
 Material clínico de resultados, organizado por tratamento. Ótimo para provas sociais / galerias de resultados nas páginas de Tratamentos e Tricologia.
 
 | Subpasta                       | Imagens | Vídeos | Usar em                                              |
 |--------------------------------|:-------:|:------:|------------------------------------------------------|
-| `Cabelos/`                     | 14      | 0      | **Tricologia** (antes/depois capilar)                |
+| `Cabelos/`                     | 14      | 0      | **Tricologia** (resultados capilares)                |
 | `laser-CO2/`                   | 7       | 0      | Tratamentos · Eixo 1 (Laser CO2 / Superfície)        |
 | `Liftera/`                     | 5       | 2      | Tratamentos · Eixo 4 (Ultrassom Microfocado Liftera) |
 | `Preenchimento labial/`        | 11      | 4      | Tratamentos · Eixo 3 (Preenchimento / Volume)        |
 
-> Nomes de arquivo são hashes/IDs (ex.: `24012089-…​.jpeg`), sem padrão semântico. Ao montar as galerias, vale renomear/curar (escolher os melhores pares antes/depois) e otimizar/comprimir para web. Há `.mov` (vídeo Apple) em Liftera e Preenchimento labial: converter para `.mp4` antes de publicar. Atenção a consentimento de imagem dos pacientes antes de exibir publicamente.
+> Nomes de arquivo são hashes/IDs (ex.: `24012089-…​.jpeg`), sem padrão semântico. Ao montar as galerias, vale renomear/curar (escolher os melhores pares) e otimizar/comprimir para web. Há `.mov` (vídeo Apple) em Liftera e Preenchimento labial: converter para `.mp4` antes de publicar. Atenção a consentimento de imagem dos pacientes antes de exibir publicamente.
 
 ### `/imagens` — mapeamento por tratamento/seção
 

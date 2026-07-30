@@ -20,8 +20,8 @@ The shipped, wired behaviors (in `main.js` order):
 5. **Mobile drawer** — `[data-drawer]` open/close, Esc, scroll lock
 6. **Hero video play/pause** — `[data-hero-pause]`, motion-safe autoplay
 7. **Soft hero parallax** — `.hero__media.parallax`
-8. **Antes/Depois drag comparator** — `[data-ba]` + `.ba__range` → `--pos`
-9. **Casos carousel** — `[data-casos-track]` + tap-to-reveal-depois
+8. **Comparison drag comparator** — `[data-ba]` + `.ba__range` → `--pos`
+9. **Casos carousel** — `[data-casos-track]` + tap-to-reveal image B
 10. **Avaliações carousel** — `[data-reviews-track]`
 11. **Smooth anchor scrolling** — in-page `#` links
 12. **Fio de cabelo motif** — `fioMotif()`, per-section SVG generation
@@ -352,7 +352,7 @@ window.addEventListener("scroll", onScroll, { passive: true });
 
 ---
 
-## 8. Antes/Depois drag comparator
+## 8. Comparison drag comparator
 
 A single before/after image where the patient drags to wipe between the two states. A real `<input type="range">` is the keyboard-accessible engine; pointer events let you press-and-drag anywhere on the image. Both write the same `--pos` CSS var that clips the "before" image and positions the divider.
 
@@ -360,13 +360,11 @@ A single before/after image where the patient drags to wipe between the two stat
 
 ```html
 <div class="ba" data-ba style="--pos:50%">
-  <img class="ba__img ba__img--after"  src="…/home-depois.jpg" alt="Pele após o tratamento…" />
-  <img class="ba__img ba__img--before" src="…/home-antes.jpg"  alt="Pele antes do tratamento" />
-  <span class="ba__label ba__label--before">Antes</span>
-  <span class="ba__label ba__label--after">Depois</span>
+  <img class="ba__img ba__img--after"  src="…/home-b.jpg" alt="Pele da paciente, registro fotográfico 2" />
+  <img class="ba__img ba__img--before" src="…/home-a.jpg" alt="Pele da paciente, registro fotográfico 1" />
   <div class="ba__divider" aria-hidden="true"><span class="ba__handle">…chevrons…</span></div>
   <input class="ba__range" type="range" min="0" max="100" value="50" step="0.1"
-         aria-label="Comparar antes e depois" />
+         aria-label="Comparar os dois registros fotográficos" />
 </div>
 ```
 
@@ -408,13 +406,13 @@ document.querySelectorAll("[data-ba]").forEach((ba) => {
 
 ### Accessibility / reduced-motion
 
-The `<input type="range">` carries the interaction's accessibility: it is fully keyboard operable (Arrow/Home/End/PageUp-Down move `--pos` in real time via `input`) and labelled `aria-label="Comparar antes e depois"`. The divider/handle are `aria-hidden` decoration. There is no time-based animation, so nothing to gate for reduced-motion — the wipe is direct manipulation.
+The `<input type="range">` carries the interaction's accessibility: it is fully keyboard operable (Arrow/Home/End/PageUp-Down move `--pos` in real time via `input`) and labelled `aria-label="Comparar os dois registros fotográficos"`. The divider/handle are `aria-hidden` decoration. There is no time-based animation, so nothing to gate for reduced-motion — the wipe is direct manipulation.
 
 ---
 
-## 9. Casos carousel (Antes e Depois)
+## 9. Casos carousel
 
-A full-bleed, horizontally-scrolling track of before/after case cards. Arrows step one card at a time and disable at the ends; each card reveals its "depois" on hover/focus (desktop) and on tap (touch), with `aria-pressed` tracking the tapped state.
+A full-bleed, horizontally-scrolling track of case cards. Arrows step one card at a time and disable at the ends; each card reveals its second image on hover/focus (desktop) and on tap (touch), with `aria-pressed` tracking the tapped state.
 
 ### Markup hooks
 
@@ -425,15 +423,15 @@ A full-bleed, horizontally-scrolling track of before/after case cards. Arrows st
 </div>
 
 <div class="casos__viewport">
-  <ul class="casos__track" data-casos-track tabindex="0" role="list" aria-label="Casos de antes e depois">
+  <ul class="casos__track" data-casos-track tabindex="0" role="list" aria-label="Casos de pacientes da clínica">
     <li class="caso-item">
       <article class="caso" style="--off:2.6">
-        <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Tratamento Capilar: ver o depois">
+        <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Tratamento Capilar: ver o resultado">
           <span class="caso__media">
-            <img class="caso__img caso__img--antes"  … />
-            <img class="caso__img caso__img--depois" … />
+            <img class="caso__img caso__img--a"  … />
+            <img class="caso__img caso__img--b" … />
           </span>
-          <span class="caso__meta">…tag (Antes/Depois) + category…</span>
+          <span class="caso__meta">…category chip only (no state label)…</span>
         </button>
       </article>
     </li>
@@ -471,7 +469,7 @@ track.addEventListener("scroll", /* rAF-throttled */ updateArrows, { passive: tr
 window.addEventListener("resize", updateArrows);
 updateArrows();
 
-/* hover-less (touch) devices: tap toggles the "depois" persistently */
+/* hover-less (touch) devices: tap toggles image B persistently */
 track.querySelectorAll(".caso__toggle").forEach((btn) => {
   btn.addEventListener("click", () => {
     const caso = btn.closest(".caso");
@@ -483,11 +481,11 @@ track.querySelectorAll(".caso__toggle").forEach((btn) => {
 
 - **Native scroll is the engine.** Arrows call `scrollBy` by exactly one card (measured width + computed `column-gap`); the track is also free-scroll/swipe by the user. Smooth scroll degrades to `"auto"` under reduced-motion.
 - **Arrow disabling** is computed from `scrollLeft` against `scrollWidth - clientWidth` (with a 2px tolerance): `prev` disables at the start, `next` at the end. Recomputed on every (throttled) scroll and on resize, and once on init — so the first card starts with `prev` disabled (matching the `disabled` attribute in the markup).
-- **Reveal model.** On pointer devices, hover/focus reveals the depois purely in CSS (`.caso__toggle:hover .caso__img--depois`, `:focus-visible …`). On touch there is no hover, so the tap handler **toggles `.caso.is-revealed`** persistently and flips `aria-pressed` — the same CSS rule (`.caso.is-revealed .caso__img--depois`) drives the visual. Hover and the toggled class share one stylesheet path, so the two never diverge.
+- **Reveal model.** On pointer devices, hover/focus reveals image B purely in CSS (`.caso__toggle:hover .caso__img--b`, `:focus-visible …`). On touch there is no hover, so the tap handler **toggles `.caso.is-revealed`** persistently and flips `aria-pressed` — the same CSS rule (`.caso.is-revealed .caso__img--b`) drives the visual. Hover and the toggled class share one stylesheet path, so the two never diverge.
 
 ### Accessibility / keyboard
 
-Each card's reveal control is a real `<button class="caso__toggle">` with `aria-pressed` (toggle semantics) and a descriptive `aria-label` ("`<categoria>`: ver o depois"); Enter/Space activate it natively, and `:focus-visible` reveals the depois exactly like hover. The track is `tabindex="0"` + `role="list"` with an `aria-label`, so it is focusable and can be scrolled with the keyboard. Arrow buttons carry `aria-label`s and use the native `disabled` attribute at the ends. The Antes/Depois tag inside each card is `aria-hidden` (decorative state mirror).
+Each card's reveal control is a real `<button class="caso__toggle">` with `aria-pressed` (toggle semantics) and a descriptive `aria-label` ("`<categoria>`: ver o resultado"); Enter/Space activate it natively, and `:focus-visible` reveals image B exactly like hover. The track is `tabindex="0"` + `role="list"` with an `aria-label`, so it is focusable and can be scrolled with the keyboard. Arrow buttons carry `aria-label`s and use the native `disabled` attribute at the ends. Cards carry no state label (§ Compliance).
 
 ---
 

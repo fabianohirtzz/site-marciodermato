@@ -122,7 +122,7 @@
       </button>
     </section>
 
-    <!-- ===================== RESULTADOS (antes/depois) ===================== -->
+    <!-- ===================== RESULTADOS (comparador) ===================== -->
     <section class="section section--branco" id="resultados" aria-labelledby="resultados-title" data-fio="left">
       <div class="container">
         <div class="compare">
@@ -130,22 +130,20 @@
             <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Resultados reais</p>
             <h2 id="resultados-title" class="section__title">Veja a diferença que o cuidado <span class="hl hl--italic">certo</span> faz</h2>
             <p class="section__lede">
-              Arraste para comparar o antes e o depois. Resultados naturais, conquistados com avaliação precisa e a tecnologia adequada para cada pele.
+              Arraste para comparar os dois registros. Resultados naturais, conquistados com avaliação precisa e a tecnologia adequada para cada pele.
             </p>
             <p class="compare__note">Resultado real de paciente da clínica. Imagens exibidas com consentimento.</p>
           </div>
 
           <div class="ba reveal" data-ba style="--pos:50%">
-            <img class="ba__img ba__img--after" src="assets/img/home-depois.jpg" alt="Pele após o tratamento, com mais uniformidade e viço" />
-            <img class="ba__img ba__img--before" src="assets/img/home-antes.jpg" alt="Pele antes do tratamento" />
-            <span class="ba__label ba__label--before">Antes</span>
-            <span class="ba__label ba__label--after">Depois</span>
+            <img class="ba__img ba__img--after" src="assets/img/home-b.jpg" alt="Pele da paciente, registro fotográfico 2" />
+            <img class="ba__img ba__img--before" src="assets/img/home-a.jpg" alt="Pele da paciente, registro fotográfico 1" />
             <div class="ba__divider" aria-hidden="true">
               <span class="ba__handle">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 7 4 12l5 5M15 7l5 5-5 5" /></svg>
               </span>
             </div>
-            <input class="ba__range" type="range" min="0" max="100" value="50" step="0.1" aria-label="Comparar antes e depois" />
+            <input class="ba__range" type="range" min="0" max="100" value="50" step="0.1" aria-label="Comparar os dois registros fotográficos" />
           </div>
         </div>
       </div>
@@ -255,14 +253,14 @@
       </div>
     </section>
 
-    <!-- ========================= ANTES E DEPOIS ========================= -->
+    <!-- ========================= CASOS ================================== -->
     <section class="section section--casos" id="casos" aria-labelledby="casos-title">
       <div class="container casos__top">
         <header class="casos__head reveal">
           <div class="casos__intro">
-            <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Antes e Depois</p>
+            <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Resultados</p>
             <h2 id="casos-title" class="section__title">Resultados que <span class="hl hl--italic">falam por si</span></h2>
-            <p class="section__lede casos__hint">Passe o cursor sobre a foto, ou toque nela, para revelar o depois.</p>
+            <p class="section__lede casos__hint">Passe o cursor sobre a foto, ou toque nela, para ver o resultado.</p>
           </div>
           <div class="casos__nav" role="group" aria-label="Navegar pelos resultados">
             <button class="casos__arrow" type="button" data-casos-prev aria-label="Ver caso anterior" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -272,19 +270,15 @@
       </div>
 
       <div class="casos__viewport reveal">
-        <ul class="casos__track" data-casos-track tabindex="0" role="list" aria-label="Casos de antes e depois">
+        <ul class="casos__track" data-casos-track tabindex="0" role="list" aria-label="Casos de pacientes da clínica">
           <li class="caso-item">
             <article class="caso" style="--off:2.6">
-              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Tratamento Capilar: ver o depois">
+              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Tratamento Capilar: ver o resultado">
                 <span class="caso__media">
-                  <img class="caso__img caso__img--antes" src="imagens/casos/capilar-01-antes.jpg" alt="Antes do tratamento de Tratamento Capilar" loading="lazy" decoding="async" width="560" height="896" />
-                  <img class="caso__img caso__img--depois" src="imagens/casos/capilar-01-depois.jpg" alt="Depois do tratamento de Tratamento Capilar" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--a" src="imagens/casos/capilar-01a.jpg" alt="Tratamento Capilar, registro fotográfico 1" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--b" src="imagens/casos/capilar-01b.jpg" alt="Tratamento Capilar, registro fotográfico 2" loading="lazy" decoding="async" width="560" height="896" />
                 </span>
                 <span class="caso__meta">
-                  <span class="caso__tag" aria-hidden="true">
-                    <span class="caso__tag-state caso__tag-state--antes">Antes</span>
-                    <span class="caso__tag-state caso__tag-state--depois">Depois</span>
-                  </span>
                   <span class="caso__cat">Tratamento Capilar</span>
                 </span>
               </button>
@@ -292,16 +286,12 @@
           </li>
           <li class="caso-item">
             <article class="caso" style="--off:0">
-              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Preenchimento Labial: ver o depois">
+              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Preenchimento Labial: ver o resultado">
                 <span class="caso__media">
-                  <img class="caso__img caso__img--antes" src="imagens/casos/preenchimento-01-antes.jpg" alt="Antes do tratamento de Preenchimento Labial" loading="lazy" decoding="async" width="560" height="896" />
-                  <img class="caso__img caso__img--depois" src="imagens/casos/preenchimento-01-depois.jpg" alt="Depois do tratamento de Preenchimento Labial" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--a" src="imagens/casos/preenchimento-01a.jpg" alt="Preenchimento Labial, registro fotográfico 1" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--b" src="imagens/casos/preenchimento-01b.jpg" alt="Preenchimento Labial, registro fotográfico 2" loading="lazy" decoding="async" width="560" height="896" />
                 </span>
                 <span class="caso__meta">
-                  <span class="caso__tag" aria-hidden="true">
-                    <span class="caso__tag-state caso__tag-state--antes">Antes</span>
-                    <span class="caso__tag-state caso__tag-state--depois">Depois</span>
-                  </span>
                   <span class="caso__cat">Preenchimento Labial</span>
                 </span>
               </button>
@@ -309,16 +299,12 @@
           </li>
           <li class="caso-item">
             <article class="caso" style="--off:4.4">
-              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Laser CO₂: ver o depois">
+              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Laser CO₂: ver o resultado">
                 <span class="caso__media">
-                  <img class="caso__img caso__img--antes" src="imagens/casos/laser-01-antes.jpg" alt="Antes do tratamento de Laser CO₂" loading="lazy" decoding="async" width="560" height="896" />
-                  <img class="caso__img caso__img--depois" src="imagens/casos/laser-01-depois.jpg" alt="Depois do tratamento de Laser CO₂" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--a" src="imagens/casos/laser-01a.jpg" alt="Laser CO₂, registro fotográfico 1" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--b" src="imagens/casos/laser-01b.jpg" alt="Laser CO₂, registro fotográfico 2" loading="lazy" decoding="async" width="560" height="896" />
                 </span>
                 <span class="caso__meta">
-                  <span class="caso__tag" aria-hidden="true">
-                    <span class="caso__tag-state caso__tag-state--antes">Antes</span>
-                    <span class="caso__tag-state caso__tag-state--depois">Depois</span>
-                  </span>
                   <span class="caso__cat">Laser CO₂</span>
                 </span>
               </button>
@@ -326,16 +312,12 @@
           </li>
           <li class="caso-item">
             <article class="caso" style="--off:1.2">
-              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Liftera: ver o depois">
+              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Liftera: ver o resultado">
                 <span class="caso__media">
-                  <img class="caso__img caso__img--antes" src="imagens/casos/liftera-01-antes.jpg" alt="Antes do tratamento de Liftera" loading="lazy" decoding="async" width="560" height="896" />
-                  <img class="caso__img caso__img--depois" src="imagens/casos/liftera-01-depois.jpg" alt="Depois do tratamento de Liftera" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--a" src="imagens/casos/liftera-01a.jpg" alt="Liftera, registro fotográfico 1" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--b" src="imagens/casos/liftera-01b.jpg" alt="Liftera, registro fotográfico 2" loading="lazy" decoding="async" width="560" height="896" />
                 </span>
                 <span class="caso__meta">
-                  <span class="caso__tag" aria-hidden="true">
-                    <span class="caso__tag-state caso__tag-state--antes">Antes</span>
-                    <span class="caso__tag-state caso__tag-state--depois">Depois</span>
-                  </span>
                   <span class="caso__cat">Liftera</span>
                 </span>
               </button>
@@ -343,16 +325,12 @@
           </li>
           <li class="caso-item">
             <article class="caso" style="--off:3.4">
-              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Tratamento Capilar: ver o depois">
+              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Tratamento Capilar: ver o resultado">
                 <span class="caso__media">
-                  <img class="caso__img caso__img--antes" src="imagens/casos/capilar-02-antes.jpg" alt="Antes do tratamento de Tratamento Capilar" loading="lazy" decoding="async" width="560" height="896" />
-                  <img class="caso__img caso__img--depois" src="imagens/casos/capilar-02-depois.jpg" alt="Depois do tratamento de Tratamento Capilar" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--a" src="imagens/casos/capilar-02a.jpg" alt="Tratamento Capilar, registro fotográfico 1" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--b" src="imagens/casos/capilar-02b.jpg" alt="Tratamento Capilar, registro fotográfico 2" loading="lazy" decoding="async" width="560" height="896" />
                 </span>
                 <span class="caso__meta">
-                  <span class="caso__tag" aria-hidden="true">
-                    <span class="caso__tag-state caso__tag-state--antes">Antes</span>
-                    <span class="caso__tag-state caso__tag-state--depois">Depois</span>
-                  </span>
                   <span class="caso__cat">Tratamento Capilar</span>
                 </span>
               </button>
@@ -360,16 +338,12 @@
           </li>
           <li class="caso-item">
             <article class="caso" style="--off:0.6">
-              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Preenchimento Labial: ver o depois">
+              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Preenchimento Labial: ver o resultado">
                 <span class="caso__media">
-                  <img class="caso__img caso__img--antes" src="imagens/casos/preenchimento-02-antes.jpg" alt="Antes do tratamento de Preenchimento Labial" loading="lazy" decoding="async" width="560" height="896" />
-                  <img class="caso__img caso__img--depois" src="imagens/casos/preenchimento-02-depois.jpg" alt="Depois do tratamento de Preenchimento Labial" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--a" src="imagens/casos/preenchimento-02a.jpg" alt="Preenchimento Labial, registro fotográfico 1" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--b" src="imagens/casos/preenchimento-02b.jpg" alt="Preenchimento Labial, registro fotográfico 2" loading="lazy" decoding="async" width="560" height="896" />
                 </span>
                 <span class="caso__meta">
-                  <span class="caso__tag" aria-hidden="true">
-                    <span class="caso__tag-state caso__tag-state--antes">Antes</span>
-                    <span class="caso__tag-state caso__tag-state--depois">Depois</span>
-                  </span>
                   <span class="caso__cat">Preenchimento Labial</span>
                 </span>
               </button>
@@ -377,16 +351,12 @@
           </li>
           <li class="caso-item">
             <article class="caso" style="--off:2.6">
-              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Laser CO₂: ver o depois">
+              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Laser CO₂: ver o resultado">
                 <span class="caso__media">
-                  <img class="caso__img caso__img--antes" src="imagens/casos/laser-02-antes.jpg" alt="Antes do tratamento de Laser CO₂" loading="lazy" decoding="async" width="560" height="896" />
-                  <img class="caso__img caso__img--depois" src="imagens/casos/laser-02-depois.jpg" alt="Depois do tratamento de Laser CO₂" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--a" src="imagens/casos/laser-02a.jpg" alt="Laser CO₂, registro fotográfico 1" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--b" src="imagens/casos/laser-02b.jpg" alt="Laser CO₂, registro fotográfico 2" loading="lazy" decoding="async" width="560" height="896" />
                 </span>
                 <span class="caso__meta">
-                  <span class="caso__tag" aria-hidden="true">
-                    <span class="caso__tag-state caso__tag-state--antes">Antes</span>
-                    <span class="caso__tag-state caso__tag-state--depois">Depois</span>
-                  </span>
                   <span class="caso__cat">Laser CO₂</span>
                 </span>
               </button>
@@ -394,16 +364,12 @@
           </li>
           <li class="caso-item">
             <article class="caso" style="--off:0">
-              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Liftera: ver o depois">
+              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Liftera: ver o resultado">
                 <span class="caso__media">
-                  <img class="caso__img caso__img--antes" src="imagens/casos/liftera-02-antes.jpg" alt="Antes do tratamento de Liftera" loading="lazy" decoding="async" width="560" height="896" />
-                  <img class="caso__img caso__img--depois" src="imagens/casos/liftera-02-depois.jpg" alt="Depois do tratamento de Liftera" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--a" src="imagens/casos/liftera-02a.jpg" alt="Liftera, registro fotográfico 1" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--b" src="imagens/casos/liftera-02b.jpg" alt="Liftera, registro fotográfico 2" loading="lazy" decoding="async" width="560" height="896" />
                 </span>
                 <span class="caso__meta">
-                  <span class="caso__tag" aria-hidden="true">
-                    <span class="caso__tag-state caso__tag-state--antes">Antes</span>
-                    <span class="caso__tag-state caso__tag-state--depois">Depois</span>
-                  </span>
                   <span class="caso__cat">Liftera</span>
                 </span>
               </button>
@@ -411,16 +377,12 @@
           </li>
           <li class="caso-item">
             <article class="caso" style="--off:4.4">
-              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Tratamento Capilar: ver o depois">
+              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Tratamento Capilar: ver o resultado">
                 <span class="caso__media">
-                  <img class="caso__img caso__img--antes" src="imagens/casos/capilar-03-antes.jpg" alt="Antes do tratamento de Tratamento Capilar" loading="lazy" decoding="async" width="560" height="896" />
-                  <img class="caso__img caso__img--depois" src="imagens/casos/capilar-03-depois.jpg" alt="Depois do tratamento de Tratamento Capilar" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--a" src="imagens/casos/capilar-03a.jpg" alt="Tratamento Capilar, registro fotográfico 1" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--b" src="imagens/casos/capilar-03b.jpg" alt="Tratamento Capilar, registro fotográfico 2" loading="lazy" decoding="async" width="560" height="896" />
                 </span>
                 <span class="caso__meta">
-                  <span class="caso__tag" aria-hidden="true">
-                    <span class="caso__tag-state caso__tag-state--antes">Antes</span>
-                    <span class="caso__tag-state caso__tag-state--depois">Depois</span>
-                  </span>
                   <span class="caso__cat">Tratamento Capilar</span>
                 </span>
               </button>
@@ -428,16 +390,12 @@
           </li>
           <li class="caso-item">
             <article class="caso" style="--off:1.2">
-              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Preenchimento Labial: ver o depois">
+              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Preenchimento Labial: ver o resultado">
                 <span class="caso__media">
-                  <img class="caso__img caso__img--antes" src="imagens/casos/preenchimento-03-antes.jpg" alt="Antes do tratamento de Preenchimento Labial" loading="lazy" decoding="async" width="560" height="896" />
-                  <img class="caso__img caso__img--depois" src="imagens/casos/preenchimento-03-depois.jpg" alt="Depois do tratamento de Preenchimento Labial" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--a" src="imagens/casos/preenchimento-03a.jpg" alt="Preenchimento Labial, registro fotográfico 1" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--b" src="imagens/casos/preenchimento-03b.jpg" alt="Preenchimento Labial, registro fotográfico 2" loading="lazy" decoding="async" width="560" height="896" />
                 </span>
                 <span class="caso__meta">
-                  <span class="caso__tag" aria-hidden="true">
-                    <span class="caso__tag-state caso__tag-state--antes">Antes</span>
-                    <span class="caso__tag-state caso__tag-state--depois">Depois</span>
-                  </span>
                   <span class="caso__cat">Preenchimento Labial</span>
                 </span>
               </button>
@@ -445,16 +403,12 @@
           </li>
           <li class="caso-item">
             <article class="caso" style="--off:3.4">
-              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Laser CO₂: ver o depois">
+              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Laser CO₂: ver o resultado">
                 <span class="caso__media">
-                  <img class="caso__img caso__img--antes" src="imagens/casos/laser-03-antes.jpg" alt="Antes do tratamento de Laser CO₂" loading="lazy" decoding="async" width="560" height="896" />
-                  <img class="caso__img caso__img--depois" src="imagens/casos/laser-03-depois.jpg" alt="Depois do tratamento de Laser CO₂" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--a" src="imagens/casos/laser-03a.jpg" alt="Laser CO₂, registro fotográfico 1" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--b" src="imagens/casos/laser-03b.jpg" alt="Laser CO₂, registro fotográfico 2" loading="lazy" decoding="async" width="560" height="896" />
                 </span>
                 <span class="caso__meta">
-                  <span class="caso__tag" aria-hidden="true">
-                    <span class="caso__tag-state caso__tag-state--antes">Antes</span>
-                    <span class="caso__tag-state caso__tag-state--depois">Depois</span>
-                  </span>
                   <span class="caso__cat">Laser CO₂</span>
                 </span>
               </button>
@@ -462,16 +416,12 @@
           </li>
           <li class="caso-item">
             <article class="caso" style="--off:0.6">
-              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Tratamento Capilar: ver o depois">
+              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Tratamento Capilar: ver o resultado">
                 <span class="caso__media">
-                  <img class="caso__img caso__img--antes" src="imagens/casos/capilar-04-antes.jpg" alt="Antes do tratamento de Tratamento Capilar" loading="lazy" decoding="async" width="560" height="896" />
-                  <img class="caso__img caso__img--depois" src="imagens/casos/capilar-04-depois.jpg" alt="Depois do tratamento de Tratamento Capilar" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--a" src="imagens/casos/capilar-04a.jpg" alt="Tratamento Capilar, registro fotográfico 1" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--b" src="imagens/casos/capilar-04b.jpg" alt="Tratamento Capilar, registro fotográfico 2" loading="lazy" decoding="async" width="560" height="896" />
                 </span>
                 <span class="caso__meta">
-                  <span class="caso__tag" aria-hidden="true">
-                    <span class="caso__tag-state caso__tag-state--antes">Antes</span>
-                    <span class="caso__tag-state caso__tag-state--depois">Depois</span>
-                  </span>
                   <span class="caso__cat">Tratamento Capilar</span>
                 </span>
               </button>
@@ -479,16 +429,12 @@
           </li>
           <li class="caso-item">
             <article class="caso" style="--off:2.6">
-              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Preenchimento Labial: ver o depois">
+              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Preenchimento Labial: ver o resultado">
                 <span class="caso__media">
-                  <img class="caso__img caso__img--antes" src="imagens/casos/preenchimento-04-antes.jpg" alt="Antes do tratamento de Preenchimento Labial" loading="lazy" decoding="async" width="560" height="896" />
-                  <img class="caso__img caso__img--depois" src="imagens/casos/preenchimento-04-depois.jpg" alt="Depois do tratamento de Preenchimento Labial" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--a" src="imagens/casos/preenchimento-04a.jpg" alt="Preenchimento Labial, registro fotográfico 1" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--b" src="imagens/casos/preenchimento-04b.jpg" alt="Preenchimento Labial, registro fotográfico 2" loading="lazy" decoding="async" width="560" height="896" />
                 </span>
                 <span class="caso__meta">
-                  <span class="caso__tag" aria-hidden="true">
-                    <span class="caso__tag-state caso__tag-state--antes">Antes</span>
-                    <span class="caso__tag-state caso__tag-state--depois">Depois</span>
-                  </span>
                   <span class="caso__cat">Preenchimento Labial</span>
                 </span>
               </button>
@@ -496,16 +442,12 @@
           </li>
           <li class="caso-item">
             <article class="caso" style="--off:0">
-              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Tratamento Capilar: ver o depois">
+              <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Tratamento Capilar: ver o resultado">
                 <span class="caso__media">
-                  <img class="caso__img caso__img--antes" src="imagens/casos/capilar-05-antes.jpg" alt="Antes do tratamento de Tratamento Capilar" loading="lazy" decoding="async" width="560" height="896" />
-                  <img class="caso__img caso__img--depois" src="imagens/casos/capilar-05-depois.jpg" alt="Depois do tratamento de Tratamento Capilar" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--a" src="imagens/casos/capilar-05a.jpg" alt="Tratamento Capilar, registro fotográfico 1" loading="lazy" decoding="async" width="560" height="896" />
+                  <img class="caso__img caso__img--b" src="imagens/casos/capilar-05b.jpg" alt="Tratamento Capilar, registro fotográfico 2" loading="lazy" decoding="async" width="560" height="896" />
                 </span>
                 <span class="caso__meta">
-                  <span class="caso__tag" aria-hidden="true">
-                    <span class="caso__tag-state caso__tag-state--antes">Antes</span>
-                    <span class="caso__tag-state caso__tag-state--depois">Depois</span>
-                  </span>
                   <span class="caso__cat">Tratamento Capilar</span>
                 </span>
               </button>

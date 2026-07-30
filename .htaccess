@@ -8,7 +8,7 @@ DirectoryIndex index.html
 
 # ---------------------------------------------------------------------
 # 1. Canonicalização: HTTPS e sem www.
-#    Precisa vir antes dos redirects de conteúdo.
+#    Precisa vir previamente aos redirects de conteúdo.
 # ---------------------------------------------------------------------
 <IfModule mod_rewrite.c>
   RewriteEngine On

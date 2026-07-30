@@ -9,7 +9,7 @@
 > `README.md` do projeto e pesquisa de referência (links ao final).
 >
 > **Ainda não executar no site.** Este arquivo é a fonte de conteúdo; a montagem das
-> páginas (`tratamentos.html` e sub-páginas) vem depois.
+> páginas (`tratamentos.html` e sub-páginas) vem em seguida.
 
 ---
 
@@ -54,7 +54,7 @@
 **Disclaimer médico (rodapé de cada página de tratamento):**
 *"O conteúdo desta página é informativo e não substitui a consulta médica. A indicação, a técnica e os produtos são definidos individualmente em avaliação presencial. Resultados variam de pessoa para pessoa. Procedimentos realizados por médico dermatologista. Conteúdo em conformidade com as normas do CFM sobre publicidade médica."*
 
-**Conformidade CFM (regras de copy):** sem preços, sem "antes e depois" sensacionalista, sem promessa de resultado ("garante", "elimina", "milagre"), sem superlativos de autopromoção ("o melhor"). Fotos de antes/depois só com consentimento e disclaimer. Evitar travessões (—) no corpo; usar vírgulas e dois-pontos.
+**Conformidade CFM (regras de copy):** sem preços, sem promessa de resultado ("garante", "elimina", "milagre"), sem superlativos de autopromoção ("o melhor"). **Nunca escrever as palavras "antes" e "depois" como par comparativo** (rótulos, títulos, alt, legendas): é vedado pelas políticas do Google e o site foi limpo disso. Fotos de resultado só com consentimento e disclaimer. Evitar travessões (—) no corpo; usar vírgulas e dois-pontos.
 
 **Inventário de CTAs (reaproveitar):**
 - Primária: **AGENDE SUA CONSULTA** → `https://wa.me/5551999704848?text=...` (texto contextualizado por tratamento)
@@ -119,7 +119,7 @@ A pele responde ao que recebe todos os dias. Uma rotina bem indicada controla ol
 - Quem já usa muitos produtos sem ver resultado, ou com sinais de irritação.
 - Quem vai realizar procedimentos e precisa preparar e manter a pele.
 
-**Para quem não é / cuidado:** gestantes e lactantes (alguns ativos são contraindicados), peles em surto inflamatório intenso e quadros que exijam tratamento clínico antes do cosmético. Por isso a rotina é sempre definida em avaliação.
+**Para quem não é / cuidado:** gestantes e lactantes (alguns ativos são contraindicados), peles em surto inflamatório intenso e quadros que exijam tratamento clínico prévio ao cosmético. Por isso a rotina é sempre definida em avaliação.
 
 ### Como funciona
 1. **Avaliação da pele** pelo Método 4D: tipo de pele, textura, manchas, sensibilidade e objetivos.
@@ -346,10 +346,10 @@ Pode haver ardência e calor durante a ativação com luz, controlados pela equi
 **Quantas sessões são necessárias?**
 Depende do caso e do tipo de lesão; o protocolo é definido na avaliação dermatológica.
 
-**Posso me expor ao sol depois?**
+**Posso me expor ao sol após o procedimento?**
 Não nos dias seguintes. A pele fica fotossensível e a proteção solar rigorosa é parte essencial do tratamento.
 
-**Preciso de avaliação antes?**
+**Preciso de avaliação prévia?**
 Sempre. Por envolver diagnóstico de lesões, a terapia fotodinâmica parte de um exame detalhado da pele.
 
 ### CTA de fechamento
@@ -395,13 +395,13 @@ Manchas solares e melasma, rosácea e vermelhidão difusa, vasinhos, poros dilat
 4. **Resfriamento e finalização**, com orientações de fotoproteção.
 
 ### Resultados esperados
-Manchas tendem a escurecer e "descamar" nos dias seguintes antes de clarear; vermelhidão e vasinhos reduzem progressivamente; textura e viço melhoram ao longo das sessões. Geralmente faz-se uma série, com manutenção. A fotoproteção é indispensável para manter o resultado. Resultados variam individualmente.
+Manchas tendem a escurecer e "descamar" nos dias seguintes, até clarear; vermelhidão e vasinhos reduzem progressivamente; textura e viço melhoram ao longo das sessões. Geralmente faz-se uma série, com manutenção. A fotoproteção é indispensável para manter o resultado. Resultados variam individualmente.
 
 ### Caso (ilustrativo · usar caso real com consentimento)
 Paciente com manchas solares e vermelhidão difusa nas bochechas realiza uma série de sessões de luz. As manchas escurecem e saem nos primeiros dias, a vermelhidão diminui sessão a sessão e, ao final, a pele apresenta tom mais uniforme e luminoso. Mantém-se fotoproteção diária e sessões de manutenção conforme orientação.
 
 ### Cuidados
-Evite sol e bronzeamento antes e depois, use protetor solar rigorosamente, não esfolie a área e siga as orientações de hidratação. Manchas tratadas podem ficar temporariamente mais escuras antes de clarear, o que é esperado.
+Evite sol e bronzeamento no período que cerca as sessões, use protetor solar rigorosamente, não esfolie a área e siga as orientações de hidratação. Manchas tratadas podem ficar temporariamente mais escuras até clarear, o que é esperado.
 
 ### FAQ
 **Qual a diferença entre laser e luz intensa pulsada?**
@@ -410,14 +410,14 @@ São tecnologias distintas com alvos diferentes. O Dr. Márcio escolhe a mais ad
 **Laser serve para melasma?**
 Pode ajudar em casos selecionados, sempre com cautela e dentro de um plano com home care e fotoproteção, porque o melasma tende a recidivar.
 
-**Preciso ficar em casa depois?**
-Em geral não, mas pode haver vermelhidão e, no caso de manchas, um escurecimento temporário antes da descamação. As atividades costumam ser mantidas com fotoproteção.
+**Preciso ficar em casa após a sessão?**
+Em geral não, mas pode haver vermelhidão e, no caso de manchas, um escurecimento temporário que precede a descamação. As atividades costumam ser mantidas com fotoproteção.
 
 **Quantas sessões?**
 Normalmente uma série, definida na avaliação, seguida de manutenção.
 
 **Posso fazer bronzeada?**
-Não. Pele bronzeada aumenta o risco de manchas. É preciso aguardar e proteger a pele antes do procedimento.
+Não. Pele bronzeada aumenta o risco de manchas. É preciso aguardar e proteger a pele previamente ao procedimento.
 
 ### CTA de fechamento
 Tom uniforme e pele luminosa têm tecnologia e critério por trás. **Agende sua avaliação** e veja se o laser ou a LIP são indicados para você.
@@ -626,7 +626,7 @@ Começa entre 3 e 7 dias e completa em cerca de duas semanas.
 O desconforto é pequeno: são microinjeções com agulha fina, e o procedimento dura poucos minutos.
 
 **Serve para prevenir rugas?**
-Sim. Tratar as rugas dinâmicas antes que se tornem estáticas ajuda a evitar que elas se aprofundem no futuro.
+Sim. Tratar as rugas dinâmicas enquanto ainda não se tornaram estáticas ajuda a evitar que elas se aprofundem no futuro.
 
 ### CTA de fechamento
 Um olhar mais descansado, com a sua expressão preservada. **Agende sua avaliação** de toxina botulínica com o Dr. Márcio.
@@ -674,7 +674,7 @@ Com o tempo, perdemos volume e definição: as olheiras se aprofundam, o sulco n
 O volume e a suavização aparecem imediatamente, com refinamento nos dias seguintes à medida que o inchaço inicial cede. A duração varia conforme a área, o produto e os hábitos, em geral de meses a mais de um ano. Por ser reversível, ajustes são possíveis. Pode haver edema, vermelhidão e hematomas temporários. Resultados variam individualmente.
 
 ### Caso (ilustrativo · usar caso real com consentimento)
-Paciente com olheiras fundas e aspecto cansado, que "dormia bem mas parecia exausta", faz preenchimento do sulco nasojugal com técnica conservadora. Já na saída, o olhar parece mais descansado; após alguns dias, com o inchaço resolvido, o resultado fica natural e harmônico, sem que pareça "ter feito preenchimento". *Há material de antes/depois de preenchimento labial disponível no projeto para esta página, com consentimento.*
+Paciente com olheiras fundas e aspecto cansado, que "dormia bem mas parecia exausta", faz preenchimento do sulco nasojugal com técnica conservadora. Já na saída, o olhar parece mais descansado; após alguns dias, com o inchaço resolvido, o resultado fica natural e harmônico, sem que pareça "ter feito preenchimento".
 
 ### Cuidados
 Evite calor intenso, exercícios pesados e manipular a área nas primeiras 24 a 48 horas. Hematomas e inchaço leve são comuns e desaparecem em poucos dias. Procure o médico diante de dor intensa, palidez ou alteração de cor na pele, sinais que exigem avaliação imediata.
@@ -831,7 +831,7 @@ Pode reduzir a gordura localizada quando bem indicada e feita em série. A avali
 **Quantas sessões são necessárias?**
 Geralmente uma série, definida na avaliação conforme a quantidade de gordura e a resposta individual.
 
-**Vou ficar com a pele flácida depois?**
+**Vou ficar com a pele flácida após o procedimento?**
 Para evitar isso, costuma-se combinar a redução de gordura com estímulo de colágeno (tecnologias ou bioestimuladores).
 
 **É dolorido?**
@@ -964,7 +964,7 @@ A flacidez não responde a cremes: ela acontece na profundidade, onde o colágen
 Parte do efeito de firmeza é percebida logo, mas o resultado principal é progressivo: surge a partir de cerca de 3 meses, conforme o colágeno é estimulado. Costuma-se indicar de 1 a 3 sessões, com intervalo mínimo de 30 dias, e manutenção anual. A duração média do efeito é de cerca de 6 a 12 meses, variando individualmente. Resultados variam individualmente.
 
 ### Caso (ilustrativo · usar caso real com consentimento)
-Paciente com flacidez inicial no terço inferior e contorno mandibular "apagando" realiza o protocolo de ultrassom microfocado. Nas semanas seguintes, sente a pele mais firme; por volta de 3 meses, o contorno está mais definido e o pescoço mais liso, com aspecto descansado e natural. Programa manutenção anual para preservar o resultado. *Há material de antes/depois de Liftera disponível no projeto para esta página, com consentimento.*
+Paciente com flacidez inicial no terço inferior e contorno mandibular "apagando" realiza o protocolo de ultrassom microfocado. Nas semanas seguintes, sente a pele mais firme; por volta de 3 meses, o contorno está mais definido e o pescoço mais liso, com aspecto descansado e natural. Programa manutenção anual para preservar o resultado.
 
 ### Cuidados
 Pode haver vermelhidão, leve inchaço e sensibilidade por alguns dias. Mantenha hidratação e fotoproteção e evite calor intenso na área logo após. Siga as orientações específicas da sessão.
@@ -1144,7 +1144,7 @@ Ao montar cada sub-página, garanta:
 - [ ] NAP consistente (endereço, telefone, horário) e mapa
 - [ ] Disclaimer médico (CFM) no rodapé da página
 - [ ] Sem preços, sem promessa de resultado, sem superlativos de autopromoção
-- [ ] Antes/depois apenas com consentimento + disclaimer "resultados variam"
+- [ ] Fotos de resultado apenas com consentimento + disclaimer "resultados variam", e sem rotular as imagens como par comparativo
 
 ## Apêndice B · Mapa frase-chave → slug (visão rápida)
 
@@ -1178,4 +1178,4 @@ Conteúdo clínico-base: documento do próprio Dr. Márcio (`SITE 2025.docx`) e 
 - Skinbooster: dralarissasdrigotti.com.br, talitalmeida.com.br, tuasaude.com/skinbooster
 - Peelings químicos: clinicaweiss.com.br, draglaucialabinas.com.br, mantecorpskincare.com.br
 
-> Observação: parâmetros como número de sessões, duração e cuidados são gerais e devem ser confirmados/ajustados pelo Dr. Márcio conforme o protocolo da clínica e cada paciente, antes da publicação.
+> Observação: parâmetros como número de sessões, duração e cuidados são gerais e devem ser confirmados/ajustados pelo Dr. Márcio conforme o protocolo da clínica e cada paciente, previamente à publicação.

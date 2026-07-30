@@ -916,24 +916,8 @@ body.fonts-pending .stats { visibility: hidden; }
   pointer-events: none;
 }
 .ba__img--before { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
-/* "Depois" sits higher in its source photo — drop it so features line up with "Antes". */
+/* The second photo sits higher in frame — nudge it so features line up. */
 .ba__img--after { object-position: center 9%; }
-
-.ba__label {
-  position: absolute;
-  top: 16px;
-  z-index: 3;
-  padding: 6px 14px;
-  border-radius: var(--r-pill);
-  font: 600 11px/1 var(--font-body);
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: #fff;
-  background: rgba(4, 77, 77, 0.6);
-  backdrop-filter: blur(4px);
-  pointer-events: none;
-}
-.ba__label--before { left: 16px; }
-.ba__label--after { right: 16px; }
 
 .ba__divider {
   position: absolute;
@@ -1424,7 +1408,7 @@ body.fonts-pending .stats { visibility: hidden; }
 }
 
 /* ------------------------------------------------------------------ */
-/* 19. Antes e Depois — full-bleed before/after gallery               */
+/* 19. Casos — full-bleed case gallery                                */
 /* ------------------------------------------------------------------ */
 .section--casos {
   --casos-off-step: clamp(8px, 1.4vw, 18px);
@@ -1523,15 +1507,15 @@ body.fonts-pending .stats { visibility: hidden; }
   object-fit: cover;
   transition: opacity 0.55s var(--ease-glide), transform 0.8s var(--ease-calm);
 }
-.caso__img--depois { opacity: 0; transform: scale(1.04); }
+.caso__img--b { opacity: 0; transform: scale(1.04); }
 
-/* reveal "depois" on hover / keyboard focus / tap-toggled */
-.caso__toggle:hover .caso__img--depois,
-.caso__toggle:focus-visible .caso__img--depois,
-.caso.is-revealed .caso__img--depois { opacity: 1; transform: none; }
-.caso__toggle:hover .caso__img--antes,
-.caso__toggle:focus-visible .caso__img--antes,
-.caso.is-revealed .caso__img--antes { opacity: 0; }
+/* reveal the 2nd image on hover / keyboard focus / tap-toggled */
+.caso__toggle:hover .caso__img--b,
+.caso__toggle:focus-visible .caso__img--b,
+.caso.is-revealed .caso__img--b { opacity: 1; transform: none; }
+.caso__toggle:hover .caso__img--a,
+.caso__toggle:focus-visible .caso__img--a,
+.caso.is-revealed .caso__img--a { opacity: 0; }
 
 .caso__toggle:hover .caso__media,
 .caso__toggle:focus-visible .caso__media {
@@ -1539,32 +1523,12 @@ body.fonts-pending .stats { visibility: hidden; }
   box-shadow: 0 30px 64px rgba(5, 127, 127, 0.2), 0 8px 20px rgba(22, 48, 47, 0.08);
 }
 
-/* tag (Antes / Depois) + category chip */
+/* category chip — sits alone at the top-right of the card */
 .caso__meta {
   position: absolute; left: 12px; top: 12px; right: 12px;
-  display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+  display: flex; align-items: flex-start; justify-content: flex-end; gap: 8px;
   pointer-events: none;
 }
-.caso__tag {
-  display: inline-grid;
-  padding: 6px 13px;
-  border-radius: var(--r-pill);
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(6px);
-  box-shadow: 0 6px 18px rgba(5, 127, 127, 0.14);
-  font: 600 11px/1 var(--font-body);
-  letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--marca-ink);
-}
-.caso__tag-state { grid-area: 1 / 1; transition: opacity 0.4s var(--ease-glide); }
-.caso__tag-state--depois { opacity: 0; color: var(--marca-deep); }
-.caso__toggle:hover .caso__tag-state--antes,
-.caso__toggle:focus-visible .caso__tag-state--antes,
-.caso.is-revealed .caso__tag-state--antes { opacity: 0; }
-.caso__toggle:hover .caso__tag-state--depois,
-.caso__toggle:focus-visible .caso__tag-state--depois,
-.caso.is-revealed .caso__tag-state--depois { opacity: 1; }
-
 .caso__cat {
   padding: 6px 12px;
   border-radius: var(--r-pill);
@@ -1591,7 +1555,6 @@ body.fonts-pending .stats { visibility: hidden; }
     max-width: calc(100% - 20px);
     gap: 6px;
   }
-  .caso__tag { padding: 5px 10px; letter-spacing: 0.08em; }
   .caso__cat {
     max-width: 100%;
     padding: 5px 10px;
@@ -1603,7 +1566,7 @@ body.fonts-pending .stats { visibility: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
   .caso__img { transition: opacity 0.001ms; }
-  .caso__img--depois { transform: none; }
+  .caso__img--b { transform: none; }
   .caso__toggle:hover .caso__media,
   .caso__toggle:focus-visible .caso__media { transform: none; }
 }
@@ -2312,7 +2275,7 @@ a.treat-card:hover .treat-card__more svg { transform: translateX(4px); }
 /* ================================================================== */
 /* Tricologia — hero square media + contained composite frames        */
 /* ================================================================== */
-/* antes/depois composites are wide (antes | depois). A normal cover   */
+/* These composites are wide (two panels side by side). A normal cover */
 /* frame would crop one half, so these variants show the whole image.  */
 .treat-hero__media--square { aspect-ratio: 1 / 1; }
 .media-frame--contain {
@@ -2329,10 +2292,10 @@ a.treat-card:hover .treat-card__more svg { transform: translateX(4px); }
 }
 
 /* ================================================================== */
-/* Tricologia — "Resultados reais" antes/depois carousel              */
+/* Tricologia — "Resultados reais" carousel                           */
 /* ================================================================== */
 /* Reuses the .casos viewport + arrow JS (data-casos-*), but each card */
-/* shows a full pre-composed antes/depois image instead of a portrait  */
+/* shows a full pre-composed two-panel image instead of a portrait     */
 /* cross-fade pair.                                                     */
 .casos__track--results { scroll-snap-type: x proximity; }
 .result-item {

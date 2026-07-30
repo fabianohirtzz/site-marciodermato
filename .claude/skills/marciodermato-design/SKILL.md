@@ -57,7 +57,7 @@ You always have these tools available — picking the right one is the senior mo
 - **Soft hover lift** — cards translate up a few px and deepen their teal-tinted shadow; buttons brighten / fill.
 - **Stagger-in** — grids of treatment avatars or axis cards reveal in sequence with an `--i`-indexed step, so the page assembles with composure.
 - **Hero heritage rails** — the rotated lateral rails ("+30 anos de excelência" / "Desde 1993") are *deliberately static* (they replaced the old hero count-up stats — do not animate them as counters). The `countUp()` helper still ships in `main.js` but is currently dormant (no `[data-count]` elements on the home).
-- **Carousel + comparator motion** — the casos and reviews tracks scroll-snap one card per arrow; the antes/depois `.ba` comparator clips on a drag-driven `--pos`; casos cards cross-fade antes↔depois on hover/tap. All flatten under reduced motion.
+- **Carousel + comparator motion** — the casos and reviews tracks scroll-snap one card per arrow; the `.ba` comparator clips on a drag-driven `--pos`; casos cards cross-fade image A↔B on hover/tap. All flatten under reduced motion.
 
 ## How to start any new piece of UI
 
@@ -73,6 +73,27 @@ You always have these tools available — picking the right one is the senior mo
 
 - **Cold and clinical.** Pure teal + white with tight spacing reads like a hospital intake form or a SaaS dashboard. Warm it: add the sand/nude accent, the elegant serif, real photography of the doctor and the clinic, generous space, and human copy. The brand is *premium care*, not *a lab*.
 - **Loud and cheap (med-spa syndrome).** The opposite pull is neon-teal gradients, glossy buttons everywhere, sparkles, "‑50% OFF" energy, and stocky beauty photos. Resist. Luxury is restraint: one teal, one serif, lots of space, slow motion, natural results. If it looks like a Groupon aesthetic deal, you've broken brand.
+
+## Compliance — the words "antes" and "depois" are banned
+
+The site advertises through Google, whose healthcare policies do not accept before/after
+framing. In July 2026 the whole site was swept clean of it, so treat this as a hard rule:
+
+- **Never write "antes" or "depois" as a comparative pair** — not in visible copy, headings,
+  eyebrows, chips, captions, `alt`, `aria-label`, `title`, meta tags, JSON-LD, HTML comments,
+  CSS class names, or image filenames.
+- **The imagery stays.** Only the wording goes. Comparators and case carousels are fine; they
+  just carry no state labels.
+- **Neutral vocabulary to use instead:** "Resultados" / "Resultados reais" for section
+  eyebrows; "Resultado" for a chip; "registro fotográfico 1 / 2" in `alt`; "ver o resultado"
+  in `aria-label`; "comparar os dois registros" for the comparator. For plain temporal prose
+  prefer "previamente", "após", "em seguida", "quanto mais cedo".
+- **Naming convention:** paired assets end in `a`/`b` (`home-a.jpg`, `capilar-01a.jpg`) and
+  BEM modifiers are `--a` / `--b` (`.caso__img--a`). The `antes-depois/` folder at the repo
+  root is untouched source material and is excluded from the FTP deploy — never link to it.
+- Always keep the **consent note** next to real patient imagery (`.compare__note`).
+
+The same rule is recorded for copywriting in `COPY-TRATAMENTOS.md` (§ Conformidade CFM).
 
 ## Brand facts (verified — use these)
 
@@ -101,15 +122,15 @@ The full extracted site copy, the treatments-by-axis list, and the image→treat
 The site is **plain HTML + one external stylesheet + one external script** — nothing inline. When you change styling or behavior, edit these, not the HTML `<head>`:
 
 - `assets/css/main.css` — **all** styles (tokens on `:root`, every component). The reference implementation the `references/` docs mirror.
-- `assets/js/main.js` — **all** behavior (reveal observer, nav indicator + scroll state, drawer, hero play/pause, soft parallax, the `fioMotif()` motif generator, the antes/depois comparator, the casos + reviews carousels).
-- `assets/img/` — page-specific images authored for this build (e.g. `home-antes.jpg`, `home-depois.jpg` for the comparator).
+- `assets/js/main.js` — **all** behavior (reveal observer, nav indicator + scroll state, drawer, hero play/pause, soft parallax, the `fioMotif()` motif generator, the comparison comparator, the casos + reviews carousels).
+- `assets/img/` — page-specific images authored for this build (e.g. `home-a.jpg`, `home-b.jpg` for the comparator).
 - `index.html` is the canonical, fully-built page; `tratamentos.html`, `metodo-4d.html`, `tricologia.html`, `sobre.html`, `contato.html` are page stubs to build out against the same system.
 
 Brand assets:
 
 - `logo/` — `logo-header-colorido.png` (on light / scrolled nav), `logo-header-branco.png` (white, over hero/dark), `logo-rodape.png`/`logo-rodape2.png` (footer), `brandbook.pdf` (the source of the teal + Poppins decision). The mark's sinuous **white curve** is the reusable brand motif — it's already extracted and generated per-section by `fioMotif()`.
 - `video-hero/video-hero.mp4` — hero background video.
-- `imagens/` — per-treatment art (`toxina-butolinica.png`, `skinbooster`, `radiofrequencia.png`, the four axis images `superficie-da-pele*`, `linhas-de-expressao`, `volumes-da-face`, `flacidez`, etc.), plus `sobre*.jpg`, `contato.jpg`, `metodo4d-sobre*.jpg`, `rodape-site*`, and `imagens/casos/*-antes.jpg`/`*-depois.jpg` for the Antes e Depois carousel. (`*.wpress` is an old WordPress backup — ignore.)
+- `imagens/` — per-treatment art (`toxina-butolinica.png`, `skinbooster`, `radiofrequencia.png`, the four axis images `superficie-da-pele*`, `linhas-de-expressao`, `volumes-da-face`, `flacidez`, etc.), plus `sobre*.jpg`, `contato.jpg`, `metodo4d-sobre*.jpg`, `rodape-site*`, and `imagens/casos/*a.jpg`/`*b.jpg` for the Casos carousel. (`*.wpress` is an old WordPress backup — ignore.)
 - `ambiente/` — `dermaclin1…15.jpg`, photos of the physical clinic for the "Nosso Espaço" gallery.
 
 When building, prefer the real photography and the bespoke treatment art over generic stock — it is what keeps the brand specific and trustworthy.

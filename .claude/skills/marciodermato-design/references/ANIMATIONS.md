@@ -15,7 +15,7 @@ The motion of this brand is **calm, smooth, and slightly slower than a typical s
 5. Fio de cabelo — the signature scroll-driven motif
 6. Soft hover lift (cards, buttons, image zoom)
 7. Método 4D axis cards + icon stroke-draw
-8. Antes/Depois comparator (drag-to-reveal)
+8. Comparison comparator (drag-to-reveal)
 9. Casos + Avaliações carousels (scroll-snap, arrows, cross-fade)
 10. Hero video (autoplay, pause, reduced-motion fallback)
 11. Nav — entrance, scrolled-state (`.is-solid`), sliding indicator
@@ -424,7 +424,7 @@ The deeper "draw-in" gesture for this brand lives on the **Diferenciais** icons 
 
 ---
 
-## 8. Antes/Depois comparator (drag-to-reveal)
+## 8. Comparison comparator (drag-to-reveal)
 
 The before/after comparator (`.ba`) is a **single `--pos` custom property** driving everything. `.ba__img--before` is clipped to that position and `.ba__divider` is parked at it; as `--pos` changes both follow instantly — there is no transition on them, the *finger/cursor is the timing function*. Pure CSS does the wipe; JS only writes the number.
 
@@ -456,7 +456,7 @@ range.addEventListener('input', () => ba.style.setProperty('--pos', range.value 
 
 ## 9. Casos + Avaliações carousels (scroll-snap, arrows, cross-fade)
 
-Two horizontal carousels — **Casos** (antes/depois gallery) and **Avaliações** (reviews) — share the same calm pattern: a native overflow track with `scroll-snap-type: x proximity`, hidden scrollbars, and a pair of arrows that page by exactly one card. No autoplay (autoplay carousels are explicitly off-brand, § 15).
+Two horizontal carousels — **Casos** (results gallery) and **Avaliações** (reviews) — share the same calm pattern: a native overflow track with `scroll-snap-type: x proximity`, hidden scrollbars, and a pair of arrows that page by exactly one card. No autoplay (autoplay carousels are explicitly off-brand, § 15).
 
 ### Arrow paging (shared logic)
 
@@ -472,23 +472,23 @@ const go = (dir) =>
 
 Arrows **disable at the ends** — a rAF-coalesced, `passive` scroll handler toggles `prev.disabled` / `next.disabled` from `scrollLeft`. The disabled arrow flattens to `opacity: .4` and `transform: none`; the live one lifts `-2px` and fills teal on hover (`.casos__arrow` / `.reviews__arrow`, transition `transform .26s var(--ease-calm)`).
 
-### Casos cross-fade — antes ↔ depois
+### Casos cross-fade — image A ↔ B
 
-Each card layers two images. At rest the **depois** sits at `opacity: 0; transform: scale(1.04)`; on hover, focus, or a tap-toggled `.is-revealed`, it cross-fades up (`opacity .55s var(--ease-glide)`, `transform .8s var(--ease-calm)`) while the **antes** fades out, the `.caso__media` lifts `-6px`, and the corner tag swaps Antes→Depois (`opacity .4s var(--ease-glide)`). Touch devices have no hover, so a `.caso__toggle` button flips `.is-revealed` on tap (JS toggles `aria-pressed`).
+Each card layers two images. At rest the **second image** sits at `opacity: 0; transform: scale(1.04)`; on hover, focus, or a tap-toggled `.is-revealed`, it cross-fades up (`opacity .55s var(--ease-glide)`, `transform .8s var(--ease-calm)`) while the **first** fades out and the `.caso__media` lifts `-6px`. There is **no state label** on the card (§ Compliance). Touch devices have no hover, so a `.caso__toggle` button flips `.is-revealed` on tap (JS toggles `aria-pressed`).
 
 ```css
 .caso__img { transition: opacity .55s var(--ease-glide), transform .8s var(--ease-calm); }
-.caso__img--depois { opacity: 0; transform: scale(1.04); }
-.caso__toggle:hover .caso__img--depois,
-.caso__toggle:focus-visible .caso__img--depois,
-.caso.is-revealed .caso__img--depois { opacity: 1; transform: none; }
+.caso__img--b { opacity: 0; transform: scale(1.04); }
+.caso__toggle:hover .caso__img--b,
+.caso__toggle:focus-visible .caso__img--b,
+.caso.is-revealed .caso__img--b { opacity: 1; transform: none; }
 ```
 
 ### `--off` stagger — the casos shelf
 
 Cards carry an `--off` value and drop by `calc(var(--off) * var(--casos-off-step))` (`--casos-off-step: clamp(8px, 1.4vw, 18px)`), so the row sits as a gently uneven shelf rather than a rigid line. This is **static layout offset, not animation** — it just gives the gallery rhythm.
 
-**Reduced motion:** arrow paging falls back to `behavior: 'auto'` (instant jump); the casos cross-fade is flattened (`.caso__img { transition: opacity .001ms }`, `--depois { transform: none }`, and the media lift is zeroed) so antes→depois is a clean swap with no scale or slide. The § 13 review-card and arrow hover lifts are zeroed too.
+**Reduced motion:** arrow paging falls back to `behavior: 'auto'` (instant jump); the casos cross-fade is flattened (`.caso__img { transition: opacity .001ms }`, `--b { transform: none }`, and the media lift is zeroed) so the A→B swap is clean, with no scale or slide. The § 13 review-card and arrow hover lifts are zeroed too.
 
 ---
 

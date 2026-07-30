@@ -2,85 +2,85 @@
   {
     "cat": "cabelo",
     "label": "Tratamento Capilar",
-    "antes": "imagens/casos/capilar-01-antes.jpg",
-    "depois": "imagens/casos/capilar-01-depois.jpg"
+    "img1": "imagens/casos/capilar-01a.jpg",
+    "img2": "imagens/casos/capilar-01b.jpg"
   },
   {
     "cat": "preenchimento",
     "label": "Preenchimento Labial",
-    "antes": "imagens/casos/preenchimento-01-antes.jpg",
-    "depois": "imagens/casos/preenchimento-01-depois.jpg"
+    "img1": "imagens/casos/preenchimento-01a.jpg",
+    "img2": "imagens/casos/preenchimento-01b.jpg"
   },
   {
     "cat": "laser",
     "label": "Laser CO₂",
-    "antes": "imagens/casos/laser-01-antes.jpg",
-    "depois": "imagens/casos/laser-01-depois.jpg"
+    "img1": "imagens/casos/laser-01a.jpg",
+    "img2": "imagens/casos/laser-01b.jpg"
   },
   {
     "cat": "liftera",
     "label": "Liftera",
-    "antes": "imagens/casos/liftera-01-antes.jpg",
-    "depois": "imagens/casos/liftera-01-depois.jpg"
+    "img1": "imagens/casos/liftera-01a.jpg",
+    "img2": "imagens/casos/liftera-01b.jpg"
   },
   {
     "cat": "cabelo",
     "label": "Tratamento Capilar",
-    "antes": "imagens/casos/capilar-02-antes.jpg",
-    "depois": "imagens/casos/capilar-02-depois.jpg"
+    "img1": "imagens/casos/capilar-02a.jpg",
+    "img2": "imagens/casos/capilar-02b.jpg"
   },
   {
     "cat": "preenchimento",
     "label": "Preenchimento Labial",
-    "antes": "imagens/casos/preenchimento-02-antes.jpg",
-    "depois": "imagens/casos/preenchimento-02-depois.jpg"
+    "img1": "imagens/casos/preenchimento-02a.jpg",
+    "img2": "imagens/casos/preenchimento-02b.jpg"
   },
   {
     "cat": "laser",
     "label": "Laser CO₂",
-    "antes": "imagens/casos/laser-02-antes.jpg",
-    "depois": "imagens/casos/laser-02-depois.jpg"
+    "img1": "imagens/casos/laser-02a.jpg",
+    "img2": "imagens/casos/laser-02b.jpg"
   },
   {
     "cat": "liftera",
     "label": "Liftera",
-    "antes": "imagens/casos/liftera-02-antes.jpg",
-    "depois": "imagens/casos/liftera-02-depois.jpg"
+    "img1": "imagens/casos/liftera-02a.jpg",
+    "img2": "imagens/casos/liftera-02b.jpg"
   },
   {
     "cat": "cabelo",
     "label": "Tratamento Capilar",
-    "antes": "imagens/casos/capilar-03-antes.jpg",
-    "depois": "imagens/casos/capilar-03-depois.jpg"
+    "img1": "imagens/casos/capilar-03a.jpg",
+    "img2": "imagens/casos/capilar-03b.jpg"
   },
   {
     "cat": "preenchimento",
     "label": "Preenchimento Labial",
-    "antes": "imagens/casos/preenchimento-03-antes.jpg",
-    "depois": "imagens/casos/preenchimento-03-depois.jpg"
+    "img1": "imagens/casos/preenchimento-03a.jpg",
+    "img2": "imagens/casos/preenchimento-03b.jpg"
   },
   {
     "cat": "laser",
     "label": "Laser CO₂",
-    "antes": "imagens/casos/laser-03-antes.jpg",
-    "depois": "imagens/casos/laser-03-depois.jpg"
+    "img1": "imagens/casos/laser-03a.jpg",
+    "img2": "imagens/casos/laser-03b.jpg"
   },
   {
     "cat": "cabelo",
     "label": "Tratamento Capilar",
-    "antes": "imagens/casos/capilar-04-antes.jpg",
-    "depois": "imagens/casos/capilar-04-depois.jpg"
+    "img1": "imagens/casos/capilar-04a.jpg",
+    "img2": "imagens/casos/capilar-04b.jpg"
   },
   {
     "cat": "preenchimento",
     "label": "Preenchimento Labial",
-    "antes": "imagens/casos/preenchimento-04-antes.jpg",
-    "depois": "imagens/casos/preenchimento-04-depois.jpg"
+    "img1": "imagens/casos/preenchimento-04a.jpg",
+    "img2": "imagens/casos/preenchimento-04b.jpg"
   },
   {
     "cat": "cabelo",
     "label": "Tratamento Capilar",
-    "antes": "imagens/casos/capilar-05-antes.jpg",
-    "depois": "imagens/casos/capilar-05-depois.jpg"
+    "img1": "imagens/casos/capilar-05a.jpg",
+    "img2": "imagens/casos/capilar-05b.jpg"
   }
 ]

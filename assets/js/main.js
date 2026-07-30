@@ -312,7 +312,7 @@
   });
 
   /* ------------------------------------------------------------------ */
-  /* Antes e Depois — full-bleed carousel + tap-to-reveal               */
+  /* Casos — full-bleed carousel + tap-to-reveal                        */
   /* ------------------------------------------------------------------ */
   (function casos() {
     const track = document.querySelector("[data-casos-track]");
@@ -353,7 +353,7 @@
     window.addEventListener("resize", updateArrows);
     updateArrows();
 
-    /* hover-less (touch) devices: tap toggles the "depois" persistently */
+    /* hover-less (touch) devices: tap toggles the 2nd image persistently */
     track.querySelectorAll(".caso__toggle").forEach((btn) => {
       btn.addEventListener("click", () => {
         const caso = btn.closest(".caso");

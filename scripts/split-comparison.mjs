@@ -1,6 +1,6 @@
-// One-off: split the side-by-side antes/depois composite into two clean files.
+// One-off: split the side-by-side comparison composite into two clean files.
 // The source composite has the doctor's watermark across the top-center; we trim
-// that band, then cut the image into left (antes) and right (depois) halves.
+// that band, then cut the image into its left and right halves.
 import sharp from "sharp";
 import { mkdirSync } from "node:fs";
 
@@ -18,8 +18,8 @@ const usableH = height - top - Math.round(height * 0.02);
 const halfW = Math.floor(width / 2);
 
 const halves = [
-  { name: "home-antes.jpg", left: 0 },
-  { name: "home-depois.jpg", left: halfW },
+  { name: "home-a.jpg", left: 0 },
+  { name: "home-b.jpg", left: halfW },
 ];
 
 for (const h of halves) {

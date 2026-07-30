@@ -28,8 +28,8 @@ Two craft reflexes carried into every snippet below:
 | 14 | Contact form + info rows | Contato | Labeled fields, teal focus ring, contact rows |
 | 15 | Footer | Footer | Logo, nav, contact, social, credentials line |
 | 16 | WhatsApp floating button | Global | Fixed WhatsApp-green button, pill label, CSS pulse rings, unread pip |
-| 17 | Before/After drag comparator | Resultados | Two-image slider you drag to reveal the depois; `--pos` clip |
-| 18 | Antes e Depois case carousel | Casos | Horizontal rail of cards; hover/tap swaps antes→depois; `--off` stagger |
+| 17 | Two-image drag comparator | Resultados | Slider you drag to reveal the second image; `--pos` clip |
+| 18 | Casos case carousel | Casos | Horizontal rail of cards; hover/tap cross-fades image A→B; `--off` stagger |
 | 19 | Fio de cabelo motif | Global (opt-in) | The brand-mark hair strand drawn in a section's free lateral margin via `data-fio` |
 
 ---
@@ -1487,7 +1487,7 @@ Two craft reflexes carried into every snippet below:
 
 ## 17. Before / after drag comparator
 
-**Purpose.** The "Resultados reais" proof: a two-image slider you **drag to reveal** the before/after. A copy column sits beside it; the comparator itself stacks the "depois" full and clips the "antes" to a draggable width, with a divider, a round handle, and an invisible range for keyboard/SR users.
+**Purpose.** The "Resultados reais" proof: a two-image slider you **drag to reveal** the second image. A copy column sits beside it; the comparator stacks image B full and clips image A to a draggable width, with a divider, a round handle, and an invisible range for keyboard/SR users. **No state labels** — see § Compliance.
 
 **When to use.** The Resultados section on Home (`#resultados`, carries `data-fio="left"`). One comparator per section, paired with the §3 header copy and a consent note.
 
@@ -1504,14 +1504,13 @@ Two craft reflexes carried into every snippet below:
 
   <!-- the slider. --pos (0–100%) is the single source of truth -->
   <div class="ba reveal" data-ba style="--pos:50%">
-    <img class="ba__img ba__img--after"  src="assets/img/home-depois.jpg" alt="Pele após o tratamento, com mais uniformidade e viço" />
-    <img class="ba__img ba__img--before" src="assets/img/home-antes.jpg"  alt="Pele antes do tratamento" />
-    <span class="ba__label ba__label--before">Antes</span>
-    <span class="ba__label ba__label--after">Depois</span>
+    <img class="ba__img ba__img--after"  src="assets/img/home-b.jpg" alt="Pele da paciente, registro fotográfico 2" />
+    <img class="ba__img ba__img--before" src="assets/img/home-a.jpg" alt="Pele da paciente, registro fotográfico 1" />
+    <!-- NO state labels: the words "antes"/"depois" are banned site-wide (§ Compliance) -->
     <div class="ba__divider" aria-hidden="true">
       <span class="ba__handle"><svg viewBox="0 0 24 24" …><path d="M9 7 4 12l5 5M15 7l5 5-5 5"/></svg></span>
     </div>
-    <input class="ba__range" type="range" min="0" max="100" value="50" step="0.1" aria-label="Comparar antes e depois" />
+    <input class="ba__range" type="range" min="0" max="100" value="50" step="0.1" aria-label="Comparar os dois registros fotográficos" />
   </div>
 </div>
 ```
@@ -1554,13 +1553,13 @@ Two craft reflexes carried into every snippet below:
 ### Craft notes
 - **`--pos` is the whole mechanism.** A single `--pos` (0–100%) custom prop, set on `.ba`, simultaneously drives the `.ba__img--before` clip (`inset(0 calc(100% - var(--pos)) 0 0)`) and the `left` of `.ba__divider`. Move `--pos`, the reveal and the divider track together. The handle is centered on the divider.
 - **Dual input for a reason.** The `<input type="range">` is the accessible control (keyboard, screen readers) but is `pointer-events: none` and `opacity: 0`; the JS adds press-and-drag on the **whole image** (Pointer Events, with capture) so users can grab anywhere, not just a thumb. Both paths write `--pos` and keep the range's `value` in sync. `touch-action: pan-y` keeps vertical page scroll working on touch.
-- The two `.ba__label`s ("Antes" left, "Depois" right) are frosted deep-teal pills; the divider/handle are white with a teal-tinted shadow. Always pair with a **consent note** (`.compare__note`) — real-patient imagery, shown with consent. Real `alt` on both images.
+- There are **no state-label pills** on the comparator (§ Compliance); the divider/handle are white with a teal-tinted shadow. Always pair with a **consent note** (`.compare__note`) — real-patient imagery, shown with consent. Neutral, non-comparative `alt` on both images.
 
 ---
 
-## 18. Antes e Depois — case carousel
+## 18. Casos — case carousel
 
-**Purpose.** A horizontal carousel of before/after cases: each card shows the "antes" and **reveals the "depois" on hover (or tap on touch)**, with a state tag that flips Antes→Depois and a category chip. Cards carry a small vertical `--off` stagger so the rail reads organic, not gridded.
+**Purpose.** A horizontal carousel of patient cases: each card shows a first image and **cross-fades to a second one on hover (or tap on touch)**, with a category chip. There is **no state label** — the words "antes"/"depois" are banned site-wide (§ Compliance). Cards carry a small vertical `--off` stagger so the rail reads organic, not gridded.
 
 **When to use.** The Casos section on Home (`#casos`, `section--casos`). The track scroll-snaps and is driven by prev/next arrows; on touch, tapping a card toggles its reveal persistently.
 
@@ -1573,8 +1572,8 @@ Two craft reflexes carried into every snippet below:
   <div class="container casos__top">
     <header class="casos__head reveal">
       <div class="casos__intro">
-        … eyebrow "Antes e Depois" + title + lede (§3) …
-        <p class="section__lede casos__hint">Passe o cursor sobre a foto, ou toque nela, para revelar o depois.</p>
+        … eyebrow "Resultados" + title + lede (§3) …
+        <p class="section__lede casos__hint">Passe o cursor sobre a foto, ou toque nela, para ver o resultado.</p>
       </div>
       <div class="casos__nav" role="group" aria-label="Navegar pelos resultados">
         <button class="casos__arrow" type="button" data-casos-prev aria-label="Ver caso anterior" disabled><svg …/></button>
@@ -1584,20 +1583,16 @@ Two craft reflexes carried into every snippet below:
   </div>
 
   <div class="casos__viewport reveal">
-    <ul class="casos__track" data-casos-track tabindex="0" role="list" aria-label="Casos de antes e depois">
+    <ul class="casos__track" data-casos-track tabindex="0" role="list" aria-label="Casos de pacientes da clínica">
       <li class="caso-item">
         <!-- --off staggers this card's vertical offset (× --casos-off-step) -->
         <article class="caso" style="--off:2.6">
-          <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Tratamento Capilar: ver o depois">
+          <button class="caso__toggle" type="button" aria-pressed="false" aria-label="Tratamento Capilar: ver o resultado">
             <span class="caso__media">
-              <img class="caso__img caso__img--antes"  src="imagens/casos/capilar-01-antes.jpg"  alt="Antes do tratamento de Tratamento Capilar"  loading="lazy" width="560" height="896" />
-              <img class="caso__img caso__img--depois" src="imagens/casos/capilar-01-depois.jpg" alt="Depois do tratamento de Tratamento Capilar" loading="lazy" width="560" height="896" />
+              <img class="caso__img caso__img--a" src="imagens/casos/capilar-01a.jpg" alt="Tratamento Capilar, registro fotográfico 1" loading="lazy" width="560" height="896" />
+              <img class="caso__img caso__img--b" src="imagens/casos/capilar-01b.jpg" alt="Tratamento Capilar, registro fotográfico 2" loading="lazy" width="560" height="896" />
             </span>
             <span class="caso__meta">
-              <span class="caso__tag" aria-hidden="true">
-                <span class="caso__tag-state caso__tag-state--antes">Antes</span>
-                <span class="caso__tag-state caso__tag-state--depois">Depois</span>
-              </span>
               <span class="caso__cat">Tratamento Capilar</span>
             </span>
           </button>
@@ -1632,14 +1627,14 @@ Two craft reflexes carried into every snippet below:
 }
 .caso__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
   transition: opacity .55s var(--ease-glide), transform .8s var(--ease-calm); }
-.caso__img--depois { opacity: 0; transform: scale(1.04); }
+.caso__img--b { opacity: 0; transform: scale(1.04); }
 
-/* reveal "depois" on hover / keyboard focus / tap-toggled .is-revealed */
-.caso__toggle:hover .caso__img--depois,
-.caso__toggle:focus-visible .caso__img--depois,
-.caso.is-revealed .caso__img--depois { opacity: 1; transform: none; }
-.caso__toggle:hover .caso__img--antes,
-.caso.is-revealed .caso__img--antes { opacity: 0; }
+/* reveal image B on hover / keyboard focus / tap-toggled .is-revealed */
+.caso__toggle:hover .caso__img--b,
+.caso__toggle:focus-visible .caso__img--b,
+.caso.is-revealed .caso__img--b { opacity: 1; transform: none; }
+.caso__toggle:hover .caso__img--a,
+.caso.is-revealed .caso__img--a { opacity: 0; }
 .caso__toggle:hover .caso__media,
 .caso__toggle:focus-visible .caso__media { transform: translateY(-6px); box-shadow: 0 30px 64px rgba(5,127,127,0.2), 0 8px 20px rgba(22,48,47,0.08); }
 
@@ -1648,19 +1643,17 @@ Two craft reflexes carried into every snippet below:
   background: rgba(255,255,255,0.88); backdrop-filter: blur(6px); box-shadow: 0 6px 18px rgba(5,127,127,0.14);
   font: 600 11px/1 var(--font-body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--marca-ink); }
 .caso__tag-state { grid-area: 1 / 1; transition: opacity .4s var(--ease-glide); }   /* overlap so they swap */
-.caso__tag-state--depois { opacity: 0; color: var(--marca-deep); }
-.caso__toggle:hover .caso__tag-state--antes,  .caso.is-revealed .caso__tag-state--antes  { opacity: 0; }
-.caso__toggle:hover .caso__tag-state--depois, .caso.is-revealed .caso__tag-state--depois { opacity: 1; }
+/* NOTE: the old .caso__tag state pill was removed — see § Compliance. */
 .caso__cat { padding: 6px 12px; border-radius: var(--r-pill); background: rgba(4,77,77,0.42); backdrop-filter: blur(6px);
   font: 600 11px/1.2 var(--font-body); /* … white caps category chip … */ }
 
 @media (prefers-reduced-motion: reduce) {
-  .caso__img { transition: opacity 0.001ms; } .caso__img--depois { transform: none; }
+  .caso__img { transition: opacity 0.001ms; } .caso__img--b { transform: none; }
 }
 ```
 
 ### Craft notes
-- **Reveal works three ways.** Hover and keyboard focus reveal the "depois" while held; a **tap** (the whole card is a `<button class="caso__toggle">`) toggles `.is-revealed` persistently for touch devices, syncing `aria-pressed`. The two `.caso__img`s cross-fade (the depois also un-scales from `1.04`), and the `.caso__tag` swaps Antes→Depois via two overlapped `.caso__tag-state` labels.
+- **Reveal works three ways.** Hover and keyboard focus reveal image B while held; a **tap** (the whole card is a `<button class="caso__toggle">`) toggles `.is-revealed` persistently for touch devices, syncing `aria-pressed`. The two `.caso__img`s cross-fade (B also un-scales from `1.04`). The card carries only a `.caso__cat` category chip — no state label (§ Compliance).
 - **`--off` is the organic stagger.** Each `.caso` reads `--off` (e.g. `2.6`, `0`, `4.4`, …) and offsets its top margin by `--off × --casos-off-step`, so the rail of portrait cards sits at varied heights instead of a flat row. Keep values small and varied; it is decoration, not a grid.
 - **Full-bleed snap rail.** `.casos__track` is a flex rail padded to `--gutter`, scroll-snaps, hides its scrollbar, and shows `--per` cards (6 down to 2.2 across breakpoints). Arrows `scrollBy` one card+gap and disable at the ends; the track is keyboard-scrollable (`tabindex="0"`). Cards are `5 / 8` portrait with the brand `--r-lg` radius and teal-tinted shadow. Every image is `loading="lazy"` with real `alt`.
 
