@@ -60,3 +60,12 @@ console.log(
   `podcast.html: ${data.episodios.length} episódios, ${data.shorts.length} cortes.\n` +
     `index.html: seção injetada com ${naHome} cortes no trilho.`
 );
+
+/* Avisa sem impedir: um título automático no ar é melhor do que um corte
+   faltando, mas ninguém deve esquecer que aquele texto veio do YouTube. */
+const revisar = data.shorts.filter((s) => s.revisar);
+if (revisar.length) {
+  console.log(`\nAtenção: ${revisar.length} título(s) ainda não revisado(s) —`);
+  for (const s of revisar) console.log(`  ${s.arquivo}  "${s.titulo}"`);
+  console.log('Ajuste em tools/podcast/podcast.json e tire o "revisar": true.');
+}

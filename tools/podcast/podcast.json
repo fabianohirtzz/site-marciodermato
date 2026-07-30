@@ -1,8 +1,13 @@
 {
   "canal": "https://www.youtube.com/@%C3%89UmaQuest%C3%A3odePele01",
   "nome": "É uma Questão de Pele",
-  "apresentadores": "Dr. Márcio Teixeira e a farmacêutica Cristine Prato",
-  "sobre": "Um podcast sobre pele, cabelos e saúde, conduzido pelo Dr. Márcio Teixeira, dermatologista e tricologista, ao lado da farmacêutica Cristine Prato, da Farmatec Farmácia de Manipulação. A proposta é descomplicar o que costuma chegar confuso ao consultório: o que a ciência sustenta, o que é modismo, e o que faz sentido para a sua pele.",
+  "apresentadores": "Dr. Márcio Teixeira e a farmacêutica Christine Prato",
+  "sobre": "Um podcast sobre pele, cabelos e saúde, conduzido pelo Dr. Márcio Teixeira, dermatologista e tricologista, ao lado da farmacêutica Christine Prato, da Farmatec Farmácia de Manipulação. A proposta é descomplicar o que costuma chegar confuso ao consultório: o que a ciência sustenta, o que é modismo, e o que faz sentido para a sua pele.",
+
+  "hosts": [
+    { "nome": "Dr. Márcio Teixeira", "papel": "Dermatologista e tricologista, criador do Método 4D" },
+    { "nome": "Christine Prato", "papel": "Farmacêutica, da Farmatec Farmácia de Manipulação" }
+  ],
 
   "episodios": [
     {

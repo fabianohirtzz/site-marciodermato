@@ -21,6 +21,35 @@ recebe cookie nenhum do YouTube.
 Os episódios longos nunca são baixados: só a capa é local, e o player abre no
 mesmo lightbox, em 16:9.
 
+## Corte novo: o caminho curto
+
+```bash
+npm run podcast:sync -- --dry-run   # mostra o que faria
+npm run podcast:sync                # baixa, converte e reconstrói
+```
+
+O comando lê o canal, compara com o `podcast.json`, e para cada Short novo
+baixa os primeiros segundos, converte, gera o poster, escreve o JSON e roda o
+build. O corte novo entra no topo e no trilho da home; o mais antigo que estava
+lá sai, de modo que a home nunca congela na seleção do dia em que foi montada.
+
+**Sempre revise os títulos depois.** O sync limpa hashtags e emoji do título do
+YouTube, mas o resultado costuma ser uma frase truncada
+("Pele Ardendo no Inverno? O Erro"). Ele marca o item com `"revisar": true` e o
+build lista o que está pendente a cada execução. Escreva o título de verdade em
+`tools/podcast/podcast.json`, tire o `"revisar": true` e rode
+`npm run build:podcast`.
+
+Requisitos: `pip install yt-dlp` e ffmpeg no PATH. Se o comando falhar ao ler o
+canal, rode `pip install -U yt-dlp` — o YouTube muda o player com frequência.
+
+**Isto roda na sua máquina, não no Actions.** O YouTube recusa download vindo de
+IP de datacenter, e o runner do GitHub cai nisso. Automatizar lá exigiria
+cookies de sessão ou proxy, uma dependência que quebra sem avisar.
+
+Episódios novos o sync **não** escreve sozinho: a descrição é copy. Ele imprime
+o rascunho em JSON para você completar à mão, seguindo a seção abaixo.
+
 ## Episódio novo
 
 1. Baixe a capa e reduza para 960px de largura:
@@ -37,7 +66,9 @@ mesmo lightbox, em 16:9.
 
 3. `npm run build:podcast && npm run build:sitemap`
 
-## Corte (Short) novo
+## Corte (Short) novo: o caminho manual
+
+Use quando o `podcast:sync` falhar, ou quando quiser tratar um corte específico.
 
 1. Baixe os primeiros segundos e reencode:
 
