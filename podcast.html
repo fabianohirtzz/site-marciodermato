@@ -11,7 +11,7 @@
   <meta property="og:title" content="Podcast É uma Questão de Pele · Dr. Márcio Teixeira" />
   <meta property="og:description" content="O podcast do Dr. Márcio Teixeira, dermatologista e tricologista em Porto Alegre, sobre pele, cabelos e saúde. Episódios completos e cortes rápidos." />
   <meta property="og:url" content="https://marciodermato.com.br/podcast.html" />
-  <meta property="og:image" content="https://marciodermato.com.br/assets/podcast/ep-03.jpg" />
+  <meta property="og:image" content="https://marciodermato.com.br/assets/podcast/og-podcast.jpg" />
   <link rel="icon" type="image/png" href="logo/logo-header-colorido.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -83,17 +83,30 @@
   </aside>
 
   <main id="conteudo">
-    <section class="section section--neve">
-      <div class="container">
-        <header class="ts-head ts-head--center">
+    <!-- A hero empresta o nude e o dourado da identidade do podcast, que é
+         própria e diferente do teal do consultório. O selo é o logo do canal. -->
+    <section class="section phero" aria-labelledby="phero-title">
+      <div class="container phero__inner">
+        <div class="phero__text">
           <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Podcast</p>
-          <h1 class="ts-title">É uma <span class="hl hl--italic">Questão de Pele</span></h1>
-          <p class="ts-lede">Um podcast sobre pele, cabelos e saúde, conduzido pelo Dr. Márcio Teixeira, dermatologista e tricologista, ao lado da farmacêutica Cristine Prato, da Farmatec Farmácia de Manipulação. A proposta é descomplicar o que costuma chegar confuso ao consultório: o que a ciência sustenta, o que é modismo, e o que faz sentido para a sua pele.</p>
-        </header>
-        <div class="podcast__actions podcast__actions--center">
-          <a class="btn btn--primary" href="https://www.youtube.com/@%C3%89UmaQuest%C3%A3odePele01" target="_blank" rel="noopener">Assistir no YouTube</a>
-          <a class="btn btn--ghost" data-th-quiz="PGW6nIOmTX" href="https://meutrack-ingest.carlosabsj-ti.workers.dev/f/PGW6nIOmTX" target="_blank" rel="noopener">Agende sua consulta</a>
+          <h1 class="phero__title" id="phero-title">É uma <span class="hl hl--italic">Questão de Pele</span></h1>
+          <p class="phero__tagline">A ciência que transforma sua pele.</p>
+          <p class="phero__lede">Um podcast sobre pele, cabelos e saúde, conduzido pelo Dr. Márcio Teixeira, dermatologista e tricologista, ao lado da farmacêutica Cristine Prato, da Farmatec Farmácia de Manipulação. A proposta é descomplicar o que costuma chegar confuso ao consultório: o que a ciência sustenta, o que é modismo, e o que faz sentido para a sua pele.</p>
+          <ul class="phero__hosts">
+            <li>
+              <strong>Dr. Márcio Teixeira</strong>
+              <span>Dermatologista e tricologista, criador do Método 4D</span>
+            </li>
+            <li>
+              <strong>Cristine Prato</strong>
+              <span>Farmacêutica, da Farmatec Farmácia de Manipulação</span>
+            </li>
+          </ul>
         </div>
+        <figure class="phero__media reveal">
+          <img class="phero__photo" src="assets/podcast/hero-dupla.jpg" alt="Dr. Márcio Teixeira e Cristine Prato, apresentadores do podcast" width="900" height="1082" />
+          <img class="phero__seal" src="assets/podcast/logo-podcast.jpg" alt="" width="420" height="420" loading="lazy" />
+        </figure>
       </div>
     </section>
 
@@ -145,141 +158,178 @@
       </div>
     </section>
 
-    <section class="section section--neve" aria-labelledby="cortes-title">
-      <div class="container">
-        <header class="ts-head ts-head--center">
-          <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Cortes</p>
-          <h2 class="ts-title" id="cortes-title">Respostas <span class="hl hl--italic">rápidas</span></h2>
-          <p class="ts-lede">Os trechos que mais rendem dúvida no consultório, em menos de um minuto.</p>
-        </header>
+    <section class="section section--neve podcast" aria-labelledby="cortes-title">
+      <div class="container cortes__top">
+        <div class="cortes__head reveal">
+          <div class="cortes__intro">
+            <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Cortes</p>
+            <h2 class="section__title" id="cortes-title">Respostas <span class="hl hl--italic">rápidas</span></h2>
+            <p class="section__lede cortes__hint">Os trechos que mais rendem dúvida no consultório, em menos de um minuto.</p>
+          </div>
+        <div class="cortes__nav" role="group" aria-label="Navegar pelos cortes">
+          <button class="cortes__arrow" type="button" data-cortes-prev aria-label="Ver corte anterior" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="cortes__arrow" type="button" data-cortes-next aria-label="Ver próximo corte"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+        </div>
       </div>
-      <div class="preel preel--grid" data-reel aria-label="Cortes do podcast">
-      <article class="preel__item">
-        <button class="preel__btn" type="button" data-yt="Q5KsiC4d2hU" data-reel-index="0" aria-label="Assistir: Pele ardendo no inverno? O erro mais comum">
-          <video class="preel__video" playsinline muted loop preload="none" poster="assets/podcast/short-01.jpg">
-            <source src="assets/podcast/short-01.mp4" type="video/mp4" />
-          </video>
-          <span class="preel__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
-        </button>
-        <p class="preel__title">Pele ardendo no inverno? O erro mais comum</p>
-      </article>
-      <article class="preel__item">
-        <button class="preel__btn" type="button" data-yt="QncQ6paAWdk" data-reel-index="1" aria-label="Assistir: Como funciona o hidratante: a analogia da parede de tijolos">
-          <video class="preel__video" playsinline muted loop preload="none" poster="assets/podcast/short-02.jpg">
-            <source src="assets/podcast/short-02.mp4" type="video/mp4" />
-          </video>
-          <span class="preel__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
-        </button>
-        <p class="preel__title">Como funciona o hidratante: a analogia da parede de tijolos</p>
-      </article>
-      <article class="preel__item">
-        <button class="preel__btn" type="button" data-yt="rzLmliJ7Cek" data-reel-index="2" aria-label="Assistir: Pausa para skincare e dupla limpeza: o que funciona">
-          <video class="preel__video" playsinline muted loop preload="none" poster="assets/podcast/short-03.jpg">
-            <source src="assets/podcast/short-03.mp4" type="video/mp4" />
-          </video>
-          <span class="preel__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
-        </button>
-        <p class="preel__title">Pausa para skincare e dupla limpeza: o que funciona</p>
-      </article>
-      <article class="preel__item">
-        <button class="preel__btn" type="button" data-yt="uStxYJGPiss" data-reel-index="3" aria-label="Assistir: O segredo para disfarçar rugas">
-          <video class="preel__video" playsinline muted loop preload="none" poster="assets/podcast/short-04.jpg">
-            <source src="assets/podcast/short-04.mp4" type="video/mp4" />
-          </video>
-          <span class="preel__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
-        </button>
-        <p class="preel__title">O segredo para disfarçar rugas</p>
-      </article>
-      <article class="preel__item">
-        <button class="preel__btn" type="button" data-yt="OYaQ1Pz80uw" data-reel-index="4" aria-label="Assistir: Como escolher o demaquilante ideal">
-          <video class="preel__video" playsinline muted loop preload="none" poster="assets/podcast/short-05.jpg">
-            <source src="assets/podcast/short-05.mp4" type="video/mp4" />
-          </video>
-          <span class="preel__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
-        </button>
-        <p class="preel__title">Como escolher o demaquilante ideal</p>
-      </article>
-      <article class="preel__item">
-        <button class="preel__btn" type="button" data-yt="gcWmwVFBFM4" data-reel-index="5" aria-label="Assistir: Pele seca envelhece mais?">
-          <video class="preel__video" playsinline muted loop preload="none" poster="assets/podcast/short-06.jpg">
-            <source src="assets/podcast/short-06.mp4" type="video/mp4" />
-          </video>
-          <span class="preel__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
-        </button>
-        <p class="preel__title">Pele seca envelhece mais?</p>
-      </article>
-      <article class="preel__item">
-        <button class="preel__btn" type="button" data-yt="M7jy6-znnuk" data-reel-index="6" aria-label="Assistir: Pele oleosa é só desvantagem? As vantagens que ninguém conta">
-          <video class="preel__video" playsinline muted loop preload="none" poster="assets/podcast/short-07.jpg">
-            <source src="assets/podcast/short-07.mp4" type="video/mp4" />
-          </video>
-          <span class="preel__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
-        </button>
-        <p class="preel__title">Pele oleosa é só desvantagem? As vantagens que ninguém conta</p>
-      </article>
-      <article class="preel__item">
-        <button class="preel__btn" type="button" data-yt="wQaAuv9tHwU" data-reel-index="7" aria-label="Assistir: Qual é o meu tipo de pele? O teste caseiro">
-          <video class="preel__video" playsinline muted loop preload="none" poster="assets/podcast/short-08.jpg">
-            <source src="assets/podcast/short-08.mp4" type="video/mp4" />
-          </video>
-          <span class="preel__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
-        </button>
-        <p class="preel__title">Qual é o meu tipo de pele? O teste caseiro</p>
-      </article>
-      <article class="preel__item">
-        <button class="preel__btn" type="button" data-yt="d0rz5J5LnQM" data-reel-index="8" aria-label="Assistir: Tipos de pele, skincare básico e as trends do momento">
-          <video class="preel__video" playsinline muted loop preload="none" poster="assets/podcast/short-09.jpg">
-            <source src="assets/podcast/short-09.mp4" type="video/mp4" />
-          </video>
-          <span class="preel__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
-        </button>
-        <p class="preel__title">Tipos de pele, skincare básico e as trends do momento</p>
-      </article>
-      <article class="preel__item">
-        <button class="preel__btn" type="button" data-yt="jBGPos0ly4g" data-reel-index="9" aria-label="Assistir: A pele como impermeabilizante do corpo">
-          <video class="preel__video" playsinline muted loop preload="none" poster="assets/podcast/short-10.jpg">
-            <source src="assets/podcast/short-10.mp4" type="video/mp4" />
-          </video>
-          <span class="preel__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
-        </button>
-        <p class="preel__title">A pele como impermeabilizante do corpo</p>
-      </article>
-      <article class="preel__item">
-        <button class="preel__btn" type="button" data-yt="KcqRbjRDFJA" data-reel-index="10" aria-label="Assistir: Barreira cutânea: quando a pele arde, repuxa e descama">
-          <video class="preel__video" playsinline muted loop preload="none" poster="assets/podcast/short-11.jpg">
-            <source src="assets/podcast/short-11.mp4" type="video/mp4" />
-          </video>
-          <span class="preel__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
-        </button>
-        <p class="preel__title">Barreira cutânea: quando a pele arde, repuxa e descama</p>
-      </article>
-      <article class="preel__item">
-        <button class="preel__btn" type="button" data-yt="cw8o_swkhYI" data-reel-index="11" aria-label="Assistir: Sua pele é como uma esponja: a metáfora do envelhecimento">
-          <video class="preel__video" playsinline muted loop preload="none" poster="assets/podcast/short-12.jpg">
-            <source src="assets/podcast/short-12.mp4" type="video/mp4" />
-          </video>
-          <span class="preel__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
-        </button>
-        <p class="preel__title">Sua pele é como uma esponja: a metáfora do envelhecimento</p>
-      </article>
-      <article class="preel__item">
-        <button class="preel__btn" type="button" data-yt="w-9LVJyFk-A" data-reel-index="12" aria-label="Assistir: Por que a pele vai ficando mais seca com os anos">
-          <video class="preel__video" playsinline muted loop preload="none" poster="assets/podcast/short-13.jpg">
-            <source src="assets/podcast/short-13.mp4" type="video/mp4" />
-          </video>
-          <span class="preel__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
-        </button>
-        <p class="preel__title">Por que a pele vai ficando mais seca com os anos</p>
-      </article>
-      <article class="preel__item">
-        <button class="preel__btn" type="button" data-yt="SNSjohQkbnw" data-reel-index="13" aria-label="Assistir: O início de um novo projeto: a ciência que transforma a pele">
-          <video class="preel__video" playsinline muted loop preload="none" poster="assets/podcast/short-14.jpg">
-            <source src="assets/podcast/short-14.mp4" type="video/mp4" />
-          </video>
-          <span class="preel__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
-        </button>
-        <p class="preel__title">O início de um novo projeto: a ciência que transforma a pele</p>
-      </article>
+
+      <div class="cortes__viewport reveal">
+        <ul class="cortes__track" data-cortes-track tabindex="0" role="list" aria-label="Cortes do podcast">
+          <li class="corte-item">
+            <article class="corte" style="--off:0">
+              <button class="corte__btn" type="button" data-yt="Q5KsiC4d2hU" data-corte-index="0" aria-label="Assistir: Pele ardendo no inverno? O erro mais comum">
+                <video class="corte__video" playsinline muted loop preload="none" poster="assets/podcast/short-01.jpg">
+                  <source src="assets/podcast/short-01.mp4" type="video/mp4" />
+                </video>
+                <span class="corte__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
+              </button>
+              <p class="corte__title">Pele ardendo no inverno? O erro mais comum</p>
+            </article>
+          </li>
+          <li class="corte-item">
+            <article class="corte" style="--off:2.4">
+              <button class="corte__btn" type="button" data-yt="QncQ6paAWdk" data-corte-index="1" aria-label="Assistir: Como funciona o hidratante: a analogia da parede de tijolos">
+                <video class="corte__video" playsinline muted loop preload="none" poster="assets/podcast/short-02.jpg">
+                  <source src="assets/podcast/short-02.mp4" type="video/mp4" />
+                </video>
+                <span class="corte__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
+              </button>
+              <p class="corte__title">Como funciona o hidratante: a analogia da parede de tijolos</p>
+            </article>
+          </li>
+          <li class="corte-item">
+            <article class="corte" style="--off:1.1">
+              <button class="corte__btn" type="button" data-yt="rzLmliJ7Cek" data-corte-index="2" aria-label="Assistir: Pausa para skincare e dupla limpeza: o que funciona">
+                <video class="corte__video" playsinline muted loop preload="none" poster="assets/podcast/short-03.jpg">
+                  <source src="assets/podcast/short-03.mp4" type="video/mp4" />
+                </video>
+                <span class="corte__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
+              </button>
+              <p class="corte__title">Pausa para skincare e dupla limpeza: o que funciona</p>
+            </article>
+          </li>
+          <li class="corte-item">
+            <article class="corte" style="--off:3">
+              <button class="corte__btn" type="button" data-yt="uStxYJGPiss" data-corte-index="3" aria-label="Assistir: O segredo para disfarçar rugas">
+                <video class="corte__video" playsinline muted loop preload="none" poster="assets/podcast/short-04.jpg">
+                  <source src="assets/podcast/short-04.mp4" type="video/mp4" />
+                </video>
+                <span class="corte__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
+              </button>
+              <p class="corte__title">O segredo para disfarçar rugas</p>
+            </article>
+          </li>
+          <li class="corte-item">
+            <article class="corte" style="--off:0.6">
+              <button class="corte__btn" type="button" data-yt="OYaQ1Pz80uw" data-corte-index="4" aria-label="Assistir: Como escolher o demaquilante ideal">
+                <video class="corte__video" playsinline muted loop preload="none" poster="assets/podcast/short-05.jpg">
+                  <source src="assets/podcast/short-05.mp4" type="video/mp4" />
+                </video>
+                <span class="corte__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
+              </button>
+              <p class="corte__title">Como escolher o demaquilante ideal</p>
+            </article>
+          </li>
+          <li class="corte-item">
+            <article class="corte" style="--off:1.8">
+              <button class="corte__btn" type="button" data-yt="gcWmwVFBFM4" data-corte-index="5" aria-label="Assistir: Pele seca envelhece mais?">
+                <video class="corte__video" playsinline muted loop preload="none" poster="assets/podcast/short-06.jpg">
+                  <source src="assets/podcast/short-06.mp4" type="video/mp4" />
+                </video>
+                <span class="corte__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
+              </button>
+              <p class="corte__title">Pele seca envelhece mais?</p>
+            </article>
+          </li>
+          <li class="corte-item">
+            <article class="corte" style="--off:0">
+              <button class="corte__btn" type="button" data-yt="M7jy6-znnuk" data-corte-index="6" aria-label="Assistir: Pele oleosa é só desvantagem? As vantagens que ninguém conta">
+                <video class="corte__video" playsinline muted loop preload="none" poster="assets/podcast/short-07.jpg">
+                  <source src="assets/podcast/short-07.mp4" type="video/mp4" />
+                </video>
+                <span class="corte__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
+              </button>
+              <p class="corte__title">Pele oleosa é só desvantagem? As vantagens que ninguém conta</p>
+            </article>
+          </li>
+          <li class="corte-item">
+            <article class="corte" style="--off:2.4">
+              <button class="corte__btn" type="button" data-yt="wQaAuv9tHwU" data-corte-index="7" aria-label="Assistir: Qual é o meu tipo de pele? O teste caseiro">
+                <video class="corte__video" playsinline muted loop preload="none" poster="assets/podcast/short-08.jpg">
+                  <source src="assets/podcast/short-08.mp4" type="video/mp4" />
+                </video>
+                <span class="corte__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
+              </button>
+              <p class="corte__title">Qual é o meu tipo de pele? O teste caseiro</p>
+            </article>
+          </li>
+          <li class="corte-item">
+            <article class="corte" style="--off:1.1">
+              <button class="corte__btn" type="button" data-yt="d0rz5J5LnQM" data-corte-index="8" aria-label="Assistir: Tipos de pele, skincare básico e as trends do momento">
+                <video class="corte__video" playsinline muted loop preload="none" poster="assets/podcast/short-09.jpg">
+                  <source src="assets/podcast/short-09.mp4" type="video/mp4" />
+                </video>
+                <span class="corte__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
+              </button>
+              <p class="corte__title">Tipos de pele, skincare básico e as trends do momento</p>
+            </article>
+          </li>
+          <li class="corte-item">
+            <article class="corte" style="--off:3">
+              <button class="corte__btn" type="button" data-yt="jBGPos0ly4g" data-corte-index="9" aria-label="Assistir: A pele como impermeabilizante do corpo">
+                <video class="corte__video" playsinline muted loop preload="none" poster="assets/podcast/short-10.jpg">
+                  <source src="assets/podcast/short-10.mp4" type="video/mp4" />
+                </video>
+                <span class="corte__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
+              </button>
+              <p class="corte__title">A pele como impermeabilizante do corpo</p>
+            </article>
+          </li>
+          <li class="corte-item">
+            <article class="corte" style="--off:0.6">
+              <button class="corte__btn" type="button" data-yt="KcqRbjRDFJA" data-corte-index="10" aria-label="Assistir: Barreira cutânea: quando a pele arde, repuxa e descama">
+                <video class="corte__video" playsinline muted loop preload="none" poster="assets/podcast/short-11.jpg">
+                  <source src="assets/podcast/short-11.mp4" type="video/mp4" />
+                </video>
+                <span class="corte__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
+              </button>
+              <p class="corte__title">Barreira cutânea: quando a pele arde, repuxa e descama</p>
+            </article>
+          </li>
+          <li class="corte-item">
+            <article class="corte" style="--off:1.8">
+              <button class="corte__btn" type="button" data-yt="cw8o_swkhYI" data-corte-index="11" aria-label="Assistir: Sua pele é como uma esponja: a metáfora do envelhecimento">
+                <video class="corte__video" playsinline muted loop preload="none" poster="assets/podcast/short-12.jpg">
+                  <source src="assets/podcast/short-12.mp4" type="video/mp4" />
+                </video>
+                <span class="corte__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
+              </button>
+              <p class="corte__title">Sua pele é como uma esponja: a metáfora do envelhecimento</p>
+            </article>
+          </li>
+          <li class="corte-item">
+            <article class="corte" style="--off:0">
+              <button class="corte__btn" type="button" data-yt="w-9LVJyFk-A" data-corte-index="12" aria-label="Assistir: Por que a pele vai ficando mais seca com os anos">
+                <video class="corte__video" playsinline muted loop preload="none" poster="assets/podcast/short-13.jpg">
+                  <source src="assets/podcast/short-13.mp4" type="video/mp4" />
+                </video>
+                <span class="corte__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
+              </button>
+              <p class="corte__title">Por que a pele vai ficando mais seca com os anos</p>
+            </article>
+          </li>
+          <li class="corte-item">
+            <article class="corte" style="--off:2.4">
+              <button class="corte__btn" type="button" data-yt="SNSjohQkbnw" data-corte-index="13" aria-label="Assistir: O início de um novo projeto: a ciência que transforma a pele">
+                <video class="corte__video" playsinline muted loop preload="none" poster="assets/podcast/short-14.jpg">
+                  <source src="assets/podcast/short-14.mp4" type="video/mp4" />
+                </video>
+                <span class="corte__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
+              </button>
+              <p class="corte__title">O início de um novo projeto: a ciência que transforma a pele</p>
+            </article>
+          </li>
+        </ul>
       </div>
     </section>
 

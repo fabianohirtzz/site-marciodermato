@@ -66,26 +66,54 @@ function facade(ep, base = '', cls = '') {
         </button>`;
 }
 
+/* Deslocamento vertical de cada card, como no carrossel de Resultados: quebra
+   a régua reta e dá ritmo à faixa. Ciclo fixo, para o build ser determinístico. */
+const DEGRAUS = [0, 2.4, 1.1, 3, 0.6, 1.8];
+
 /* Um card do trilho. O preview local é mudo e sem áudio no arquivo; o short
    completo, com som, abre no lightbox do YouTube. */
-function reelItem(s, i, base = '') {
+function corteItem(s, i, base = '') {
   // O título fica FORA do vídeo: os shorts já trazem legenda queimada, e um
   // rótulo por cima viraria texto sobre texto.
-  return `      <article class="preel__item">
-        <button class="preel__btn" type="button" data-yt="${attr(s.id)}" data-reel-index="${i}" aria-label="Assistir: ${attr(s.titulo)}">
-          <video class="preel__video" playsinline muted loop preload="none" poster="${base}assets/podcast/${attr(s.arquivo)}.jpg">
-            <source src="${base}assets/podcast/${attr(s.arquivo)}.mp4" type="video/mp4" />
-          </video>
-          <span class="preel__play" aria-hidden="true">${PLAY_SVG}</span>
-        </button>
-        <p class="preel__title">${esc(s.titulo)}</p>
-      </article>`;
+  return `          <li class="corte-item">
+            <article class="corte" style="--off:${DEGRAUS[i % DEGRAUS.length]}">
+              <button class="corte__btn" type="button" data-yt="${attr(s.id)}" data-corte-index="${i}" aria-label="Assistir: ${attr(s.titulo)}">
+                <video class="corte__video" playsinline muted loop preload="none" poster="${base}assets/podcast/${attr(s.arquivo)}.jpg">
+                  <source src="${base}assets/podcast/${attr(s.arquivo)}.mp4" type="video/mp4" />
+                </video>
+                <span class="corte__play" aria-hidden="true">${PLAY_SVG}</span>
+              </button>
+              <p class="corte__title">${esc(s.titulo)}</p>
+            </article>
+          </li>`;
+}
+
+const SETAS = `        <div class="cortes__nav" role="group" aria-label="Navegar pelos cortes">
+          <button class="cortes__arrow" type="button" data-cortes-prev aria-label="Ver corte anterior" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="cortes__arrow" type="button" data-cortes-next aria-label="Ver próximo corte"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>`;
+
+/* O trilho segue a anatomia do carrossel de Resultados da home: cabeçalho com
+   as setas à direita e a faixa sangrando de ponta a ponta. */
+function trilho(shorts, cabecalho, base = '') {
+  return `      <div class="container cortes__top">
+        <div class="cortes__head reveal">
+${cabecalho}
+${SETAS}
+        </div>
+      </div>
+
+      <div class="cortes__viewport reveal">
+        <ul class="cortes__track" data-cortes-track tabindex="0" role="list" aria-label="Cortes do podcast">
+${shorts.map((s, i) => corteItem(s, i, base)).join('\n')}
+        </ul>
+      </div>`;
 }
 
 export function renderHomeSection(data) {
   const dest = data.episodios[0];
   const shorts = data.shorts.filter((s) => s.home);
-  return `    <section class="section section--branco podcast" id="podcast" aria-labelledby="podcast-title" data-podcast>
+  return `    <section class="section section--neve podcast" id="podcast" aria-labelledby="podcast-title" data-podcast>
       <div class="container">
         <header class="ts-head ts-head--center">
           <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Podcast</p>
@@ -107,9 +135,13 @@ export function renderHomeSection(data) {
         </div>
       </div>
 
-      <div class="preel reveal" data-reel aria-label="Cortes do podcast">
-${shorts.map((s, i) => reelItem(s, i)).join('\n')}
-      </div>
+${trilho(
+  shorts,
+  `          <div class="cortes__intro">
+            <p class="cortes__label">Cortes rápidos</p>
+            <p class="cortes__hint">Os trechos que mais rendem dúvida no consultório, em menos de um minuto.</p>
+          </div>`
+)}
     </section>`;
 }
 
@@ -127,7 +159,7 @@ function head(title, description, canonical, extra = '') {
   <meta property="og:title" content="${attr(title)}" />
   <meta property="og:description" content="${attr(description)}" />
   <meta property="og:url" content="${attr(canonical)}" />
-  <meta property="og:image" content="${SITE}/assets/podcast/ep-03.jpg" />
+  <meta property="og:image" content="${SITE}/assets/podcast/og-podcast.jpg" />
   <link rel="icon" type="image/png" href="logo/logo-header-colorido.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -184,8 +216,6 @@ export function renderPage(data) {
     )
     .join('\n');
 
-  const shorts = data.shorts.map((s, i) => reelItem(s, i)).join('\n');
-
   return `${head(title, description, `${SITE}/podcast.html`, jsonLd(data) + '\n')}
 <body class="is-loading">
 ${TRACKING_BODY}
@@ -194,17 +224,30 @@ ${TRACKING_BODY}
 ${navHTML('', 'podcast')}
 
   <main id="conteudo">
-    <section class="section section--neve">
-      <div class="container">
-        <header class="ts-head ts-head--center">
+    <!-- A hero empresta o nude e o dourado da identidade do podcast, que é
+         própria e diferente do teal do consultório. O selo é o logo do canal. -->
+    <section class="section phero" aria-labelledby="phero-title">
+      <div class="container phero__inner">
+        <div class="phero__text">
           <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Podcast</p>
-          <h1 class="ts-title">É uma <span class="hl hl--italic">Questão de Pele</span></h1>
-          <p class="ts-lede">${esc(data.sobre)}</p>
-        </header>
-        <div class="podcast__actions podcast__actions--center">
-          <a class="btn btn--primary" href="${attr(data.canal)}" target="_blank" rel="noopener">Assistir no YouTube</a>
-          <a class="btn btn--ghost" ${CTA_ATTRS}>Agende sua consulta</a>
+          <h1 class="phero__title" id="phero-title">É uma <span class="hl hl--italic">Questão de Pele</span></h1>
+          <p class="phero__tagline">A ciência que transforma sua pele.</p>
+          <p class="phero__lede">${esc(data.sobre)}</p>
+          <ul class="phero__hosts">
+            <li>
+              <strong>Dr. Márcio Teixeira</strong>
+              <span>Dermatologista e tricologista, criador do Método 4D</span>
+            </li>
+            <li>
+              <strong>Cristine Prato</strong>
+              <span>Farmacêutica, da Farmatec Farmácia de Manipulação</span>
+            </li>
+          </ul>
         </div>
+        <figure class="phero__media reveal">
+          <img class="phero__photo" src="assets/podcast/hero-dupla.jpg" alt="Dr. Márcio Teixeira e Cristine Prato, apresentadores do podcast" width="900" height="1082" />
+          <img class="phero__seal" src="assets/podcast/logo-podcast.jpg" alt="" width="420" height="420" loading="lazy" />
+        </figure>
       </div>
     </section>
 
@@ -221,17 +264,15 @@ ${episodios}
       </div>
     </section>
 
-    <section class="section section--neve" aria-labelledby="cortes-title">
-      <div class="container">
-        <header class="ts-head ts-head--center">
-          <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Cortes</p>
-          <h2 class="ts-title" id="cortes-title">Respostas <span class="hl hl--italic">rápidas</span></h2>
-          <p class="ts-lede">Os trechos que mais rendem dúvida no consultório, em menos de um minuto.</p>
-        </header>
-      </div>
-      <div class="preel preel--grid" data-reel aria-label="Cortes do podcast">
-${shorts}
-      </div>
+    <section class="section section--neve podcast" aria-labelledby="cortes-title">
+${trilho(
+  data.shorts,
+  `          <div class="cortes__intro">
+            <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Cortes</p>
+            <h2 class="section__title" id="cortes-title">Respostas <span class="hl hl--italic">rápidas</span></h2>
+            <p class="section__lede cortes__hint">Os trechos que mais rendem dúvida no consultório, em menos de um minuto.</p>
+          </div>`
+)}
     </section>
 
     <section class="section section--deep cta-band" id="agende" aria-labelledby="cta-title">

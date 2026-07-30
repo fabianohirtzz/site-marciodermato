@@ -39,7 +39,7 @@ test('escapa HTML no texto e nos atributos', () => {
 test('a seção da home traz só os cortes marcados', () => {
   const html = renderHomeSection(data);
   const naHome = data.shorts.filter(s => s.home);
-  assert.equal((html.match(/class="preel__item"/g) || []).length, naHome.length);
+  assert.equal((html.match(/class="corte-item"/g) || []).length, naHome.length);
   const fora = data.shorts.find(s => !s.home);
   assert.ok(!html.includes(`${fora.arquivo}.mp4`), 'corte fora da home não deveria aparecer');
 });
@@ -53,14 +53,14 @@ test('a seção da home destaca o episódio mais recente', () => {
 test('a página lista todos os episódios e todos os cortes', () => {
   const html = renderPage(data);
   assert.equal((html.match(/class="pep /g) || []).length, data.episodios.length);
-  assert.equal((html.match(/class="preel__item"/g) || []).length, data.shorts.length);
+  assert.equal((html.match(/class="corte-item"/g) || []).length, data.shorts.length);
   for (const s of data.shorts) assert.ok(html.includes(`${s.arquivo}.mp4`), `falta ${s.arquivo}`);
 });
 
 test('os vídeos do trilho carregam sob demanda e sem som', () => {
   const html = renderPage(data);
   assert.equal((html.match(/preload="none"/g) || []).length, data.shorts.length);
-  assert.equal((html.match(/class="preel__video" playsinline muted loop/g) || []).length, data.shorts.length);
+  assert.equal((html.match(/class="corte__video" playsinline muted loop/g) || []).length, data.shorts.length);
 });
 
 test('nenhum iframe do YouTube no HTML servido', () => {
@@ -94,4 +94,27 @@ test('os CTAs da página abrem o popup do formulário', () => {
   const html = renderPage(data);
   assert.ok(html.includes('data-th-quiz='));
   assert.ok(!html.includes('wa.me'));
+});
+
+test('a hero da página não repete botões da CTA band', () => {
+  const html = renderPage(data);
+  const hero = html.slice(html.indexOf('class="section phero"'), html.indexOf('id="episodios-title"'));
+  assert.ok(!hero.includes('<a class="btn'), 'a hero deve ser só imagem e texto');
+  assert.ok(hero.includes('hero-dupla.jpg'));
+  assert.ok(hero.includes('logo-podcast.jpg'));
+});
+
+test('os dois trilhos trazem as setas de navegação', () => {
+  for (const html of [renderHomeSection(data), renderPage(data)]) {
+    assert.ok(html.includes('data-cortes-track'));
+    assert.ok(html.includes('data-cortes-prev'));
+    assert.ok(html.includes('data-cortes-next'));
+  }
+});
+
+test('os cards do trilho vêm em degrau, como o carrossel de Resultados', () => {
+  const html = renderPage(data);
+  const offs = html.match(/style="--off:[\d.]+"/g) || [];
+  assert.equal(offs.length, data.shorts.length);
+  assert.ok(new Set(offs).size > 1, 'os degraus não podem ser todos iguais');
 });
