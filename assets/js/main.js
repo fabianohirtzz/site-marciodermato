@@ -747,20 +747,6 @@
   (function popupDoFormulario() {
     const Z_DO_OVERLAY = "2147483000";
 
-    // Tenta focar o iframe por até ~10 frames: no embed.js atual o iframe já
-    // está dentro do overlay quando ele entra no body (montagem síncrona), mas
-    // se uma versão futura do script adiar essa inserção, não queremos que o
-    // foco se perca em silêncio — e sem observar a subtree, vestir() não seria
-    // chamado de novo para o mesmo nó.
-    const focarIframe = (no, tentativa) => {
-      const frame = no.querySelector("iframe");
-      if (frame) {
-        frame.focus();
-        return;
-      }
-      if ((tentativa || 0) < 10) requestAnimationFrame(() => focarIframe(no, (tentativa || 0) + 1));
-    };
-
     const vestir = (no) => {
       if (!(no instanceof HTMLElement)) return;
       if (no.style.zIndex !== Z_DO_OVERLAY || no.dataset.thVestido) return;
@@ -769,7 +755,13 @@
       no.setAttribute("role", "dialog");
       no.setAttribute("aria-modal", "true");
       no.setAttribute("aria-label", "Agende sua avaliação");
-      focarIframe(no);
+      // Foca o overlay (não o iframe): o leitor de tela anuncia o dialog, o
+      // Tab entra no formulário naturalmente, e o keydown de Escape do
+      // embed.js continua chegando no document pai — focar o iframe
+      // (cross-origin) tirava o Escape do ar, porque o keydown nunca saía
+      // de dentro dele.
+      no.setAttribute("tabindex", "-1");
+      no.focus({ preventScroll: true });
     };
 
     new MutationObserver((registros) => {

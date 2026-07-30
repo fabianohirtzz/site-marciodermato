@@ -2810,6 +2810,13 @@ a.treat-card:hover .treat-card__more svg { transform: translateX(4px); }
   animation: th-modal-entra 0.18s ease-out both;
 }
 
+/* O overlay recebe foco por programa (tabindex="-1") para anunciar o
+   dialog sem tirar o Escape do embed.js do ar; sem outline aqui, porque
+   o foco visível continua nos elementos acionáveis de dentro do card. */
+.th-modal:focus {
+  outline: none;
+}
+
 .th-modal button {
   width: 36px !important;
   height: 36px !important;
