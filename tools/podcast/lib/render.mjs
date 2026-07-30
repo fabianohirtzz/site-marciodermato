@@ -33,6 +33,10 @@ export function validate(data) {
   if (!Array.isArray(data.episodios) || !data.episodios.length) erros.push('nenhum episódio');
   if (!Array.isArray(data.shorts) || !data.shorts.length) erros.push('nenhum short');
   if (!data.canal) erros.push('canal ausente');
+  if (!Array.isArray(data.hosts) || !data.hosts.length) erros.push('nenhum apresentador');
+  for (const [i, h] of (data.hosts || []).entries()) {
+    for (const campo of ['nome', 'papel']) if (!h[campo]) erros.push(`host[${i}]: falta "${campo}"`);
+  }
 
   for (const [i, ep] of (data.episodios || []).entries()) {
     for (const campo of ['id', 'num', 'titulo', 'duracao', 'publicado', 'capa', 'descricao']) {
@@ -234,18 +238,18 @@ ${navHTML('', 'podcast')}
           <p class="phero__tagline">A ciência que transforma sua pele.</p>
           <p class="phero__lede">${esc(data.sobre)}</p>
           <ul class="phero__hosts">
-            <li>
-              <strong>Dr. Márcio Teixeira</strong>
-              <span>Dermatologista e tricologista, criador do Método 4D</span>
-            </li>
-            <li>
-              <strong>Cristine Prato</strong>
-              <span>Farmacêutica, da Farmatec Farmácia de Manipulação</span>
-            </li>
+${data.hosts
+  .map(
+    (h) => `            <li>
+              <strong>${esc(h.nome)}</strong>
+              <span>${esc(h.papel)}</span>
+            </li>`
+  )
+  .join('\n')}
           </ul>
         </div>
         <figure class="phero__media reveal">
-          <img class="phero__photo" src="assets/podcast/hero-dupla.jpg" alt="Dr. Márcio Teixeira e Cristine Prato, apresentadores do podcast" width="900" height="1082" />
+          <img class="phero__photo" src="assets/podcast/hero-dupla.jpg" alt="${attr(data.hosts.map((h) => h.nome).join(' e '))}, apresentadores do podcast" width="900" height="1082" />
           <img class="phero__seal" src="assets/podcast/logo-podcast.jpg" alt="" width="420" height="420" loading="lazy" />
         </figure>
       </div>

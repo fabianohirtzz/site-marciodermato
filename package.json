@@ -9,7 +9,8 @@
     "build:blog": "node tools/build-blog.mjs",
     "build:treatments": "node tools/build-treatments.mjs",
     "build:sitemap": "node tools/build-sitemap.mjs",
-    "build:podcast": "node tools/build-podcast.mjs"
+    "build:podcast": "node tools/build-podcast.mjs",
+    "podcast:sync": "node tools/podcast/sync.mjs"
   },
   "dependencies": {
     "sharp": "^0.34.5"

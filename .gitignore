@@ -14,6 +14,9 @@ node_modules/
 *-full.jpeg
 *.log
 
+# downloads brutos do podcast:sync, antes do ffmpeg
+tools/podcast/.tmp/
+
 # large source files that are NOT website assets
 # 996 MB WordPress backup of the old site
 *.wpress
