@@ -92,10 +92,16 @@ function corteItem(s, i, base = '') {
           </li>`;
 }
 
-const SETAS = `        <div class="cortes__nav" role="group" aria-label="Navegar pelos cortes">
-          <button class="cortes__arrow" type="button" data-cortes-prev aria-label="Ver corte anterior" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          <button class="cortes__arrow" type="button" data-cortes-next aria-label="Ver próximo corte"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        </div>`;
+/* As setas circulares são as mesmas em toda faixa do site (casos, avaliações,
+   cortes); só mudam o data-attribute que o JS observa e o que elas anunciam. */
+function setas(ns, grupo, anterior, proximo, indent = '        ') {
+  return `${indent}<div class="cortes__nav" role="group" aria-label="${attr(grupo)}">
+${indent}  <button class="cortes__arrow" type="button" data-${ns}-prev aria-label="${attr(anterior)}" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+${indent}  <button class="cortes__arrow" type="button" data-${ns}-next aria-label="${attr(proximo)}"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+${indent}</div>`;
+}
+
+const SETAS = setas('cortes', 'Navegar pelos cortes', 'Ver corte anterior', 'Ver próximo corte');
 
 /* O trilho segue a anatomia do carrossel de Resultados da home: cabeçalho com
    as setas à direita e a faixa sangrando de ponta a ponta. */
@@ -207,16 +213,20 @@ export function renderPage(data) {
   const description =
     'O podcast do Dr. Márcio Teixeira, dermatologista e tricologista em Porto Alegre, sobre pele, cabelos e saúde. Episódios completos e cortes rápidos.';
 
+  /* Faixa rolável em vez de grade: a lista cresce a cada episódio, e uma
+     grade de três colunas deixaria o quarto sozinho na linha de baixo. */
   const episodios = data.episodios
     .map(
-      (ep) => `        <article class="pep reveal">
-          ${facade(ep, '', ' pfacade--card')}
-          <div class="pep__body">
-            <p class="pep__meta">Episódio ${esc(String(ep.num))} · ${esc(minutos(ep.duracao))}</p>
-            <h3 class="pep__title">${esc(ep.titulo)}</h3>
-            <p class="pep__desc">${esc(ep.descricao)}</p>
-          </div>
-        </article>`
+      (ep) => `            <li class="pep-item">
+              <article class="pep">
+                ${facade(ep, '', ' pfacade--card')}
+                <div class="pep__body">
+                  <p class="pep__meta">Episódio ${esc(String(ep.num))} · ${esc(minutos(ep.duracao))}</p>
+                  <h3 class="pep__title">${esc(ep.titulo)}</h3>
+                  <p class="pep__desc">${esc(ep.descricao)}</p>
+                </div>
+              </article>
+            </li>`
     )
     .join('\n');
 
@@ -249,7 +259,7 @@ ${data.hosts
           </ul>
         </div>
         <figure class="phero__media reveal">
-          <img class="phero__photo" src="assets/podcast/hero-dupla.jpg" alt="${attr(data.hosts.map((h) => h.nome).join(' e '))}, apresentadores do podcast" width="900" height="1082" />
+          <img class="phero__photo" src="assets/podcast/hero-dupla.jpg" alt="${attr(data.hosts.map((h) => h.nome).join(' e '))}, apresentadores do podcast" width="900" height="1206" />
           <img class="phero__seal" src="assets/podcast/logo-podcast.jpg" alt="" width="420" height="420" loading="lazy" />
         </figure>
       </div>
@@ -257,13 +267,18 @@ ${data.hosts
 
     <section class="section section--branco" aria-labelledby="episodios-title" data-fio="left">
       <div class="container">
-        <header class="ts-head">
-          <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Episódios</p>
-          <h2 class="ts-title" id="episodios-title">Conversas <span class="hl hl--italic">completas</span></h2>
-          <p class="ts-lede">Cada episódio percorre um dos eixos do Método 4D, o protocolo de avaliação criado pelo Dr. Márcio.</p>
-        </header>
-        <div class="pep-list">
+        <div class="peps__head">
+          <header class="ts-head">
+            <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Episódios</p>
+            <h2 class="ts-title" id="episodios-title">Conversas <span class="hl hl--italic">completas</span></h2>
+            <p class="ts-lede">Cada episódio percorre um dos eixos do Método 4D, o protocolo de avaliação criado pelo Dr. Márcio.</p>
+          </header>
+${setas('peps', 'Navegar pelos episódios', 'Ver episódio anterior', 'Ver próximo episódio', '          ')}
+        </div>
+        <div class="peps reveal">
+          <ul class="peps__track" data-peps-track tabindex="0" role="list" aria-label="Episódios do podcast">
 ${episodios}
+          </ul>
         </div>
       </div>
     </section>

@@ -474,6 +474,21 @@
   })();
 
   /* ------------------------------------------------------------------ */
+  /* Podcast — faixa de episódios (mesma mecânica das demais)            */
+  /* ------------------------------------------------------------------ */
+  (function episodios() {
+    const track = document.querySelector("[data-peps-track]");
+    if (!track) return;
+
+    carrosselSetas(
+      track,
+      document.querySelector("[data-peps-prev]"),
+      document.querySelector("[data-peps-next]"),
+      ".pep-item"
+    );
+  })();
+
+  /* ------------------------------------------------------------------ */
   /* Smooth anchor scroll (closes drawer, respects reduced motion)      */
   /* ------------------------------------------------------------------ */
   document.querySelectorAll('a[href^="#"]').forEach((a) => {

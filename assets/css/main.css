@@ -3164,12 +3164,49 @@ a.treat-card:hover .treat-card__more svg { transform: translateX(4px); }
   .corte__btn:focus-visible { transform: none; transition: none; }
 }
 
-/* --- cards de episódio na página ------------------------------------ */
-.pep-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: clamp(22px, 3vw, 34px);
+/* --- faixa de episódios na página ------------------------------------ */
+/* Rola como as demais faixas do site (casos, avaliações, cortes): uma carta
+   por clique de seta. Grade não serve aqui porque a lista cresce a cada
+   episódio novo e sobraria um card sozinho na última linha. */
+.peps__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  flex-wrap: wrap;
 }
+.peps__head .ts-head { max-width: 620px; margin-bottom: 0; }
+.peps { margin-top: clamp(26px, 3.6vw, 40px); }
+.peps__track {
+  --per: 3;
+  --gap: clamp(22px, 3vw, 34px);
+  display: flex;
+  align-items: stretch;
+  gap: var(--gap);
+  margin: 0;
+  /* respiro para a sombra e o hover-lift do card não serem cortados */
+  padding: 8px 6px 30px;
+  margin-inline: -6px;
+  list-style: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: 6px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.peps__track::-webkit-scrollbar { display: none; }
+.peps__track:focus-visible { outline: 3px solid var(--marca); outline-offset: -3px; border-radius: var(--r-md); }
+.pep-item {
+  flex: 0 0 calc((100% - 12px - (var(--per) - 1) * var(--gap)) / var(--per));
+  display: flex;
+  scroll-snap-align: start;
+}
+.pep-item > .pep { width: 100%; }
+
+@media (max-width: 980px) { .peps__track { --per: 2; } }
+@media (max-width: 620px) { .peps__track { --per: 1.12; } }
+
 .pep {
   display: flex;
   flex-direction: column;

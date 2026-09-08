@@ -60,7 +60,8 @@ test('aplicarShorts insere no topo e marca para revisão', () => {
   assert.equal(out.shorts[0].id, 'zzz');
   assert.equal(out.shorts[0].titulo, 'Um corte novo');
   assert.equal(out.shorts[0].revisar, true);
-  assert.equal(out.shorts[0].arquivo, 'short-15');
+  // derivado do JSON: o conteúdo cresce, e o teste não pode envelhecer junto
+  assert.equal(out.shorts[0].arquivo, proximoArquivo(data.shorts));
   assert.equal(out.shorts.length, data.shorts.length + 1);
 });
 
@@ -90,6 +91,6 @@ test('com poucos cortes, todos ficam na home', () => {
 test('rascunhoEpisodio numera a partir do último e deixa a copy em branco', () => {
   const r = rascunhoEpisodio({ id: 'novo', titulo: 'EP 04 | Alguma coisa #podcast' }, data);
   assert.equal(r.num, data.episodios[0].num + 1);
-  assert.equal(r.capa, 'assets/podcast/ep-04.jpg');
+  assert.equal(r.capa, `assets/podcast/ep-${String(r.num).padStart(2, '0')}.jpg`);
   assert.equal(r.descricao, '', 'descrição é copy, o sync não inventa');
 });

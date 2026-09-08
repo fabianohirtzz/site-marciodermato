@@ -3,13 +3,27 @@
   "nome": "É uma Questão de Pele",
   "apresentadores": "Dr. Márcio Teixeira e a farmacêutica Christine Prato",
   "sobre": "Um podcast sobre pele, cabelos e saúde, conduzido pelo Dr. Márcio Teixeira, dermatologista e tricologista, ao lado da farmacêutica Christine Prato, da Farmatec Farmácia de Manipulação. A proposta é descomplicar o que costuma chegar confuso ao consultório: o que a ciência sustenta, o que é modismo, e o que faz sentido para a sua pele.",
-
   "hosts": [
-    { "nome": "Dr. Márcio Teixeira", "papel": "Dermatologista e tricologista, criador do Método 4D" },
-    { "nome": "Christine Prato", "papel": "Farmacêutica, da Farmatec Farmácia de Manipulação" }
+    {
+      "nome": "Dr. Márcio Teixeira",
+      "papel": "Dermatologista e tricologista, criador do Método 4D"
+    },
+    {
+      "nome": "Christine Prato",
+      "papel": "Farmacêutica, da Farmatec Farmácia de Manipulação"
+    }
   ],
-
   "episodios": [
+    {
+      "id": "TNcqHyVCT3A",
+      "num": 4,
+      "titulo": "Fotoproteção: o cuidado de todos os dias",
+      "duracao": "58:21",
+      "segundos": 3501,
+      "publicado": "2026-08-24",
+      "capa": "assets/podcast/ep-04.jpg",
+      "descricao": "Passar protetor solar pela manhã já virou hábito, mas proteger de verdade exige um pouco mais. O episódio segue no Eixo 1 do Método 4D e trata da fotoproteção no dia a dia: o que o FPS realmente mede, a quantidade certa na hora de aplicar, e por que a exposição solar acumulada aparece na pele em forma de manchas e envelhecimento."
+    },
     {
       "id": "GSCntb2YkYk",
       "num": 3,
@@ -41,21 +55,99 @@
       "descricao": "O episódio de estreia apresenta a dupla e mergulha na estrutura da pele: a analogia da esponja, o microbioma que protege o organismo, a diferença entre gel, sérum e creme, a barreira fragilizada e a relação entre intestino e pele."
     }
   ],
-
   "shorts": [
-    { "id": "Q5KsiC4d2hU", "arquivo": "short-01", "titulo": "Pele ardendo no inverno? O erro mais comum", "home": true },
-    { "id": "QncQ6paAWdk", "arquivo": "short-02", "titulo": "Como funciona o hidratante: a analogia da parede de tijolos", "home": true },
-    { "id": "rzLmliJ7Cek", "arquivo": "short-03", "titulo": "Pausa para skincare e dupla limpeza: o que funciona", "home": true },
-    { "id": "uStxYJGPiss", "arquivo": "short-04", "titulo": "O segredo para disfarçar rugas", "home": true },
-    { "id": "OYaQ1Pz80uw", "arquivo": "short-05", "titulo": "Como escolher o demaquilante ideal" },
-    { "id": "gcWmwVFBFM4", "arquivo": "short-06", "titulo": "Pele seca envelhece mais?", "home": true },
-    { "id": "M7jy6-znnuk", "arquivo": "short-07", "titulo": "Pele oleosa é só desvantagem? As vantagens que ninguém conta", "home": true },
-    { "id": "wQaAuv9tHwU", "arquivo": "short-08", "titulo": "Qual é o meu tipo de pele? O teste caseiro" },
-    { "id": "d0rz5J5LnQM", "arquivo": "short-09", "titulo": "Tipos de pele, skincare básico e as trends do momento" },
-    { "id": "jBGPos0ly4g", "arquivo": "short-10", "titulo": "A pele como impermeabilizante do corpo", "home": true },
-    { "id": "KcqRbjRDFJA", "arquivo": "short-11", "titulo": "Barreira cutânea: quando a pele arde, repuxa e descama", "home": true },
-    { "id": "cw8o_swkhYI", "arquivo": "short-12", "titulo": "Sua pele é como uma esponja: a metáfora do envelhecimento" },
-    { "id": "w-9LVJyFk-A", "arquivo": "short-13", "titulo": "Por que a pele vai ficando mais seca com os anos" },
-    { "id": "SNSjohQkbnw", "arquivo": "short-14", "titulo": "O início de um novo projeto: a ciência que transforma a pele" }
+    {
+      "id": "wYFwsKFsGyk",
+      "arquivo": "short-18",
+      "titulo": "Como funciona a radiação solar na nossa pele",
+      "home": true
+    },
+    {
+      "id": "0OuJmNA3XSQ",
+      "arquivo": "short-16",
+      "titulo": "Você sabe como proteger sua pele do sol?",
+      "home": true
+    },
+    {
+      "id": "bh-eTST817k",
+      "arquivo": "short-17",
+      "titulo": "Glicerina: o ativo barato que transforma a pele",
+      "home": true
+    },
+    {
+      "id": "Q5KsiC4d2hU",
+      "arquivo": "short-01",
+      "titulo": "Pele ardendo no inverno? O erro mais comum",
+      "home": true
+    },
+    {
+      "id": "QncQ6paAWdk",
+      "arquivo": "short-02",
+      "titulo": "Como funciona o hidratante: a analogia da parede de tijolos",
+      "home": true
+    },
+    {
+      "id": "rzLmliJ7Cek",
+      "arquivo": "short-03",
+      "titulo": "Pausa para skincare e dupla limpeza: o que funciona",
+      "home": true
+    },
+    {
+      "id": "uStxYJGPiss",
+      "arquivo": "short-04",
+      "titulo": "O segredo para disfarçar rugas",
+      "home": true
+    },
+    {
+      "id": "OYaQ1Pz80uw",
+      "arquivo": "short-05",
+      "titulo": "Como escolher o demaquilante ideal",
+      "home": true
+    },
+    {
+      "id": "gcWmwVFBFM4",
+      "arquivo": "short-06",
+      "titulo": "Pele seca envelhece mais?"
+    },
+    {
+      "id": "M7jy6-znnuk",
+      "arquivo": "short-07",
+      "titulo": "Pele oleosa é só desvantagem? As vantagens que ninguém conta"
+    },
+    {
+      "id": "wQaAuv9tHwU",
+      "arquivo": "short-08",
+      "titulo": "Qual é o meu tipo de pele? O teste caseiro"
+    },
+    {
+      "id": "d0rz5J5LnQM",
+      "arquivo": "short-09",
+      "titulo": "Tipos de pele, skincare básico e as trends do momento"
+    },
+    {
+      "id": "jBGPos0ly4g",
+      "arquivo": "short-10",
+      "titulo": "A pele como impermeabilizante do corpo"
+    },
+    {
+      "id": "KcqRbjRDFJA",
+      "arquivo": "short-11",
+      "titulo": "Barreira cutânea: quando a pele arde, repuxa e descama"
+    },
+    {
+      "id": "cw8o_swkhYI",
+      "arquivo": "short-12",
+      "titulo": "Sua pele é como uma esponja: a metáfora do envelhecimento"
+    },
+    {
+      "id": "w-9LVJyFk-A",
+      "arquivo": "short-13",
+      "titulo": "Por que a pele vai ficando mais seca com os anos"
+    },
+    {
+      "id": "SNSjohQkbnw",
+      "arquivo": "short-14",
+      "titulo": "O início de um novo projeto: a ciência que transforma a pele"
+    }
   ]
 }

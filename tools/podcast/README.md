@@ -43,6 +43,12 @@ build lista o que está pendente a cada execução. Escreva o título de verdade
 Requisitos: `pip install yt-dlp` e ffmpeg no PATH. Se o comando falhar ao ler o
 canal, rode `pip install -U yt-dlp` — o YouTube muda o player com frequência.
 
+A mesma atualização resolve o outro sintoma, menos óbvio: o canal é lido sem
+erro, mas o download de um corte morre em `HTTP Error 403: Forbidden` ou num
+`ffmpeg exited with code ...`. Não é o corte que está protegido, é a URL do
+formato que o yt-dlp velho não consegue mais assinar. Rode `pip install -U
+yt-dlp` e repita o `podcast:sync` — o que já entrou não é baixado de novo.
+
 **Isto roda na sua máquina, não no Actions.** O YouTube recusa download vindo de
 IP de datacenter, e o runner do GitHub cai nisso. Automatizar lá exigiria
 cookies de sessão ou proxy, uma dependência que quebra sem avisar.

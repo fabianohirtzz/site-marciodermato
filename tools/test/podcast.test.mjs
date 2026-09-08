@@ -52,7 +52,7 @@ test('a seção da home destaca o episódio mais recente', () => {
 
 test('a página lista todos os episódios e todos os cortes', () => {
   const html = renderPage(data);
-  assert.equal((html.match(/class="pep /g) || []).length, data.episodios.length);
+  assert.equal((html.match(/class="pep-item"/g) || []).length, data.episodios.length);
   assert.equal((html.match(/class="corte-item"/g) || []).length, data.shorts.length);
   for (const s of data.shorts) assert.ok(html.includes(`${s.arquivo}.mp4`), `falta ${s.arquivo}`);
 });
