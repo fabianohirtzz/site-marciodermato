@@ -259,7 +259,7 @@ ${data.hosts
           </ul>
         </div>
         <figure class="phero__media reveal">
-          <img class="phero__photo" src="assets/podcast/hero-dupla.jpg" alt="${attr(data.hosts.map((h) => h.nome).join(' e '))}, apresentadores do podcast" width="900" height="1206" />
+          <img class="phero__photo" src="assets/podcast/hero-estudio.jpg" alt="${attr(data.hosts.map((h) => h.nome).join(' e '))}, apresentadores do podcast" width="900" height="1206" />
           <img class="phero__seal" src="assets/podcast/logo-podcast.jpg" alt="" width="420" height="420" loading="lazy" />
         </figure>
       </div>

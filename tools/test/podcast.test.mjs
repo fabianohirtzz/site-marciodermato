@@ -100,7 +100,7 @@ test('a hero da página não repete botões da CTA band', () => {
   const html = renderPage(data);
   const hero = html.slice(html.indexOf('class="section phero"'), html.indexOf('id="episodios-title"'));
   assert.ok(!hero.includes('<a class="btn'), 'a hero deve ser só imagem e texto');
-  assert.ok(hero.includes('hero-dupla.jpg'));
+  assert.ok(hero.includes('hero-estudio.jpg'));
   assert.ok(hero.includes('logo-podcast.jpg'));
 });
 
