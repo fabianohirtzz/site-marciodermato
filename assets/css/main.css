@@ -2477,6 +2477,18 @@ a.treat-card:hover .treat-card__more svg { transform: translateX(4px); }
 .post-cover img { width: 100%; border-radius: 20px; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
 .post-prose img { width: 100%; border-radius: 14px; margin: 18px 0; }
 
+/* Links internos dentro do artigo. O reset global zera cor e sublinhado do <a>,
+   entao sem esta regra os links de conteudo ficariam invisiveis na leitura. */
+.post-prose a {
+  color: var(--marca);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color .25s var(--ease-soft);
+}
+.post-prose a:hover { color: var(--marca-deep); }
+
 /* Sidebar */
 .post-side {
   display: grid;
