@@ -370,7 +370,7 @@ ${footerSocialHTML()}
     </span>
   </a>
 
-  <script src="../../assets/js/main.js" defer></script>
+  <script src="../../assets/js/main.js?v=20260908" defer></script>
 ${TRACKING_FOOT}`;
 }
 
@@ -503,7 +503,7 @@ ${t.casoNotes.map((n) => `          <figcaption class="case__note">${inline(n)}<
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../../assets/css/main.css" />
+  <link rel="stylesheet" href="../../assets/css/main.css?v=20260908" />
 ${jsonLD(t, ogImg)}
 ${TRACKING_HEAD}
 </head>

@@ -51,6 +51,10 @@ DirectoryIndex index.html
 
 # ---------------------------------------------------------------------
 # 4. Cache. HTML curto (o blog republica); estáticos longos.
+# O ano de cache no CSS e no JS só é seguro porque a URL leva ?v=DATA:
+# depois de mexer em assets/css/main.css ou assets/js/main.js, rode
+# `npm run bump:assets` antes de publicar, senão a correção vai ao ar
+# sem chegar a quem já tem o arquivo antigo no navegador.
 # ---------------------------------------------------------------------
 <IfModule mod_expires.c>
   ExpiresActive On

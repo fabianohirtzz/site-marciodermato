@@ -130,7 +130,7 @@ const page = ({ file, active, title, metaTitle, desc, eyebrow, headline, lede })
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/main.css?v=20260908" />
 </head>
 <body class="is-loading">
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
@@ -150,7 +150,7 @@ ${NAV(active)}
 
 ${FOOTER}
 
-  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/main.js?v=20260908" defer></script>
 </body>
 </html>
 `;

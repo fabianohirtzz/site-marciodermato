@@ -10,6 +10,7 @@
     "build:treatments": "node tools/build-treatments.mjs",
     "build:sitemap": "node tools/build-sitemap.mjs",
     "build:podcast": "node tools/build-podcast.mjs",
+    "bump:assets": "node tools/bump-assets.mjs",
     "podcast:sync": "node tools/podcast/sync.mjs"
   },
   "dependencies": {

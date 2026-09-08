@@ -15,7 +15,7 @@ const post = {
 test('gera página com chrome de profundidade 2 e dados do post', () => {
   const html = renderPostPage(post, []);
   assert.ok(html.includes('<title>SEO title</title>'));
-  assert.ok(html.includes('href="../../assets/css/main.css"'));   // assets em ../../
+  assert.ok(html.includes('href="../../assets/css/main.css?v=20260908"'));   // assets em ../../
   assert.ok(html.includes('href="../../blog.html" aria-current="page"')); // nav Blog ativo
   assert.ok(html.includes('data-like="minha-pele"'));             // bloco de curtidas
   assert.ok(html.includes('"@type":"Article"'));                  // JSON-LD

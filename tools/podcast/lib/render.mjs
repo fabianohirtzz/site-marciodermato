@@ -174,7 +174,7 @@ function head(title, description, canonical, extra = '') {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/main.css?v=20260908" />
 ${extra}${TRACKING_HEAD}
 </head>`;
 }
@@ -309,7 +309,7 @@ ${trilho(
 
 ${footerHTML('')}
 
-  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/main.js?v=20260908" defer></script>
 ${TRACKING_FOOT}
 </body>
 </html>
