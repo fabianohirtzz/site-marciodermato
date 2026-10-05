@@ -15,6 +15,16 @@
   ],
   "episodios": [
     {
+      "id": "66H7tjqkdVM",
+      "num": 5,
+      "titulo": "Nutricosmética: a pele de dentro para fora",
+      "duracao": "61:12",
+      "segundos": 3672,
+      "publicado": "2026-09-10",
+      "capa": "assets/podcast/ep-05.jpg",
+      "descricao": "Os cuidados com a pele vão além do que se aplica no rosto. O episódio trata do skincare oral e olha para a saúde da pele de forma integrada: quais suplementos fazem sentido, o que tem respaldo da ciência e o que é só promessa de rótulo."
+    },
+    {
       "id": "TNcqHyVCT3A",
       "num": 4,
       "titulo": "Fotoproteção: o cuidado de todos os dias",
@@ -57,52 +67,92 @@
   ],
   "shorts": [
     {
+      "id": "S8FDCdBttO0",
+      "arquivo": "short-26",
+      "titulo": "Colágeno funciona?",
+      "home": true
+    },
+    {
+      "id": "hYbaB2d6kDc",
+      "arquivo": "short-25",
+      "titulo": "Você já viu protetor solar em pó?",
+      "home": true
+    },
+    {
+      "id": "lfPJ5rzDL2Q",
+      "arquivo": "short-24",
+      "titulo": "Protetor mineral para crianças: o alerta aos pais",
+      "home": true
+    },
+    {
+      "id": "d2t-yiuPd8o",
+      "arquivo": "short-23",
+      "titulo": "Protetor solar prejudica a vitamina D?",
+      "home": true
+    },
+    {
+      "id": "QH-TC8784yo",
+      "arquivo": "short-22",
+      "titulo": "Seu FPS 50 pode estar valendo FPS 25",
+      "home": true
+    },
+    {
+      "id": "hs8QdoqPYlk",
+      "arquivo": "short-21",
+      "titulo": "Base com protetor: a armadilha dos multifuncionais",
+      "home": true
+    },
+    {
+      "id": "T5jxyT3jCSM",
+      "arquivo": "short-20",
+      "titulo": "UVA e UVB: entenda a diferença na sua pele",
+      "home": true
+    },
+    {
+      "id": "-7Gn7tXlHjk",
+      "arquivo": "short-19",
+      "titulo": "O melhor antirrugas é o protetor solar",
+      "home": true
+    },
+    {
       "id": "wYFwsKFsGyk",
       "arquivo": "short-18",
-      "titulo": "Como funciona a radiação solar na nossa pele",
-      "home": true
+      "titulo": "Como funciona a radiação solar na nossa pele"
     },
     {
       "id": "0OuJmNA3XSQ",
       "arquivo": "short-16",
-      "titulo": "Você sabe como proteger sua pele do sol?",
-      "home": true
+      "titulo": "Você sabe como proteger sua pele do sol?"
     },
     {
       "id": "bh-eTST817k",
       "arquivo": "short-17",
-      "titulo": "Glicerina: o ativo barato que transforma a pele",
-      "home": true
+      "titulo": "Glicerina: o ativo barato que transforma a pele"
     },
     {
       "id": "Q5KsiC4d2hU",
       "arquivo": "short-01",
-      "titulo": "Pele ardendo no inverno? O erro mais comum",
-      "home": true
+      "titulo": "Pele ardendo no inverno? O erro mais comum"
     },
     {
       "id": "QncQ6paAWdk",
       "arquivo": "short-02",
-      "titulo": "Como funciona o hidratante: a analogia da parede de tijolos",
-      "home": true
+      "titulo": "Como funciona o hidratante: a analogia da parede de tijolos"
     },
     {
       "id": "rzLmliJ7Cek",
       "arquivo": "short-03",
-      "titulo": "Pausa para skincare e dupla limpeza: o que funciona",
-      "home": true
+      "titulo": "Pausa para skincare e dupla limpeza: o que funciona"
     },
     {
       "id": "uStxYJGPiss",
       "arquivo": "short-04",
-      "titulo": "O segredo para disfarçar rugas",
-      "home": true
+      "titulo": "O segredo para disfarçar rugas"
     },
     {
       "id": "OYaQ1Pz80uw",
       "arquivo": "short-05",
-      "titulo": "Como escolher o demaquilante ideal",
-      "home": true
+      "titulo": "Como escolher o demaquilante ideal"
     },
     {
       "id": "gcWmwVFBFM4",

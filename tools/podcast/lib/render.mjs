@@ -257,6 +257,9 @@ ${data.hosts
   )
   .join('\n')}
           </ul>
+          <div class="podcast__actions">
+            <a class="btn btn--primary" href="${attr(data.canal)}" target="_blank" rel="noopener">Conhecer o canal</a>
+          </div>
         </div>
         <figure class="phero__media reveal">
           <img class="phero__photo" src="assets/podcast/hero-estudio.jpg" alt="${attr(data.hosts.map((h) => h.nome).join(' e '))}, apresentadores do podcast" width="900" height="1206" />

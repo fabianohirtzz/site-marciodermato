@@ -99,7 +99,9 @@ test('os CTAs da página abrem o popup do formulário', () => {
 test('a hero da página não repete botões da CTA band', () => {
   const html = renderPage(data);
   const hero = html.slice(html.indexOf('class="section phero"'), html.indexOf('id="episodios-title"'));
-  assert.ok(!hero.includes('<a class="btn'), 'a hero deve ser só imagem e texto');
+  assert.ok(!hero.includes('data-th-quiz='), 'o agendamento fica só na CTA band');
+  assert.ok(!hero.includes('metodo-4d.html'), 'o Método 4D fica só na CTA band');
+  assert.ok(hero.includes(`href="${data.canal}"`), 'a hero leva ao canal');
   assert.ok(hero.includes('hero-estudio.jpg'));
   assert.ok(hero.includes('logo-podcast.jpg'));
 });
