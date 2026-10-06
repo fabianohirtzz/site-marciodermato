@@ -126,10 +126,16 @@ Photorealistic editorial photograph, one single continuous frame, 16:9 landscape
 ## 6 · IMP, MMP, intradermoterapia ou microagulhamento
 `capa-imp-mmp-intradermoterapia-microagulhamento.jpg`
 
-*Cozinha de arquiteto, mulher de 40 comparando opcoes com calma. Tela sem texto.*
+*Cozinha de arquiteto, mulher de 35 comparando opcoes com calma. Tela sem texto.*
+
+> **Refeito em 05/10.** A primeira geracao veio com fios brancos espalhados pela cabeca,
+> fora do padrao da serie. O `no grey at all` sozinho nao segurou em cabelo cacheado
+> escuro: a contraluz da janela desenhava fio a fio e o modelo lia aquilo como grisalho.
+> Agora o prompt fixa cor unica da raiz as pontas, nega branco/cinza/prateado por
+> extenso, tira a contraluz e baixa a idade para o fim dos 30.
 
 ```
-Photorealistic editorial photograph, one single continuous frame, 16:9 landscape. An affluent Brazilian woman in her early forties, medium brown skin, glossy dark curly hair with rich vivid colour and no grey at all, sits at the stone counter of an architect-designed kitchen with an open laptop and a cup of coffee, her chin resting on her hand, reading attentively as she weighs something up. The laptop screen is angled away from the camera and catches a soft window glare, showing no readable content whatsoever. She wears a cream cashmere knit and fine gold hoops, no visible logos. Behind her, pale stone, warm oak cabinetry and a vase of greenery softly out of focus. Her skin has visible real texture, pores and fine expression lines, never retouched into plastic. Soft morning light from a large window at camera right. Shot on an 85mm lens, shallow depth of field, natural colours, warm neutral, stone and oak tones. Quiet luxury, thoughtful and deliberate. No text, no letters, no logos, no watermarks, no before-and-after comparison, no split screen, no panels or borders.
+Photorealistic editorial photograph, one single continuous frame, 16:9 landscape. An affluent Brazilian woman in her late thirties, medium brown skin, dark curly hair in a deep espresso brown that is completely uniform from root to tip, with absolutely no white, grey or silver strands anywhere in it, not a single one, and no bright rim light picking out individual hairs. She sits at the stone counter of an architect-designed kitchen with an open laptop and a cup of coffee, her chin resting on her hand, reading attentively as she weighs something up. The laptop screen is angled away from the camera and catches a soft window glare, showing no readable content whatsoever. She wears a cream cashmere knit and fine gold hoops, no visible logos. Behind her, pale stone, warm oak cabinetry and a vase of greenery softly out of focus. Her skin has visible real texture, pores and fine expression lines, never retouched into plastic. Soft diffuse daylight from a large window at camera left, gentle and even, with no backlight behind her head. Shot on an 85mm lens, shallow depth of field, natural colours, warm neutral, stone and oak tones. Quiet luxury, thoughtful and deliberate. No text, no letters, no logos, no watermarks, no before-and-after comparison, no split screen, no panels or borders.
 ```
 
 ---
