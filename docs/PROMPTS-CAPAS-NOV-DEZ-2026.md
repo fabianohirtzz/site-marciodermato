@@ -1,7 +1,8 @@
 # Prompts das capas do lote de novembro e dezembro de 2026
 
 20 artigos, **13/11 a 30/12/2026** (seg/qua/sex, sem 25/12). Os prompts estao prontos para colar no **Gemini**: um prompt por capa, **autocontido**, que funciona isolado em qualquer conversa nova.
-nVersao no celular, com botao de copiar em cada prompt:
+
+Versao no celular, com botao de copiar em cada prompt:
 https://claude.ai/artifact/4nfT6J4xbnE7xW6qrrQQmX
 
 ## Como usar
