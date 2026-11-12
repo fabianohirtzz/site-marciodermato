@@ -15,6 +15,16 @@
   ],
   "episodios": [
     {
+      "id": "hZEoDXOx24w",
+      "num": 6,
+      "titulo": "O que são os cabelos?",
+      "duracao": "29:11",
+      "segundos": 1751,
+      "publicado": "2026-10-15",
+      "capa": "assets/podcast/ep-06.jpg",
+      "descricao": "Um mergulho na biologia capilar: como o fio se forma, o que acontece dentro do folículo e por que o cabelo cresce em ciclos. Entender essa estrutura é o primeiro passo para ler os sinais de queda, de crescimento lento e de fio enfraquecido."
+    },
+    {
       "id": "66H7tjqkdVM",
       "num": 5,
       "titulo": "Nutricosmética: a pele de dentro para fora",
@@ -67,52 +77,97 @@
   ],
   "shorts": [
     {
+      "id": "ccnclFdiQHE",
+      "arquivo": "short-35",
+      "titulo": "Couro cabeludo e fio: as diferenças, parte 2",
+      "home": true
+    },
+    {
+      "id": "M_zTgcEnZEE",
+      "arquivo": "short-34",
+      "titulo": "Couro cabeludo e fio pedem cuidados diferentes",
+      "home": true
+    },
+    {
+      "id": "ySzAWr6jTPs",
+      "arquivo": "short-33",
+      "titulo": "O cabelo funciona como uma casa",
+      "home": true
+    },
+    {
+      "id": "nj1Cb8kKqrk",
+      "arquivo": "short-32",
+      "titulo": "Cabelo caindo muito? Pode ser normal",
+      "home": true
+    },
+    {
+      "id": "bcG9HUml3Hc",
+      "arquivo": "short-31",
+      "titulo": "As 4 fases do ciclo do cabelo",
+      "home": true
+    },
+    {
+      "id": "O0CeW_Mzinc",
+      "arquivo": "short-30",
+      "titulo": "Por que meu cabelo não cresce?",
+      "home": true
+    },
+    {
+      "id": "9H1XZkbImF0",
+      "arquivo": "short-29",
+      "titulo": "Nascemos com cerca de 100 mil folículos",
+      "home": true
+    },
+    {
+      "id": "kCSEkhuxFw4",
+      "arquivo": "short-28",
+      "titulo": "Qual o melhor horário para tomar colágeno?",
+      "home": true
+    },
+    {
+      "id": "Ze4ue9IAvNs",
+      "arquivo": "short-27",
+      "titulo": "Suplemento demais pode causar queda de cabelo?"
+    },
+    {
       "id": "S8FDCdBttO0",
       "arquivo": "short-26",
-      "titulo": "Colágeno funciona?",
-      "home": true
+      "titulo": "Colágeno funciona?"
     },
     {
       "id": "hYbaB2d6kDc",
       "arquivo": "short-25",
-      "titulo": "Você já viu protetor solar em pó?",
-      "home": true
+      "titulo": "Você já viu protetor solar em pó?"
     },
     {
       "id": "lfPJ5rzDL2Q",
       "arquivo": "short-24",
-      "titulo": "Protetor mineral para crianças: o alerta aos pais",
-      "home": true
+      "titulo": "Protetor mineral para crianças: o alerta aos pais"
     },
     {
       "id": "d2t-yiuPd8o",
       "arquivo": "short-23",
-      "titulo": "Protetor solar prejudica a vitamina D?",
-      "home": true
+      "titulo": "Protetor solar prejudica a vitamina D?"
     },
     {
       "id": "QH-TC8784yo",
       "arquivo": "short-22",
-      "titulo": "Seu FPS 50 pode estar valendo FPS 25",
-      "home": true
+      "titulo": "Seu FPS 50 pode estar valendo FPS 25"
     },
     {
       "id": "hs8QdoqPYlk",
       "arquivo": "short-21",
-      "titulo": "Base com protetor: a armadilha dos multifuncionais",
-      "home": true
+      "titulo": "Base com protetor: a armadilha dos multifuncionais"
     },
     {
       "id": "T5jxyT3jCSM",
       "arquivo": "short-20",
-      "titulo": "UVA e UVB: entenda a diferença na sua pele",
-      "home": true
+      "titulo": "UVA e UVB: entenda a diferença na sua pele"
     },
     {
       "id": "-7Gn7tXlHjk",
       "arquivo": "short-19",
-      "titulo": "O melhor antirrugas é o protetor solar",
-      "home": true
+      "titulo": "O melhor antirrugas é o protetor solar"
     },
     {
       "id": "wYFwsKFsGyk",
