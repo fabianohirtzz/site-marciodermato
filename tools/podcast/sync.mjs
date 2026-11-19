@@ -100,7 +100,9 @@ for (const s of novosShorts) {
       'python',
       [
         '-m', 'yt_dlp',
-        '-f', 'bv*[height<=1080]/bv*',
+        // HLS primeiro: os formatos DASH (https) passaram a dar 403 / erro de
+        // ffmpeg quando o yt-dlp não resolve o desafio JS do player (nov/2026).
+        '-f', 'bv*[height<=1080][protocol^=m3u8]/bv*[height<=1080]/bv*',
         '--download-sections', '*0-14',
         '--force-keyframes-at-cuts',
         '--no-warnings', '--quiet',
