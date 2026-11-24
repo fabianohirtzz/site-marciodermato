@@ -3,7 +3,16 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { renderHomeSection, renderPage, validate, minutos, esc, attr } from '../podcast/lib/render.mjs';
+import {
+  renderHomeSection,
+  renderPage,
+  renderTricologiaSection,
+  episodiosTricologia,
+  validate,
+  minutos,
+  esc,
+  attr,
+} from '../podcast/lib/render.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const data = JSON.parse(readFileSync(join(ROOT, 'tools', 'podcast', 'podcast.json'), 'utf8'));
@@ -119,4 +128,36 @@ test('os cards do trilho vêm em degrau, como o carrossel de Resultados', () => 
   const offs = html.match(/style="--off:[\d.]+"/g) || [];
   assert.equal(offs.length, data.shorts.length);
   assert.ok(new Set(offs).size > 1, 'os degraus não podem ser todos iguais');
+});
+
+/* --- episódios de cabelo na tricologia.html ------------------------- */
+
+test('os episódios de cabelo (EP 06 e EP 07) estão marcados para a tricologia', () => {
+  const nums = episodiosTricologia(data).map((ep) => ep.num);
+  assert.ok(nums.includes(6), 'EP 06 fora da tricologia');
+  assert.ok(nums.includes(7), 'EP 07 fora da tricologia');
+});
+
+test('a seção da tricologia traz só os episódios marcados, com fachada e sem iframe', () => {
+  const html = renderTricologiaSection(data);
+  const marcados = episodiosTricologia(data);
+  assert.equal((html.match(/class="pep-item"/g) || []).length, marcados.length);
+  for (const ep of marcados) assert.ok(html.includes(`data-yt="${ep.id}"`), `falta o EP ${ep.num}`);
+  const fora = data.episodios.find((ep) => !ep.tricologia);
+  assert.ok(!html.includes(`data-yt="${fora.id}"`), 'episódio sem a marca não deveria aparecer');
+  assert.ok(!/<iframe/i.test(html));
+  assert.ok(html.includes('data-peps-track') && html.includes('data-peps-prev') && html.includes('data-peps-next'));
+  assert.ok(html.includes(`href="${data.canal}"`), 'CTA para o canal');
+  assert.ok(html.includes('href="podcast.html"'), 'CTA para a página do podcast');
+  const baixo = html.toLowerCase();
+  assert.ok(!baixo.includes('inscrito') && !baixo.includes('visualiza'), 'sem métricas do canal');
+});
+
+test('tricologia.html está em dia com o podcast.json', () => {
+  const pagina = readFileSync(join(ROOT, 'tricologia.html'), 'utf8').replace(/\r\n/g, '\n');
+  const ini = pagina.indexOf('<!-- PODCAST-TRICO:START -->');
+  const fim = pagina.indexOf('<!-- PODCAST-TRICO:END -->');
+  assert.ok(ini !== -1 && fim > ini, 'marcadores ausentes na tricologia.html');
+  const miolo = pagina.slice(ini, fim);
+  assert.ok(miolo.includes(renderTricologiaSection(data)), 'rode npm run build:podcast');
 });

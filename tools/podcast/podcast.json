@@ -16,6 +16,7 @@
   "episodios": [
     {
       "id": "S5LAPho5P8c",
+      "tricologia": true,
       "num": 7,
       "titulo": "Como cuidar dos cabelos?",
       "duracao": "49:53",
@@ -26,6 +27,7 @@
     },
     {
       "id": "hZEoDXOx24w",
+      "tricologia": true,
       "num": 6,
       "titulo": "O que são os cabelos?",
       "duracao": "29:11",

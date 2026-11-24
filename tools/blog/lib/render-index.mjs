@@ -17,7 +17,7 @@ export function renderFilters(posts) {
   return chips.join('\n          ');
 }
 
-function card(p, i) {
+function card(p, i, { excerpt = true } = {}) {
   const cover = p.coverImage
     ? `<img src="${esc(p.coverImage)}" alt="${esc(p.title)}" loading="lazy" />`
     : '';
@@ -28,13 +28,20 @@ function card(p, i) {
               <div class="blog-card__body">
                 <span class="blog-card__tag" style="--chip:${esc(p.category?.color || '#057f7f')}">${esc(p.category?.name || '')}</span>
                 <h3 class="blog-card__title">${esc(p.title)}</h3>
-                <p class="blog-card__excerpt">${esc(p.excerpt)}</p>
-                <span class="blog-card__meta">${esc(p.dateLabel)}</span>
+${excerpt ? `                <p class="blog-card__excerpt">${esc(p.excerpt)}</p>
+` : ''}                <span class="blog-card__meta">${esc(p.dateLabel)}</span>
               </div>
             </a>
           </article>`;
 }
 
 export function renderCards(posts) {
-  return posts.map(card).join('\n          ');
+  return posts.map((p, i) => card(p, i)).join('\n          ');
+}
+
+/* Os N mais recentes para a seção "Artigos do blog" da home. Mesmo card da
+   grade do blog.html, sem o resumo: na home bastam capa, categoria, título
+   e data. Espera os posts já ordenados do mais novo para o mais antigo. */
+export function renderHomeCards(posts, n = 3) {
+  return posts.slice(0, n).map((p, i) => card(p, i, { excerpt: false })).join('\n          ');
 }

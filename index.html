@@ -16,7 +16,7 @@
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Poppins:wght@300;400;500;600;700&display=swap"
     rel="stylesheet" />
 
-  <link rel="stylesheet" href="assets/css/main.css?v=20260908" />
+  <link rel="stylesheet" href="assets/css/main.css?v=20261124" />
   <!-- MeuTrack -->
   <script async src="https://meutrack-ingest.carlosabsj-ti.workers.dev/t.js?p=4TqtCgzLsewg"></script>
 
@@ -712,7 +712,7 @@
             <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Avaliações</p>
             <h2 id="avaliacoes-title" class="section__title">Quem é cuidado <span class="hl hl--italic">recomenda</span></h2>
             <p class="section__lede">Histórias reais de pacientes, registradas no Google.</p>
-            <a class="reviews__rating" href="https://g.page/r/CSvT6zxc3wPiEBM/review" target="_blank" rel="noopener" aria-label="4,9 de 5 estrelas em 216 avaliações no Google. Avaliar no Google.">
+            <a class="reviews__rating" href="https://g.page/r/CSvT6zxc3wPiEBM/review" target="_blank" rel="noopener" aria-label="4,9 de 5 estrelas em 225 avaliações no Google. Avaliar no Google.">
               <span class="reviews__rating-g" aria-hidden="true">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.27c0-.82-.07-1.6-.2-2.36H12v4.47h6.45a5.52 5.52 0 0 1-2.39 3.62v3h3.86c2.26-2.08 3.58-5.15 3.58-8.73z"/><path fill="#34A853" d="M12 24c3.24 0 5.96-1.08 7.95-2.91l-3.86-3c-1.08.72-2.45 1.16-4.09 1.16-3.14 0-5.8-2.12-6.76-4.98H1.26v3.09A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.24 14.27a7.2 7.2 0 0 1 0-4.54V6.64H1.26a12 12 0 0 0 0 10.72z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42A11.96 11.96 0 0 0 12 0 12 12 0 0 0 1.26 6.64l3.98 3.09C6.2 6.87 8.86 4.75 12 4.75z"/></svg>
               </span>
@@ -724,7 +724,7 @@
                   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.7 1.4 6.8L12 17.8 5.9 21.3l1.4-6.8L2.2 9.7l6.9-.7z"/></svg>
                   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.7 1.4 6.8L12 17.8 5.9 21.3l1.4-6.8L2.2 9.7l6.9-.7z"/></svg>
                 </span>
-                <span class="reviews__rating-score"><strong>4,9</strong> · 216 avaliações no Google</span>
+                <span class="reviews__rating-score"><strong>4,9</strong> · 225 avaliações no Google</span>
               </span>
             </a>
           </div>
@@ -888,6 +888,56 @@
       </div>
     </section>
 
+    <!-- ========================== BLOG ==========================
+         Os cards entre HOME-BLOG:START/END saem de tools/build-blog.mjs a
+         cada publicação do blog (os 3 mais recentes). Não edite à mão. -->
+    <section class="section section--neve home-blog" id="artigos" aria-labelledby="artigos-title" data-fio="right">
+      <div class="container">
+        <header class="ts-head ts-head--center reveal">
+          <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Blog</p>
+          <h2 class="ts-title" id="artigos-title">Artigos do <span class="hl hl--italic">blog</span></h2>
+          <p class="ts-lede">O Dr. Márcio escreve sobre pele, cabelo e tratamentos para você chegar à consulta já entendendo o que importa.</p>
+        </header>
+        <div class="blog-grid blog-grid--home">
+          <!-- HOME-BLOG:START -->
+          <article class="blog-card reveal" style="--i:0" data-category="Tricologia">
+            <a class="blog-card__link" href="blog/caspa-e-dermatite-seborreica-no-couro-cabeludo-o-que-e-e-como-tratar/">
+              <div class="blog-card__cover" style="--chip:#345050"><img src="https://marciodermato.com.br/imagens/blog/capa-caspa-dermatite-seborreica.jpg" alt="Caspa e dermatite seborreica no couro cabeludo: o que é e como tratar" loading="lazy" /></div>
+              <div class="blog-card__body">
+                <span class="blog-card__tag" style="--chip:#345050">Tricologia</span>
+                <h3 class="blog-card__title">Caspa e dermatite seborreica no couro cabeludo: o que é e como tratar</h3>
+                <span class="blog-card__meta">23 de novembro de 2026</span>
+              </div>
+            </a>
+          </article>
+          <article class="blog-card reveal" style="--i:1" data-category="Superfície da Pele">
+            <a class="blog-card__link" href="blog/pele-negra-e-parda-como-tratar-manchas-sem-criar-novas/">
+              <div class="blog-card__cover" style="--chip:#35dede"><img src="https://marciodermato.com.br/imagens/blog/capa-pele-negra-e-parda-manchas.jpg" alt="Pele negra e parda: como tratar manchas sem criar novas" loading="lazy" /></div>
+              <div class="blog-card__body">
+                <span class="blog-card__tag" style="--chip:#35dede">Superfície da Pele</span>
+                <h3 class="blog-card__title">Pele negra e parda: como tratar manchas sem criar novas</h3>
+                <span class="blog-card__meta">20 de novembro de 2026</span>
+              </div>
+            </a>
+          </article>
+          <article class="blog-card reveal" style="--i:2" data-category="Tricologia">
+            <a class="blog-card__link" href="blog/imp-mmp-intradermoterapia-ou-microagulhamento-qual-a-diferenca/">
+              <div class="blog-card__cover" style="--chip:#345050"><img src="https://marciodermato.com.br/imagens/blog/capa-imp-mmp-intradermoterapia-microagulhamento.jpg" alt="IMP, MMP, intradermoterapia ou microagulhamento: qual a diferença" loading="lazy" /></div>
+              <div class="blog-card__body">
+                <span class="blog-card__tag" style="--chip:#345050">Tricologia</span>
+                <h3 class="blog-card__title">IMP, MMP, intradermoterapia ou microagulhamento: qual a diferença</h3>
+                <span class="blog-card__meta">19 de novembro de 2026</span>
+              </div>
+            </a>
+          </article>
+          <!-- HOME-BLOG:END -->
+        </div>
+        <div class="home-blog__more reveal">
+          <a class="btn btn--primary" href="blog.html">Ver todos os artigos</a>
+        </div>
+      </div>
+    </section>
+
     <!-- ========================== NÚMEROS ========================== -->
     <!-- ========================= CTA BAND ========================= -->
     <section class="section section--deep cta-band" id="agende" aria-labelledby="cta-title">
@@ -965,7 +1015,7 @@
     </span>
   </a>
 
-  <script src="assets/js/main.js?v=20260908" defer></script>
+  <script src="assets/js/main.js?v=20261124" defer></script>
   <!-- MeuTrack: popup dos CTAs (data-th-quiz) -->
   <script async src="https://meutrack-ingest.carlosabsj-ti.workers.dev/embed.js"></script>
 </body>

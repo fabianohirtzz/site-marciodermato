@@ -120,6 +120,58 @@ ${shorts.map((s, i) => corteItem(s, i, base)).join('\n')}
       </div>`;
 }
 
+/* Card de episódio da faixa .peps__track: o mesmo na podcast.html e na
+   seção de cabelo da tricologia.html. */
+function epCard(ep) {
+  return `            <li class="pep-item">
+              <article class="pep">
+                ${facade(ep, '', ' pfacade--card')}
+                <div class="pep__body">
+                  <p class="pep__meta">Episódio ${esc(String(ep.num))} · ${esc(minutos(ep.duracao))}</p>
+                  <h3 class="pep__title">${esc(ep.titulo)}</h3>
+                  <p class="pep__desc">${esc(ep.descricao)}</p>
+                </div>
+              </article>
+            </li>`;
+}
+
+/* Episódios marcados com "tricologia": true no podcast.json, na ordem do
+   arquivo (o mais novo primeiro). */
+export function episodiosTricologia(data) {
+  return (data.episodios || []).filter((ep) => ep.tricologia === true);
+}
+
+/* Seção "Ouça o Dr. Márcio sobre cabelo", injetada entre
+   <!-- PODCAST-TRICO:START --> e <!-- PODCAST-TRICO:END --> na
+   tricologia.html. Mesma faixa e mesma fachada da podcast.html: o player do
+   YouTube só nasce no clique. Com menos de 3 episódios a faixa mostra 2 por
+   vez, para não sobrar uma coluna vazia. */
+export function renderTricologiaSection(data) {
+  const eps = episodiosTricologia(data);
+  const poucos = eps.length < 3 ? ' peps__track--duo' : '';
+  return `<section class="section section--branco tsec" id="podcast-cabelo" aria-labelledby="pcabelo-title" data-fio="right">
+      <div class="container">
+        <div class="peps__head">
+          <header class="ts-head">
+            <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Podcast</p>
+            <h2 class="ts-title" id="pcabelo-title">Ouça o Dr. Márcio <span class="hl hl--italic">sobre cabelo</span></h2>
+            <p class="ts-lede">Episódios do É uma Questão de Pele dedicados aos fios e ao couro cabeludo, com a farmacêutica Christine Prato.</p>
+          </header>
+${setas('peps', 'Navegar pelos episódios', 'Ver episódio anterior', 'Ver próximo episódio', '          ')}
+        </div>
+        <div class="peps reveal">
+          <ul class="peps__track${poucos}" data-peps-track tabindex="0" role="list" aria-label="Episódios do podcast sobre cabelo">
+${eps.map((ep) => epCard(ep)).join('\n')}
+          </ul>
+        </div>
+        <div class="podcast__actions">
+          <a class="btn btn--primary" href="podcast.html">Ver todos os episódios</a>
+          <a class="btn btn--ghost" href="${attr(data.canal)}" target="_blank" rel="noopener">Conhecer o canal</a>
+        </div>
+      </div>
+    </section>`;
+}
+
 export function renderHomeSection(data) {
   const dest = data.episodios[0];
   const shorts = data.shorts.filter((s) => s.home);
@@ -174,7 +226,7 @@ function head(title, description, canonical, extra = '') {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/main.css?v=20260908" />
+  <link rel="stylesheet" href="assets/css/main.css?v=20261124" />
 ${extra}${TRACKING_HEAD}
 </head>`;
 }
@@ -215,20 +267,7 @@ export function renderPage(data) {
 
   /* Faixa rolável em vez de grade: a lista cresce a cada episódio, e uma
      grade de três colunas deixaria o quarto sozinho na linha de baixo. */
-  const episodios = data.episodios
-    .map(
-      (ep) => `            <li class="pep-item">
-              <article class="pep">
-                ${facade(ep, '', ' pfacade--card')}
-                <div class="pep__body">
-                  <p class="pep__meta">Episódio ${esc(String(ep.num))} · ${esc(minutos(ep.duracao))}</p>
-                  <h3 class="pep__title">${esc(ep.titulo)}</h3>
-                  <p class="pep__desc">${esc(ep.descricao)}</p>
-                </div>
-              </article>
-            </li>`
-    )
-    .join('\n');
+  const episodios = data.episodios.map((ep) => epCard(ep)).join('\n');
 
   return `${head(title, description, `${SITE}/podcast.html`, jsonLd(data) + '\n')}
 <body class="is-loading">
@@ -312,7 +351,7 @@ ${trilho(
 
 ${footerHTML('')}
 
-  <script src="assets/js/main.js?v=20260908" defer></script>
+  <script src="assets/js/main.js?v=20261124" defer></script>
 ${TRACKING_FOOT}
 </body>
 </html>

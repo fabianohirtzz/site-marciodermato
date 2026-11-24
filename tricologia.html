@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/main.css?v=20260908" />
+  <link rel="stylesheet" href="assets/css/main.css?v=20261124" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -428,8 +428,65 @@
       </div>
     </section>
 
+    <!-- ================== PODCAST · EPISÓDIOS DE CABELO ==================
+         Gerado por tools/build-podcast.mjs a partir dos episódios com
+         "tricologia": true em tools/podcast/podcast.json. Não edite à mão. -->
+    <!-- PODCAST-TRICO:START -->
+    <section class="section section--branco tsec" id="podcast-cabelo" aria-labelledby="pcabelo-title" data-fio="right">
+      <div class="container">
+        <div class="peps__head">
+          <header class="ts-head">
+            <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Podcast</p>
+            <h2 class="ts-title" id="pcabelo-title">Ouça o Dr. Márcio <span class="hl hl--italic">sobre cabelo</span></h2>
+            <p class="ts-lede">Episódios do É uma Questão de Pele dedicados aos fios e ao couro cabeludo, com a farmacêutica Christine Prato.</p>
+          </header>
+          <div class="cortes__nav" role="group" aria-label="Navegar pelos episódios">
+            <button class="cortes__arrow" type="button" data-peps-prev aria-label="Ver episódio anterior" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button class="cortes__arrow" type="button" data-peps-next aria-label="Ver próximo episódio"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </div>
+        <div class="peps reveal">
+          <ul class="peps__track peps__track--duo" data-peps-track tabindex="0" role="list" aria-label="Episódios do podcast sobre cabelo">
+            <li class="pep-item">
+              <article class="pep">
+                <button class="pfacade pfacade--card" type="button" data-yt="S5LAPho5P8c" data-kind="ep" aria-label="Assistir ao episódio 7: Como cuidar dos cabelos?">
+          <img class="pfacade__img" src="assets/podcast/ep-07.jpg" alt="" loading="lazy" width="960" height="540" />
+          <span class="pfacade__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
+          <span class="pfacade__time">49 min</span>
+        </button>
+                <div class="pep__body">
+                  <p class="pep__meta">Episódio 7 · 49 min</p>
+                  <h3 class="pep__title">Como cuidar dos cabelos?</h3>
+                  <p class="pep__desc">A rotina capilar na prática: como lavar, com que frequência, quando hidratar e como escolher os produtos. O episódio mostra os hábitos do dia a dia que pesam na saúde do couro cabeludo e na aparência dos fios, e o que vale levar para a consulta.</p>
+                </div>
+              </article>
+            </li>
+            <li class="pep-item">
+              <article class="pep">
+                <button class="pfacade pfacade--card" type="button" data-yt="hZEoDXOx24w" data-kind="ep" aria-label="Assistir ao episódio 6: O que são os cabelos?">
+          <img class="pfacade__img" src="assets/podcast/ep-06.jpg" alt="" loading="lazy" width="960" height="540" />
+          <span class="pfacade__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5z"/></svg></span>
+          <span class="pfacade__time">29 min</span>
+        </button>
+                <div class="pep__body">
+                  <p class="pep__meta">Episódio 6 · 29 min</p>
+                  <h3 class="pep__title">O que são os cabelos?</h3>
+                  <p class="pep__desc">Um mergulho na biologia capilar: como o fio se forma, o que acontece dentro do folículo e por que o cabelo cresce em ciclos. Entender essa estrutura é o primeiro passo para ler os sinais de queda, de crescimento lento e de fio enfraquecido.</p>
+                </div>
+              </article>
+            </li>
+          </ul>
+        </div>
+        <div class="podcast__actions">
+          <a class="btn btn--primary" href="podcast.html">Ver todos os episódios</a>
+          <a class="btn btn--ghost" href="https://www.youtube.com/@%C3%89UmaQuest%C3%A3odePele01" target="_blank" rel="noopener">Conhecer o canal</a>
+        </div>
+      </div>
+    </section>
+    <!-- PODCAST-TRICO:END -->
+
     <!-- ============================ FAQ ============================ -->
-    <section class="section section--branco tsec" data-fio="right" aria-labelledby="faq-title">
+    <section class="section section--neve tsec" data-fio="left" aria-labelledby="faq-title">
       <div class="container ts-narrow">
         <header class="ts-head ts-head--center">
           <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span> Dúvidas frequentes</p>
@@ -545,7 +602,7 @@
     </span>
   </a>
 
-  <script src="assets/js/main.js?v=20260908" defer></script>
+  <script src="assets/js/main.js?v=20261124" defer></script>
   <!-- MeuTrack: popup dos CTAs (data-th-quiz) -->
   <script async src="https://meutrack-ingest.carlosabsj-ti.workers.dev/embed.js"></script>
 </body>

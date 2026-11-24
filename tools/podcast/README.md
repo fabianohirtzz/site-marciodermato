@@ -2,13 +2,39 @@
 
 O canal: <https://www.youtube.com/@%C3%89UmaQuest%C3%A3odePele01>
 
-Tudo sai de **`podcast.json`**. Ele alimenta três lugares:
+Tudo sai de **`podcast.json`**. Ele alimenta quatro lugares:
 
 - `podcast.html` (página inteira, gerada)
 - a seção da home, injetada entre `<!-- PODCAST:START -->` e `<!-- PODCAST:END -->`
+- a seção "Ouça o Dr. Márcio sobre cabelo" da `tricologia.html`, injetada entre
+  `<!-- PODCAST-TRICO:START -->` e `<!-- PODCAST-TRICO:END -->`
 - o card "Ouça o podcast" na sidebar dos posts do blog
 
-Nunca edite `podcast.html` nem o bloco da home à mão: o próximo build sobrescreve.
+Nunca edite `podcast.html`, o bloco da home nem o bloco da tricologia à mão: o
+próximo build sobrescreve.
+
+## Episódio de cabelo na página de Tricologia
+
+Para um episódio aparecer também na `tricologia.html`, acrescente
+`"tricologia": true` nele, no `podcast.json`:
+
+```json
+{
+  "id": "S5LAPho5P8c",
+  "tricologia": true,
+  "num": 7,
+  ...
+}
+```
+
+Depois rode `npm run build:podcast`. A seção mostra os episódios marcados na
+ordem do arquivo (o mais novo primeiro), com a mesma fachada da `podcast.html`:
+só a capa até o clique, e o player do `youtube-nocookie` abre no lightbox. Para
+tirar um episódio da tricologia, apague a linha e rode o build de novo.
+
+O build falha se nenhum episódio estiver marcado, ou se os marcadores sumirem
+da `tricologia.html`. O teste `tools/test/podcast.test.mjs` também acusa quando
+a página está desatualizada em relação ao JSON (esqueceram de rodar o build).
 
 ## Como o vídeo funciona
 
@@ -121,4 +147,7 @@ O card da sidebar sai de `tools/blog/lib/render-post.mjs` e lê o `podcast.json`
 no build. Para ele apontar para um episódio novo, republique o blog pelo painel
 (o Actions roda com as credenciais do Supabase). Rodar `npm run build:blog`
 local **sem** `SUPABASE_URL`/`SUPABASE_SERVICE_KEY` usa o seed de 2 posts
-placeholder e apaga os posts reais.
+placeholder e apaga os posts reais, inclusive os 3 da seção "Artigos do blog"
+da home (`index.html`, entre `<!-- HOME-BLOG:START -->` e
+`<!-- HOME-BLOG:END -->`). O `npm test` acusa se um post do seed for parar na
+home.

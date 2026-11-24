@@ -6,7 +6,8 @@
    Plain Node (ESM), sem dependências. */
 import { readFile, writeFile, mkdir, rm } from 'node:fs/promises';
 import { loadPosts } from './blog/lib/load-posts.mjs';
-import { renderFilters, renderCards } from './blog/lib/render-index.mjs';
+import { renderFilters, renderCards, renderHomeCards } from './blog/lib/render-index.mjs';
+import { injectBetween as injectInto } from './lib/inject.mjs';
 import { renderPostPage } from './blog/lib/render-post.mjs';
 import { slugsToPrune } from './blog/lib/prune-slugs.mjs';
 
@@ -30,10 +31,9 @@ function categoriesOf(all) {
 }
 
 async function injectBetween(path, startMarker, endMarker, inner) {
-  let html = await readFile(path, 'utf8');
-  const re = new RegExp(`${startMarker}[\\s\\S]*?${endMarker}`);
-  html = html.replace(re, `${startMarker}\n          ${inner}\n          ${endMarker}`);
-  await writeFile(path, html);
+  // Falha se o marcador sumiu, em vez de seguir com a página desatualizada.
+  const html = await readFile(path, 'utf8');
+  await writeFile(path, injectInto(html, startMarker, endMarker, inner));
 }
 
 async function main() {
@@ -46,7 +46,11 @@ async function main() {
   await injectBetween(blogPath, '<!-- POSTS:START -->', '<!-- POSTS:END -->', renderCards(posts));
   console.log('blog.html:', posts.length, 'posts,', new Set(posts.map(p => p.category.name)).size, 'categorias.');
 
-  // 2. Páginas de artigo.
+  // 2. Home: os 3 artigos mais recentes na seção "Artigos do blog".
+  await injectBetween(new URL('index.html', ROOT), '<!-- HOME-BLOG:START -->', '<!-- HOME-BLOG:END -->', renderHomeCards(posts, 3));
+  console.log('index.html:', Math.min(posts.length, 3), 'artigos na home.');
+
+  // 3. Páginas de artigo.
   const categories = categoriesOf(posts);
   const podcast = JSON.parse(await readFile(new URL('tools/podcast/podcast.json', ROOT), 'utf8'));
   for (const post of posts) {
@@ -56,7 +60,7 @@ async function main() {
     console.log('  ok blog/' + post.slug + '/index.html');
   }
 
-  // 3. Prune de slugs removidos.
+  // 4. Prune de slugs removidos.
   const manifestUrl = new URL('tools/blog/generated-slugs.json', ROOT);
   const newSlugs = posts.map(p => p.slug);
   let oldSlugs = [];

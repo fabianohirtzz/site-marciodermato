@@ -2610,6 +2610,18 @@ a.treat-card:hover .treat-card__more svg { transform: translateX(4px); }
   .blog-grid { grid-template-columns: 1fr; }
 }
 
+/* Home · "Artigos do blog": sempre 3 cards (gerados pelo build-blog).
+   Três colunas no desktop; abaixo disso uma coluna estreita e centrada,
+   para não sobrar um card órfão numa grade de duas. */
+.blog-grid--home { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.home-blog__more {
+  margin-top: clamp(30px, 4vw, 44px);
+  text-align: center;
+}
+@media (max-width: 900px) {
+  .blog-grid--home { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
+}
+
 /* ==================================================================== */
 /* PÁGINAS INTERNAS — Método 4D · Sobre · Contato                       */
 /* ==================================================================== */
@@ -3203,6 +3215,8 @@ a.treat-card:hover .treat-card__more svg { transform: translateX(4px); }
   scroll-snap-align: start;
 }
 .pep-item > .pep { width: 100%; }
+/* faixa com só 2 episódios (seção de cabelo da tricologia): 2 por vez */
+.peps__track--duo { --per: 2; }
 
 @media (max-width: 980px) { .peps__track { --per: 2; } }
 @media (max-width: 620px) { .peps__track { --per: 1.12; } }
